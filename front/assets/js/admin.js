@@ -28,7 +28,7 @@ function trocarSecaoAdmin(nome) {
   document.getElementById("secaoVideoaulas").style.display = nome === "videoaulas" ? "block" : "none";
   document.getElementById("secaoFeedbacks").style.display = nome === "feedbacks" ? "block" : "none";
   document.querySelectorAll(".app-nav-link[data-secao]").forEach((a) => a.classList.toggle("ativo", a.dataset.secao === nome));
-  document.querySelector(".app-sidebar")?.classList.remove("aberta");
+  window.fecharMenuMobile?.();
 
   if (nome === "videoaulas") carregarVideoaulas();
   if (nome === "feedbacks") carregarFeedbacks();
@@ -129,25 +129,33 @@ async function carregarVideoaulas() {
     const dados = await fetch(apiUrl("/videoaulas")).then((r) => r.json());
     renderizarTabelaVideoaulas(Array.isArray(dados) ? dados : []);
   } catch {
-    document.getElementById("tabelaVideoaulas").innerHTML = `<tr><td colspan="4">Não foi possível carregar as videoaulas.</td></tr>`;
+    document.getElementById("tabelaVideoaulas").innerHTML = `<tr><td colspan="5">Não foi possível carregar as videoaulas.</td></tr>`;
   }
+}
+
+/** Miniatura (capa) do vídeo no YouTube — a mesma que aparece no carrossel da home */
+function capaVideo(link = "") {
+  const m = String(link).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  if (!m) return `<span class="sr-only">sem capa</span>`;
+  return `<img class="thumb-mini" src="https://img.youtube.com/vi/${m[1]}/mqdefault.jpg" alt="" loading="lazy" />`;
 }
 
 function renderizarTabelaVideoaulas(lista) {
   const corpo = document.getElementById("tabelaVideoaulas");
   if (lista.length === 0) {
-    corpo.innerHTML = `<tr><td colspan="4">Nenhuma videoaula cadastrada.</td></tr>`;
+    corpo.innerHTML = `<tr><td colspan="5">Nenhuma videoaula cadastrada.</td></tr>`;
     return;
   }
   corpo.innerHTML = lista.map((v) => `
     <tr>
+      <td>${capaVideo(v.link)}</td>
       <td>${escapar(v.materia || "-")}</td>
       <td>${escapar(v.nome_aulas)}</td>
-      <td><a href="${escapar(v.link)}" target="_blank" rel="noopener" style="color:var(--cor-secundaria); text-decoration:underline;">assistir ↗</a></td>
+      <td><a href="${escapar(v.link)}" target="_blank" rel="noopener" style="color:var(--cor-secundaria); text-decoration:underline;">assistir<span class="sr-only"> (abre em nova aba)</span> ↗</a></td>
       <td>
         <div class="acoes-tabela">
-          <button data-editar="${v.id_materias}" title="Editar">✎</button>
-          <button data-excluir="${v.id_materias}" class="excluir" title="Excluir">🗑</button>
+          <button type="button" data-editar="${v.id_materias}" title="Editar" aria-label="Editar ${escapar(v.nome_aulas)}">✎</button>
+          <button type="button" data-excluir="${v.id_materias}" class="excluir" title="Excluir" aria-label="Excluir ${escapar(v.nome_aulas)}">🗑</button>
         </div>
       </td>
     </tr>`).join("");
@@ -170,7 +178,8 @@ function editarVideoaula(video) {
   document.getElementById("videoLink").value = video.link;
   document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
   document.getElementById("btnCancelarEdicaoVideo").style.display = "inline-flex";
-  document.getElementById("formVideo").scrollIntoView({ behavior: "smooth", block: "start" });
+  document.getElementById("videoNome").focus();
+  document.getElementById("formVideo").scrollIntoView({ block: "nearest" });
 }
 
 document.getElementById("btnCancelarEdicaoVideo").addEventListener("click", () => resetarFormVideo());

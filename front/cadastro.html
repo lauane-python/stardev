@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="assets/css/chatbot.css" />
 </head>
 <body class="bg-grid">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="loader-pagina"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
 
 <header class="header">
   <div class="container">
@@ -21,19 +22,19 @@
       </span>
       <span class="logo-texto">Star Dev</span>
     </a>
-    <nav class="nav-desktop">
+    <nav class="nav-desktop" id="menuPrincipal" aria-label="Principal">
       <a href="index.html" class="nav-link">Início</a>
       <a href="index.html#trilhas" class="nav-link">Trilhas</a>
       <a href="index.html#contato" class="nav-link">Contato</a>
     </nav>
     <div class="nav-acoes">
       <a href="login.html" class="btn btn-ghost btn-sm">Entrar</a>
-      <button class="nav-toggle" aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menuPrincipal"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     </div>
   </div>
 </header>
 
-<main class="pagina-auth">
+<main class="pagina-auth" id="conteudo" tabindex="-1">
   <div class="container">
     <div class="auth-grid">
       <div class="auth-lado">
@@ -49,25 +50,25 @@
         <span class="eyebrow">novo por aqui?</span>
         <h1 style="font-size:26px; margin-top:12px;">Criar conta</h1>
 
-        <div class="form-aviso" id="cadastroAviso"></div>
+        <div class="form-aviso" id="cadastroAviso" role="status" aria-live="polite"></div>
 
         <form id="formCadastro" novalidate style="margin-top:22px;">
           <div class="campo">
             <label for="cadNome">Nome completo</label>
             <input type="text" id="cadNome" name="nome" required minlength="6" autocomplete="name" placeholder="Seu nome completo" />
-            <div class="msg-campo" data-erro-de="cadNome"></div>
+            <div class="msg-campo" data-erro-de="cadNome" aria-live="polite"></div>
           </div>
 
           <div class="campo">
             <label for="cadEmail">E-mail</label>
             <input type="email" id="cadEmail" name="email" required autocomplete="email" placeholder="voce@email.com" />
-            <div class="msg-campo" data-erro-de="cadEmail"></div>
+            <div class="msg-campo" data-erro-de="cadEmail" aria-live="polite"></div>
           </div>
 
           <div class="campo">
             <label for="cadTelefone">Telefone <span class="opcional">(com DDD)</span></label>
             <input type="tel" id="cadTelefone" name="telefone" required autocomplete="tel" />
-            <div class="msg-campo" data-erro-de="cadTelefone"></div>
+            <div class="msg-campo" data-erro-de="cadTelefone" aria-live="polite"></div>
           </div>
 
           <div class="campo">
@@ -92,7 +93,7 @@
               <input type="password" id="cadSenhaConfirma" name="senhaConfirma" required autocomplete="new-password" placeholder="Repita a senha" />
               <button type="button" class="btn-olho" data-olho-de="cadSenhaConfirma" aria-label="Mostrar senha"></button>
             </div>
-            <div class="msg-campo" data-erro-de="cadSenhaConfirma"></div>
+            <div class="msg-campo" data-erro-de="cadSenhaConfirma" aria-live="polite"></div>
           </div>
 
           <button type="submit" class="btn btn-primario btn-block" id="btnCadastrar">Criar minha conta</button>

@@ -10,17 +10,18 @@
 <link rel="stylesheet" href="assets/css/chatbot.css" />
 </head>
 <body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="loader-pagina"><div class="loader-terminal">stardev --painel-admin<span class="cursor-piscante"></span></div></div>
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --painel-admin<span class="cursor-piscante"></span></div></div>
 
 <div class="mobile-topbar">
-  <button aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
-  <span class="logo-texto" style="color:var(--cor-primaria); font-size:14px;">Star Dev · Admin</span>
-  <span style="width:22px;"></span>
+  <button type="button" class="topbar-menu" aria-label="Ocultar menu" aria-controls="menuLateral" aria-expanded="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <button type="button" class="topbar-logo" aria-controls="menuLateral" aria-expanded="true" aria-label="Star Dev: mostrar ou ocultar o menu"><span class="logo-mark"><svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg></span><span class="logo-texto">Star Dev</span></button>
+  <span class="topbar-titulo">Painel administrativo</span>
 </div>
 
 <div class="app-shell">
-  <aside class="app-sidebar">
+  <aside class="app-sidebar" id="menuLateral" aria-label="Menu do painel administrativo">
     <a href="index.html" class="logo">
       <span class="logo-mark"><svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg></span>
       <span class="logo-texto">Star Dev</span>
@@ -28,6 +29,10 @@
     <span class="chip-nivel" style="margin-bottom:24px; width:fit-content;">nível administrador</span>
 
     <nav class="app-nav">
+      <a href="index.html" class="app-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Página inicial
+      </a>
       <a href="#" class="app-nav-link ativo" data-secao="aulas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
         Disciplinas
@@ -62,7 +67,7 @@
     </div>
   </aside>
 
-  <main class="app-main">
+  <main class="app-main" id="conteudo" tabindex="-1">
 
     <!-- ---------- DISCIPLINAS / AULAS ---------- -->
     <section id="secaoAulas">
@@ -70,33 +75,36 @@
         <div><h1>Disciplinas</h1><p>Cadastre as disciplinas ("matérias") que servirão de base para as videoaulas.</p></div>
       </div>
 
-      <div class="painel">
-        <div class="painel-titulo"><h2>Nova disciplina</h2></div>
-        <div class="form-aviso" id="aulaAviso"></div>
-        <form id="formAula" style="display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:14px; align-items:end;">
-          <div class="campo" style="margin-bottom:0;">
-            <label for="aulaMateria">Nome da disciplina</label>
-            <input type="text" id="aulaMateria" required placeholder="Ex: Front-end" />
-          </div>
-          <div class="campo" style="margin-bottom:0;">
-            <label for="aulaDuracao">Duração</label>
-            <input type="text" id="aulaDuracao" placeholder="Ex: 6h" />
-          </div>
-          <div class="campo" style="margin-bottom:0;">
-            <label for="aulaQtd">Qtd. de aulas</label>
-            <input type="number" id="aulaQtd" min="0" placeholder="Ex: 12" />
-          </div>
-          <button type="submit" class="btn btn-primario">Cadastrar</button>
-        </form>
-      </div>
+      <div class="admin-duas-colunas">
+        <div class="painel painel-form">
+          <div class="painel-titulo"><h2>Nova disciplina</h2></div>
+          <div class="form-aviso" id="aulaAviso" role="status" aria-live="polite"></div>
+          <form id="formAula" class="form-linha">
+            <div class="campo">
+              <label for="aulaMateria">Nome da disciplina</label>
+              <input type="text" id="aulaMateria" required placeholder="Ex: Front-end" />
+            </div>
+            <div class="campo">
+              <label for="aulaDuracao">Duração</label>
+              <input type="text" id="aulaDuracao" placeholder="Ex: 6h" />
+            </div>
+            <div class="campo">
+              <label for="aulaQtd">Qtd. de aulas</label>
+              <input type="number" id="aulaQtd" min="0" placeholder="Ex: 12" />
+            </div>
+            <button type="submit" class="btn btn-primario">Cadastrar</button>
+          </form>
+        </div>
 
-      <div class="painel">
-        <div class="painel-titulo"><h2>Disciplinas cadastradas</h2></div>
-        <div style="overflow-x:auto;">
-          <table class="tabela-admin">
-            <thead><tr><th>ID</th><th>Disciplina</th><th>Duração</th><th>Qtd. aulas</th></tr></thead>
-            <tbody id="tabelaAulas"></tbody>
-          </table>
+        <div class="painel">
+          <div class="painel-titulo"><h2>Disciplinas cadastradas</h2></div>
+          <div class="tabela-rolagem" tabindex="0" role="region" aria-label="Lista de disciplinas cadastradas">
+            <table class="tabela-admin">
+              <caption class="sr-only">Disciplinas cadastradas</caption>
+              <thead><tr><th scope="col">ID</th><th scope="col">Disciplina</th><th scope="col">Duração</th><th scope="col">Qtd. aulas</th></tr></thead>
+              <tbody id="tabelaAulas"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -107,41 +115,44 @@
         <div><h1>Videoaulas</h1><p>Vincule vídeos do YouTube às disciplinas cadastradas.</p></div>
       </div>
 
-      <div class="painel">
-        <div class="painel-titulo"><h2 id="tituloFormVideo">Nova videoaula</h2></div>
-        <div class="form-aviso" id="videoAviso"></div>
-        <form id="formVideo">
-          <input type="hidden" id="videoId" />
-          <div class="campo">
-            <label for="videoMateria">Disciplina</label>
-            <select id="videoMateria" required></select>
-          </div>
-          <div class="campo">
-            <label for="videoNome">Nome da aula</label>
-            <input type="text" id="videoNome" required minlength="5" placeholder="Ex: Introdução ao HTML" />
-          </div>
-          <div class="campo">
-            <label for="videoDescricao">Descrição</label>
-            <textarea id="videoDescricao" required minlength="15" placeholder="Sobre o que é essa aula (mín. 15 caracteres)"></textarea>
-          </div>
-          <div class="campo">
-            <label for="videoLink">Link do YouTube</label>
-            <input type="url" id="videoLink" required placeholder="https://www.youtube.com/watch?v=..." />
-          </div>
-          <div style="display:flex; gap:10px;">
-            <button type="submit" class="btn btn-primario" id="btnSalvarVideo">Cadastrar videoaula</button>
-            <button type="button" class="btn btn-ghost" id="btnCancelarEdicaoVideo" style="display:none;">Cancelar edição</button>
-          </div>
-        </form>
-      </div>
+      <div class="admin-duas-colunas">
+        <div class="painel painel-form">
+          <div class="painel-titulo"><h2 id="tituloFormVideo">Nova videoaula</h2></div>
+          <div class="form-aviso" id="videoAviso" role="status" aria-live="polite"></div>
+          <form id="formVideo">
+            <input type="hidden" id="videoId" />
+            <div class="campo">
+              <label for="videoMateria">Disciplina</label>
+              <select id="videoMateria" required></select>
+            </div>
+            <div class="campo">
+              <label for="videoNome">Nome da aula</label>
+              <input type="text" id="videoNome" required minlength="5" placeholder="Ex: Introdução ao HTML" />
+            </div>
+            <div class="campo">
+              <label for="videoDescricao">Descrição</label>
+              <textarea id="videoDescricao" required minlength="15" placeholder="Sobre o que é essa aula (mín. 15 caracteres)"></textarea>
+            </div>
+            <div class="campo">
+              <label for="videoLink">Link do YouTube</label>
+              <input type="url" id="videoLink" required placeholder="https://www.youtube.com/watch?v=..." />
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primario" id="btnSalvarVideo">Cadastrar videoaula</button>
+              <button type="button" class="btn btn-ghost" id="btnCancelarEdicaoVideo" style="display:none;">Cancelar edição</button>
+            </div>
+          </form>
+        </div>
 
-      <div class="painel">
-        <div class="painel-titulo"><h2>Videoaulas cadastradas</h2></div>
-        <div style="overflow-x:auto;">
-          <table class="tabela-admin">
-            <thead><tr><th>Disciplina</th><th>Aula</th><th>Link</th><th>Ações</th></tr></thead>
-            <tbody id="tabelaVideoaulas"></tbody>
-          </table>
+        <div class="painel">
+          <div class="painel-titulo"><h2>Videoaulas cadastradas</h2></div>
+          <div class="tabela-rolagem" tabindex="0" role="region" aria-label="Lista de videoaulas cadastradas">
+            <table class="tabela-admin">
+              <caption class="sr-only">Videoaulas cadastradas</caption>
+              <thead><tr><th scope="col">Capa</th><th scope="col">Disciplina</th><th scope="col">Aula</th><th scope="col">Link</th><th scope="col">Ações</th></tr></thead>
+              <tbody id="tabelaVideoaulas"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -153,9 +164,10 @@
       </div>
 
       <div class="painel">
-        <div style="overflow-x:auto;">
+        <div class="tabela-rolagem" tabindex="0" role="region" aria-label="Mensagens recebidas">
           <table class="tabela-admin">
-            <thead><tr><th>Nome</th><th>E-mail</th><th>Comentário</th><th>Ações</th></tr></thead>
+            <caption class="sr-only">Mensagens recebidas pelo formulário de contato</caption>
+            <thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Comentário</th><th scope="col">Ações</th></tr></thead>
             <tbody id="tabelaFeedbacks"></tbody>
           </table>
         </div>

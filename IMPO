@@ -1,0 +1,1 @@
+DB_HOST="gateway01.sa-east-1.prod.aws.tidbcloud.com" DB_USER="SEU_USUARIO.root" DB_PASSWORD="SUA_SENHA" node ../importar.js ../banco_lite_tidb.sql

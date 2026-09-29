@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="assets/css/chatbot.css" />
 </head>
 <body class="bg-grid">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="loader-pagina"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
 
 <header class="header">
   <div class="container">
@@ -21,19 +22,19 @@
       </span>
       <span class="logo-texto">Star Dev</span>
     </a>
-    <nav class="nav-desktop">
+    <nav class="nav-desktop" id="menuPrincipal" aria-label="Principal">
       <a href="index.html" class="nav-link">Início</a>
       <a href="index.html#trilhas" class="nav-link">Trilhas</a>
       <a href="index.html#contato" class="nav-link">Contato</a>
     </nav>
     <div class="nav-acoes">
       <a href="cadastro.html" class="btn btn-primario btn-sm">Criar conta</a>
-      <button class="nav-toggle" aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menuPrincipal"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     </div>
   </div>
 </header>
 
-<main class="pagina-auth">
+<main class="pagina-auth" id="conteudo" tabindex="-1">
   <div class="container">
     <div class="auth-grid">
       <div class="auth-lado">
@@ -49,7 +50,7 @@
         <span class="eyebrow">acesso do aluno</span>
         <h1 style="font-size:26px; margin-top:12px;">Entrar</h1>
 
-        <div class="form-aviso" id="loginAviso"></div>
+        <div class="form-aviso" id="loginAviso" role="status" aria-live="polite"></div>
 
         <form id="formLogin" novalidate style="margin-top:22px;">
           <div class="campo">

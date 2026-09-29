@@ -27,7 +27,7 @@ function trocarSecao(nome) {
   document.querySelectorAll(".app-nav-link[data-secao]").forEach((a) => {
     a.classList.toggle("ativo", a.dataset.secao === nome);
   });
-  document.querySelector(".app-sidebar")?.classList.remove("aberta");
+  window.fecharMenuMobile?.();
 }
 
 document.querySelectorAll(".app-nav-link[data-secao]").forEach((link) => {
@@ -124,10 +124,10 @@ function renderizarMaterias() {
   container.innerHTML = TODAS_MATERIAS.map((materia) => {
     const qtd = TODAS_VIDEOAULAS.filter((v) => v.id_aula === materia.id_aula).length;
     return `
-      <div class="item-materia" data-id-aula="${materia.id_aula}">
-        <h4>${escapar(materia.materia)}</h4>
-        <div class="meta">${materia.duracao || "-"} · ${qtd} aula(s)</div>
-      </div>`;
+      <button type="button" class="item-materia" data-id-aula="${materia.id_aula}" aria-pressed="false">
+        <strong>${escapar(materia.materia)}</strong>
+        <span class="meta">${escapar(materia.duracao || "-")} · ${qtd} aula(s)</span>
+      </button>`;
   }).join("");
 
   container.querySelectorAll(".item-materia").forEach((el) => {
@@ -137,6 +137,9 @@ function renderizarMaterias() {
 
 function abrirMateria(idAula) {
   MATERIA_SELECIONADA = idAula;
+  document.querySelectorAll(".item-materia").forEach((el) => {
+    el.setAttribute("aria-pressed", String(Number(el.dataset.idAula) === idAula));
+  });
   const materia = TODAS_MATERIAS.find((m) => m.id_aula === idAula);
   document.getElementById("tituloMateriaSelecionada").textContent = materia ? materia.materia : "Aulas";
   document.getElementById("painelAulas").style.display = "block";
@@ -148,21 +151,27 @@ function abrirMateria(idAula) {
   if (aulasDaMateria.length === 0) {
     lista.innerHTML = `<div class="vazio-estado"><p>Ainda não há videoaulas publicadas para essa disciplina.</p></div>`;
   } else {
-    lista.innerHTML = aulasDaMateria.map((aula, i) => `
-      <div class="item-aula" data-link="${escapar(aula.link)}" data-nome="${escapar(aula.nome_aulas)}">
-        <span class="num">${String(i + 1).padStart(2, "0")}</span>
-        <div class="info">
-          <h4>${escapar(aula.nome_aulas)}</h4>
-          <p>${escapar(aula.descricao)}</p>
-        </div>
-      </div>`).join("");
+    lista.innerHTML = aulasDaMateria.map((aula, i) => {
+      const idVideo = extrairIdYoutube(aula.link);
+      const capa = idVideo
+        ? `<img src="https://img.youtube.com/vi/${idVideo}/mqdefault.jpg" alt="" loading="lazy" />`
+        : "";
+      return `
+      <button type="button" class="item-aula" data-link="${escapar(aula.link)}" data-nome="${escapar(aula.nome_aulas)}" data-descricao="${escapar(aula.descricao)}">
+        <span class="aula-thumb">${capa}<span class="num">${String(i + 1).padStart(2, "0")}</span></span>
+        <span class="info">
+          <strong class="aula-titulo">${escapar(aula.nome_aulas)}</strong>
+          <span class="aula-desc">${escapar(aula.descricao)}</span>
+        </span>
+      </button>`;
+    }).join("");
 
     lista.querySelectorAll(".item-aula").forEach((el) => {
-      el.addEventListener("click", () => tocarVideo(el.dataset.link, el.dataset.nome));
+      el.addEventListener("click", () => tocarVideo(el.dataset.link, el.dataset.nome, el.dataset.descricao));
     });
 
     // toca a primeira aula automaticamente
-    tocarVideo(aulasDaMateria[0].link, aulasDaMateria[0].nome_aulas);
+    tocarVideo(aulasDaMateria[0].link, aulasDaMateria[0].nome_aulas, aulasDaMateria[0].descricao);
   }
 
   document.getElementById("painelAulas").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -175,16 +184,24 @@ function extrairIdYoutube(link = "") {
 }
 
 /** Monta o player, com mensagem amigável caso o vídeo não seja carregado (RNF03) */
-function tocarVideo(link, nome) {
+function tocarVideo(link, nome, descricao = "") {
   const id = extrairIdYoutube(link);
   const container = document.getElementById("playerAtivo");
 
+  // destaca o card da aula que está tocando
+  document.querySelectorAll(".item-aula").forEach((el) => {
+    if (el.dataset.link === link) el.setAttribute("aria-current", "true");
+    else el.removeAttribute("aria-current");
+  });
+
+  const legenda = `<div class="aula-atual"><h3>${escapar(nome)}</h3>${descricao ? `<p>${escapar(descricao)}</p>` : ""}</div>`;
+
   if (!id) {
     container.innerHTML = `
-      <div class="player-wrap"><div class="player-erro mostrar">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#eace76" stroke-width="1.6"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <div class="player-wrap"><div class="player-erro mostrar" role="alert">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#eace76" stroke-width="1.6" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
         <p>Vídeo temporariamente indisponível.</p>
-      </div></div>`;
+      </div></div>${legenda}`;
     return;
   }
 
@@ -193,10 +210,10 @@ function tocarVideo(link, nome) {
       <iframe id="iframeAula" src="https://www.youtube.com/embed/${id}" title="${escapar(nome)}"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       <div class="player-erro" id="playerErro">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#eace76" stroke-width="1.6"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#eace76" stroke-width="1.6" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
         <p>Vídeo temporariamente indisponível. Tente novamente mais tarde.</p>
       </div>
-    </div>`;
+    </div>${legenda}`;
 
   // fallback amigável caso o iframe do YouTube não carregue (servidor fora do ar / vídeo removido)
   const iframe = document.getElementById("iframeAula");
@@ -212,6 +229,8 @@ function escapar(str = "") {
 
 document.getElementById("btnVoltarMaterias")?.addEventListener("click", () => {
   document.getElementById("painelAulas").style.display = "none";
+  document.querySelectorAll(".item-materia").forEach((el) => el.setAttribute("aria-pressed", "false"));
+  document.getElementById("listaMaterias").scrollIntoView({ block: "nearest" });
 });
 
 /* ------------------------------------------------------------------ */

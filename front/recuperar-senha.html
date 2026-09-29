@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="assets/css/chatbot.css" />
 </head>
 <body class="bg-grid">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="loader-pagina"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
 
 <header class="header">
   <div class="container">
@@ -19,25 +20,25 @@
       <span class="logo-mark"><svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg></span>
       <span class="logo-texto">Star Dev</span>
     </a>
-    <nav class="nav-desktop">
+    <nav class="nav-desktop" id="menuPrincipal" aria-label="Principal">
       <a href="index.html" class="nav-link">Início</a>
       <a href="login.html" class="nav-link">Entrar</a>
     </nav>
     <div class="nav-acoes">
       <a href="cadastro.html" class="btn btn-primario btn-sm">Criar conta</a>
-      <button class="nav-toggle" aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menuPrincipal"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     </div>
   </div>
 </header>
 
-<main class="pagina-auth">
+<main class="pagina-auth" id="conteudo" tabindex="-1">
   <div class="container" style="max-width:520px;">
     <div class="form-card reveal">
       <span class="eyebrow">recuperação de acesso</span>
       <h1 style="font-size:24px; margin-top:12px;">Esqueci minha senha</h1>
       <p style="color:#4a373c; margin-top:8px; font-size:14.5px;">Confirme seu e-mail cadastrado e defina uma nova senha.</p>
 
-      <div class="form-aviso" id="recAviso"></div>
+      <div class="form-aviso" id="recAviso" role="status" aria-live="polite"></div>
 
       <!-- ETAPA 1: confirmar e-mail -->
       <form id="formEmailRec" style="margin-top:24px;">

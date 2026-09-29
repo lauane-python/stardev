@@ -12,8 +12,9 @@
 <link rel="stylesheet" href="assets/css/chatbot.css" />
 </head>
 <body class="bg-grid">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="loader-pagina"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
 
 <!-- ====================== HEADER ====================== -->
 <header class="header">
@@ -28,7 +29,7 @@
       <span class="logo-texto">Star Dev</span>
     </a>
 
-    <nav class="nav-desktop">
+    <nav class="nav-desktop" id="menuPrincipal" aria-label="Principal">
       <a href="index.html" class="nav-link ativo">Início</a>
       <a href="index.html#trilhas" class="nav-link">Trilhas</a>
       <a href="index.html#como-funciona" class="nav-link">Como funciona</a>
@@ -39,13 +40,14 @@
     <div class="nav-acoes">
       <a href="login.html" class="btn btn-primario btn-sm">Entrar</a>
       <a href="cadastro.html" class="btn btn-primario btn-sm">Criar conta grátis</a>
-      <button class="nav-toggle" aria-label="Abrir menu">
+      <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menuPrincipal">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
     </div>
   </div>
 </header>
 
+<main id="conteudo" tabindex="-1">
 <!-- ====================== HERO ====================== -->
 <section class="hero">
   <div class="container hero-grid">
@@ -63,6 +65,14 @@
         <span class="tag-mono">Aulas no YouTube</span>
         <span class="tag-mono">Mentor de IA incluído</span>
       </div>
+      <a href="#equipe" class="hero-autoras" aria-label="Conheça a equipe: Lauane Pasquini e Melissa Vieira">
+        <span class="hero-autoras-fotos">
+          <img src="img/ftlau.webp" alt="" width="52" height="52" decoding="async" />
+          <img src="img/ftmel.webp" alt="" width="52" height="52" decoding="async" />
+        </span>
+        <span class="hero-autoras-texto"><small>Criado por</small><strong>Lauane Pasquini &amp; Melissa Vieira</strong></span>
+        <span class="hero-autoras-seta" aria-hidden="true">→</span>
+      </a>
     </div>
 
     <div class="terminal-window reveal">
@@ -75,8 +85,6 @@
       <div class="terminal-body" id="terminalHero"></div>
     </div>
   </div>
-</section>
-
 </section>
 
 <!-- ====================== VÍDEO ====================== -->
@@ -101,7 +109,7 @@
       <h2>Veja como a plataforma funciona</h2>
     </div>
 
-    <div class="terminal-window video-janela reveal" style="max-width:960px;margin:0 auto;">
+    <div class="terminal-window video-janela reveal" style="max-width:1120px;margin:0 auto;">
       <div class="terminal-topbar">
         <span class="terminal-dot vermelho"></span>
         <span class="terminal-dot amarelo"></span>
@@ -110,7 +118,7 @@
       </div>
 
       <div class="video-area">
-        <video id="videoApresentacao" controls muted playsinline preload="metadata"
+        <video id="videoApresentacao" controls muted playsinline preload="metadata" aria-label="Vídeo de apresentação da StarDev"
                poster="videos/poster.jpg"
                style="display:block; width:100% !important; max-width:100% !important; height:auto !important; background:#241417;">
           <source src="videos/apresentacao.mp4" type="video/mp4">
@@ -250,16 +258,16 @@
       <p>Um projeto técnico pensado por estudantes, para estudantes.</p>
     </div>
     <div class="grid-equipe">
-      <div class="card-membro reveal">
-        <img src="img/ftlau.svg" alt="Foto de Lauane Pasquini" class="avatar-membro" />
-        <h3 style="margin-top:14px; color:#4a373c;">Lauane Pasquini</h3>
-        <span>Idealizadora & Desenvolvimento</span>
-      </div>
-      <div class="card-membro reveal">
-        <img src="img/ftmel.svg" alt="Foto de Melissa Vieira" class="avatar-membro" />
-        <h3 style="margin-top:14px; color:#4a373c;">Melissa Vieira</h3>
-        <span>Idealizadora & Desenvolvimento</span>
-      </div>
+      <article class="card-membro reveal">
+        <img src="img/ftlau.webp" alt="Foto de Lauane Pasquini" class="avatar-membro" width="720" height="659" loading="lazy" decoding="async" />
+        <h3>Lauane Pasquini</h3>
+        <span>Idealizadora &amp; Desenvolvimento</span>
+      </article>
+      <article class="card-membro reveal">
+        <img src="img/ftmel.webp" alt="Foto de Melissa Vieira" class="avatar-membro" width="720" height="660" loading="lazy" decoding="async" />
+        <h3>Melissa Vieira</h3>
+        <span>Idealizadora &amp; Desenvolvimento</span>
+      </article>
     </div>
   </div>
 </section>
@@ -287,28 +295,43 @@
     </div>
 
     <div class="form-card reveal">
-      <div class="form-aviso" id="contatoAviso"></div>
+      <div class="form-aviso" id="contatoAviso" role="status" aria-live="polite"></div>
       <form id="formContato" novalidate>
         <div class="campo">
           <label for="contatoNome">Nome completo</label>
           <input type="text" id="contatoNome" name="nome" required minlength="6" placeholder="Como podemos te chamar" />
-          <div class="msg-campo" data-erro-de="contatoNome"></div>
+          <div class="msg-campo" data-erro-de="contatoNome" aria-live="polite"></div>
         </div>
         <div class="campo">
           <label for="contatoEmail">E-mail</label>
           <input type="email" id="contatoEmail" name="email" required placeholder="voce@email.com" />
-          <div class="msg-campo" data-erro-de="contatoEmail"></div>
+          <div class="msg-campo" data-erro-de="contatoEmail" aria-live="polite"></div>
         </div>
         <div class="campo">
           <label for="contatoComentario">Sua mensagem</label>
           <textarea id="contatoComentario" name="comentario" required minlength="10" placeholder="Conta pra gente o que você precisa..."></textarea>
-          <div class="msg-campo" data-erro-de="contatoComentario"></div>
+          <div class="msg-campo" data-erro-de="contatoComentario" aria-live="polite"></div>
         </div>
         <button type="submit" class="btn btn-primario btn-block" id="btnEnviarContato">Enviar mensagem</button>
       </form>
     </div>
   </div>
 </section>
+
+
+<!-- ====================== CARROSSEL DE CAPAS ====================== -->
+<section id="aulas-carrossel" class="secao-carrossel" aria-labelledby="carrosselTitulo" hidden>
+  <div class="container carrossel-cabecalho">
+    <div class="section-head">
+      <span class="eyebrow">aulas na plataforma</span>
+      <h2 id="carrosselTitulo">Conteúdo novo chegando sempre</h2>
+    </div>
+    <button type="button" class="btn btn-ghost btn-sm" id="carrosselPausa" aria-pressed="false">Pausar animação</button>
+  </div>
+  <div class="carrossel" id="carrossel" aria-hidden="true"><div class="carrossel-trilho" id="carrosselTrilho"></div></div>
+</section>
+
+</main>
 
 <!-- ====================== FOOTER ====================== -->
 <footer class="footer">
