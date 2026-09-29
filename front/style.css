@@ -1,9 +1,25 @@
 * {
   box-sizing: border-box;
 }
-/* ================================
-   VÍDEO HERO
-================================ */
+
+/* Vídeo logo abaixo da hero */
+.secao-video { padding: 40px 0 96px; }
+.secao-video .section-head { margin-bottom: 36px; }
+
+.video-janela {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.video-janela video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  background: #241417;
+}
+
+
 .video-hero {
     position: relative;
     width: 100%;
@@ -13,7 +29,6 @@
     isolation: isolate;
     background: #000;
 }
-/* Container do vídeo */
 .video-hero__media {
     position: absolute;
     inset: 0;
@@ -22,7 +37,6 @@
     overflow: hidden;
     z-index: 0;
 }
-/* Vídeo do YouTube */
 .video-hero__media iframe {
     position: absolute;
     top: 50%;
@@ -36,7 +50,6 @@
     pointer-events: none;
     display: block;
 }
-/* Camada escura */
 .video-hero__overlay {
   position: relative;
   z-index: 2;
@@ -47,16 +60,14 @@
   align-items: center;
   text-align: center;
   color: #fff;
-  background: rgba(0, 0, 0, 0.25); /* escurece um pouco o vídeo pra texto legível */
+  background: rgba(0, 0, 0, 0.25);
   padding: 0 20px;
 }
-/* Título */
 .video-hero__overlay h1 {
     margin: 0;
     font-size: clamp(2.5rem, 6vw, 5.5rem);
     font-weight: 700;
 }
-/* Texto */
 .video-hero__overlay p {
     max-width: 700px;
     margin: 20px 0 0;
@@ -64,6 +75,8 @@
     font-size: clamp(1rem, 2vw, 1.3rem);
     line-height: 1.6;
 }
+
+
 /* home (index) — FUNDO ÚNICO E MAIS CLARO (substitui as duas versões antigas) */
 .body_index_cadastro {
   font-family: "Josefin Sans", sans-serif;

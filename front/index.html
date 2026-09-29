@@ -77,6 +77,104 @@
   </div>
 </section>
 
+</section>
+
+<!-- ====================== VÍDEO ====================== -->
+<section id="video" class="secao-video">
+  <style>
+    .video-area { position: relative; }
+    .video-som {
+      position: absolute; top: 16px; left: 16px; z-index: 2;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border: 0; border-radius: 999px;
+      background: var(--cor-botoes); color: #fff;
+      font-family: var(--fonte-mono); font-size: 13px; font-weight: 600;
+      cursor: pointer; box-shadow: var(--sombra-suave);
+    }
+    .video-som:hover { filter: brightness(1.12); }
+    .video-som[hidden] { display: none; }
+  </style>
+
+  <div class="container">
+    <div class="section-head centralizado reveal">
+      <span class="eyebrow">$ conheça a StarDev</span>
+      <h2>Veja como a plataforma funciona</h2>
+    </div>
+
+    <div class="terminal-window video-janela reveal" style="max-width:960px;margin:0 auto;">
+      <div class="terminal-topbar">
+        <span class="terminal-dot vermelho"></span>
+        <span class="terminal-dot amarelo"></span>
+        <span class="terminal-dot verde"></span>
+        <span class="terminal-titulo">apresentacao.mp4 — stardev</span>
+      </div>
+
+      <div class="video-area">
+        <video id="videoApresentacao" controls muted playsinline preload="metadata"
+               poster="videos/poster.jpg"
+               style="display:block; width:100% !important; max-width:100% !important; height:auto !important; background:#241417;">
+          <source src="videos/apresentacao.mp4" type="video/mp4">
+          <!-- Descomente depois de criar o arquivo de legendas:
+          <track kind="captions" src="videos/legendas.vtt" srclang="pt-BR" label="Português" default> -->
+          Seu navegador não suporta vídeo.
+        </video>
+
+        <button type="button" id="btnSom" class="video-som" aria-label="Ativar som do vídeo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>
+          Ativar som
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const video = document.getElementById('videoApresentacao');
+      const btn = document.getElementById('btnSom');
+      if (!video || !btn) return;
+
+      const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let pausadoPeloUsuario = false;
+      let pausadoPorScroll = false;
+
+      // Ativar som: recomeça do início para ouvir a apresentação completa
+      btn.addEventListener('click', function () {
+        video.muted = false;
+        video.currentTime = 0;
+        video.play();
+      });
+
+      // O botão só aparece enquanto o vídeo está mudo
+      // (também funciona se a pessoa mexer no volume pelos controles)
+      video.addEventListener('volumechange', function () {
+        btn.hidden = !video.muted;
+      });
+
+      // Distingue pausa do usuário de pausa automática por scroll
+      video.addEventListener('pause', function () {
+        if (pausadoPorScroll) { pausadoPorScroll = false; return; }
+        if (!video.ended) pausadoPeloUsuario = true;
+      });
+      video.addEventListener('play', function () { pausadoPeloUsuario = false; });
+
+      // Toca (mudo) quando aparece na tela; pausa quando sai
+      const observador = new IntersectionObserver(function (entradas) {
+        const visivel = entradas[0].isIntersecting;
+        if (visivel) {
+          if (!reduzMovimento && video.muted && video.paused && !video.ended && !pausadoPeloUsuario) {
+            video.play().catch(function () {});
+          }
+        } else if (!video.paused) {
+          pausadoPorScroll = true;
+          video.pause();
+        }
+      }, { threshold: 0.35 });
+
+      observador.observe(video);
+    })();
+  </script>
+</section>
+
 <!-- ====================== TRILHAS ====================== -->
 <section id="trilhas" class="section-alt">
   <div class="container">
