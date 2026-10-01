@@ -1,25 +1,26 @@
 /**
  * ==========================================
  * DEV MENTOR
- * OLLAMA SERVICE
+ * GROQ SERVICE (substitui o Ollama local)
  * ==========================================
  */
 const axios = require("axios");
 const {
-    MODEL,
-    URL,
-    TEMPERATURE,
-    MAX_TOKENS,
-    STREAM,
     BOT_NAME,
-    PLATFORM_NAME
+    PLATFORM_NAME,
+    TEMPERATURE,
+    MAX_TOKENS
 } = require("../config/chatConfig");
-// Gera uma resposta utilizando o Ollama
+
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant";
+
+// Gera uma resposta utilizando a Groq
 async function gerarResposta({
     pergunta,
     contexto
 }) {
-    const prompt = `
+    const systemPrompt = `
 Você é a ${BOT_NAME}.
 Você é a inteligência artificial oficial da plataforma ${PLATFORM_NAME}.
 Seu objetivo é ensinar programação para estudantes iniciantes e intermediários.
@@ -39,40 +40,46 @@ ${contexto.baseConhecimento}
 CONTEXTO DA PÁGINA
 ==============================
 ${contexto.contextoPagina}
-==============================
-HISTÓRICO DA CONVERSA
-==============================
-${contexto.historico.join("\n")}
-==============================
-PERGUNTA DO ALUNO
-==============================
-${pergunta}
-==============================
-RESPOSTA DA DEV MENTOR
-==============================
-`;
+`.trim();
+
+    const mensagens = [
+        { role: "system", content: systemPrompt },
+        ...contexto.historico.map((linha) => {
+            const ehAluno = linha.startsWith("Aluno:");
+            return {
+                role: ehAluno ? "user" : "assistant",
+                content: linha.replace(/^(Aluno|Dev Mentor):\s*/, "")
+            };
+        }),
+        { role: "user", content: pergunta }
+    ];
+
     try {
         const response = await axios.post(
-            URL,
+            GROQ_URL,
             {
-                model: MODEL,
-                prompt,
-                stream: STREAM,
-                options: {
-                    temperature: TEMPERATURE,
-                    num_predict: MAX_TOKENS
+                model: GROQ_MODEL,
+                messages: mensagens,
+                temperature: TEMPERATURE,
+                max_tokens: MAX_TOKENS
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+                    "Content-Type": "application/json"
                 }
             }
         );
-        return response.data.response.trim();
+        return response.data.choices[0].message.content.trim();
     } catch (erro) {
-        console.error("\n========== OLLAMA ==========");
+        console.error("\n========== GROQ ==========");
         console.error(erro.message);
         if (erro.response) {
             console.error(erro.response.data);
         }
-        console.error("============================\n");
+        console.error("===========================\n");
         return "Desculpe, não consegui responder agora. Tente novamente em alguns instantes.";
     }
 }
+
 module.exports = gerarResposta;
