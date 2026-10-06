@@ -151,7 +151,7 @@
                 document.getElementById("perfil-nome-topo").textContent = dados.nome || "Nome do Aluno";
 
                 if (dados.foto) {
-                    fotoImg.src = dados.foto;
+                    fotoImg.src = `${API_URL}${dados.foto}`;
                     fotoImg.classList.add("ativo");
                     fotoLabel.classList.add("tem-foto");
                 }
@@ -233,7 +233,7 @@
             };
 
             try {
-                const res = await fetch("/usuario", {
+                const res = await fetch(`${API_URL}/usuario`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
