@@ -154,3 +154,78 @@ document.addEventListener("DOMContentLoaded", () => {
   iniciarFormContato();
   iniciarCarrosselAulas();
 });
+
+
+// --------------------------------------------------- //
+// Carrossel de aulas (loop infinito, semitransparente e não clicável)
+// --------------------------------------------------- //
+
+
+
+(function () {
+  const secao  = document.getElementById('aulas-carrossel');
+  const trilho = document.getElementById('carrosselTrilho');
+  const carrossel = document.getElementById('carrossel');
+  const btnPausa = document.getElementById('carrosselPausa');
+  if (!secao || !trilho) return;
+
+  // Extrai o ID do vídeo de qualquer formato de link do YouTube
+  function idYoutube(url = '') {
+    const m = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  function criarGrupo(capas) {
+    const grupo = document.createElement('div');
+    grupo.className = 'carrossel-grupo';
+    capas.forEach((src) => {
+      const item = document.createElement('div');
+      item.className = 'carrossel-item';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.loading = 'lazy';
+      item.appendChild(img);
+      grupo.appendChild(item);
+    });
+    return grupo;
+  }
+
+  async function iniciar() {
+    try {
+      // AJUSTE AQUI: a rota que lista as aulas no seu back-end
+      const resp = await fetch(`${window.API_URL || ''}/api/videos`);
+      const aulas = await resp.json();
+
+      // AJUSTE AQUI: o nome do campo que guarda o link (url, link, video_url...)
+      let capas = aulas
+        .map((a) => idYoutube(a.url || a.link || a.video_url))
+        .filter(Boolean)
+        .map((id) => `https://img.youtube.com/vi/${id}/mqdefault.jpg`);
+
+      if (!capas.length) return;
+
+      // Garante largura suficiente para o loop não ter "buraco"
+      while (capas.length < 8) capas = capas.concat(capas);
+
+      // Dois grupos idênticos: a animação usa translateX(-50%)
+      trilho.appendChild(criarGrupo(capas));
+      trilho.appendChild(criarGrupo(capas));
+
+      // Velocidade proporcional à quantidade de capas
+      trilho.style.setProperty('--duracao', `${capas.length * 4}s`);
+
+      secao.hidden = false;
+    } catch (e) {
+      console.error('Carrossel:', e);
+    }
+  }
+
+  btnPausa?.addEventListener('click', () => {
+    const pausado = carrossel.classList.toggle('pausado');
+    btnPausa.setAttribute('aria-pressed', pausado);
+    btnPausa.textContent = pausado ? 'Retomar animação' : 'Pausar animação';
+  });
+
+  iniciar();
+})();
