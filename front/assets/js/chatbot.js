@@ -65,7 +65,7 @@
       launcher.setAttribute("aria-expanded", "true");
       if (!jaAbriu) {
         adicionarMensagemBot(
-          "Oi! Eu sou a Dev Mentor, a IA da StarDev 👾. Pode mandar sua dúvida sobre programação ou sobre a plataforma que eu te ajudo."
+          "Oi! Eu sou a Dev Mentor, a IA da StarDev. Pode mandar sua dúvida sobre programação ou sobre a plataforma que eu te ajudo."
         );
         jaAbriu = true;
       }
