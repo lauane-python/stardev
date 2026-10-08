@@ -31,10 +31,9 @@
       </div>
       <div class="dm-mensagens" id="dmMensagens"></div>
       <div class="dm-sugestoes" id="dmSugestoes">
-        <button class="dm-sugestao">Como funciona a StarDev?</button>
         <button class="dm-sugestao">Quem são as Desenvolvedoras?</button>
-        <button class="dm-sugestao">Quem é Lauane?</button>
-        <button class="dm-sugestao">Quem é Melissa?</button>
+        <button class="dm-sugestao">Como funciona a StarDev?</button>
+        <button class="dm-sugestao">Por onde eu começo?</button>
       </div>
       <div class="dm-input-area">
         <textarea id="dmInput" rows="1" placeholder="Digite sua dúvida..." maxlength="500"></textarea>
