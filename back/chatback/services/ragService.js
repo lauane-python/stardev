@@ -3,20 +3,23 @@
  * DEV MENTOR
  * RAG SERVICE
  * ==========================================
- *
- * Nesta primeira versão não utilizamos
- * embeddings.
- *
- * Este serviço apenas organiza todo o
- * contexto que será enviado ao Ollama.
+ * Organiza:
+ * - Base de conhecimento
+ * - Matéria atual
+ * - Aulas da matéria
+ * - Histórico da conversa
+ * Tudo isso será enviado para a IA.
  */
 const fs = require("fs");
 const path = require("path");
+const conexao = require("../../db.js");
 const caminhoBase = path.join(
     __dirname,
     "../data/base_conhecimento.txt"
 );
-// Lê a base de conhecimento
+// ==========================================
+// BASE DE CONHECIMENTO
+// ==========================================
 function obterBaseConhecimento() {
     try {
         return fs.readFileSync(
@@ -31,37 +34,120 @@ function obterBaseConhecimento() {
         return "";
     }
 }
-// Contexto da página onde o aluno está.
-function obterContextoPagina(pagina = "") {
-    pagina = pagina.toLowerCase();
-    if (pagina.includes("afront")) {
-        return "O aluno está estudando Front-end.";
+// ==========================================
+// CONTEXTO DA MATÉRIA
+// ==========================================
+async function obterContextoMateria(
+    materiaId
+) {
+    if (!materiaId) {
+        return {
+            id: null,
+            nome: null,
+            duracao: null,
+            quantidadeAulas: null,
+            aulas: []
+        };
     }
-    if (pagina.includes("aback")) {
-        return "O aluno está estudando Back-end.";
+    try {
+        const [materias] =
+            await conexao.query(
+                `
+                SELECT
+                    id_aula,
+                    materia,
+                    duracao,
+                    qtd_aulas
+                FROM aulas
+                WHERE id_aula = ?
+                `,
+                [materiaId]
+            );
+        if (materias.length === 0) {
+            return {
+                id: materiaId,
+                nome: null,
+                duracao: null,
+                quantidadeAulas: null,
+                aulas: []
+            };
+        }
+        const materia = materias[0];
+        const [aulas] =
+            await conexao.query(
+                `
+                SELECT
+                    id_materias,
+                    nome_aulas,
+                    descricao
+                FROM materias
+                WHERE id_aula = ?
+                ORDER BY id_materias ASC
+                `,
+                [materiaId]
+            );
+        return {
+            id: materia.id_aula,
+            nome: materia.materia,
+            duracao: materia.duracao,
+            quantidadeAulas:
+                materia.qtd_aulas,
+            aulas: aulas.map(
+                aula => ({
+                    id: aula.id_materias,
+                    nome: aula.nome_aulas,
+                    descricao:
+                        aula.descricao
+                })
+            )
+        };
+    } catch (erro) {
+        console.error(
+            "Erro ao buscar contexto da matéria:",
+            erro
+        );
+        return {
+            id: materiaId,
+            nome: null,
+            duracao: null,
+            quantidadeAulas: null,
+            aulas: []
+        };
     }
-    if (pagina.includes("adb")) {
-        return "O aluno está estudando Banco de Dados.";
-    }
-    if (pagina.includes("alogica")) {
-        return "O aluno está estudando Lógica de Programação.";
-    }
-    if (pagina.includes("aux")) {
-        return "O aluno está estudando UX/UI.";
-    }
-    if (pagina.includes("ia")) {
-        return "O aluno está estudando Inteligência Artificial.";
-    }
-    return "O aluno está navegando pela plataforma StarDev.";
 }
-// Monta todo o contexto que será enviado para a IA
-function montarContexto({
-    historico = [],
-    pagina = ""
+// ==========================================
+// CONTEXTO DA PÁGINA
+// ==========================================
+async function obterContextoPagina({
+    pagina = "",
+    materiaId = null
 }) {
+    const materia =
+        await obterContextoMateria(
+            materiaId
+        );
     return {
-        baseConhecimento: obterBaseConhecimento(),
-        contextoPagina: obterContextoPagina(pagina),
+        pagina,
+        materia
+    };
+}
+// ==========================================
+// MONTA TODO O CONTEXTO
+// ==========================================
+async function montarContexto({
+    historico = [],
+    pagina = "",
+    materiaId = null
+}) {
+    const contextoPagina =
+        await obterContextoPagina({
+            pagina,
+            materiaId
+        });
+    return {
+        baseConhecimento:
+            obterBaseConhecimento(),
+        contextoPagina,
         historico
     };
 }

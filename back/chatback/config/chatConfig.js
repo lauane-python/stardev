@@ -1,28 +1,16 @@
 /*
   ==========================================
- DEV MENTOR - CONFIGURAÇÕES DO CHATBOT
-   ==========================================
- */
+  DEV MENTOR - CONFIGURAÇÕES DO CHATBOT
+  ==========================================
+*/
 module.exports = {
-    // ==========================================
-    // OLLAMA
-    // ==========================================
-    MODEL: "llama3",
-    URL: "http://127.0.0.1:11434/api/generate",
-    // ==========================================
-    // IA
-    // ==========================================
-    TEMPERATURE: 0.7,
-    MAX_TOKENS: 300,
-    STREAM: false,
-    // ==========================================
-    // MEMÓRIA
-    // ==========================================
-    MAX_HISTORY: 10,
-    // ==========================================
-    // CHATBOT
-    // ==========================================
-    BOT_NAME: "Dev Mentor",
-    PLATFORM_NAME: "StarDev",
-    LANGUAGE: "pt-BR"
+  // IA
+  TEMPERATURE: 0.7,
+  MAX_TOKENS: 300,
+  // MEMÓRIA
+  MAX_HISTORY: 10,
+  // CHATBOT
+  BOT_NAME: "Dev Mentor",
+  PLATFORM_NAME: "StarDev",
+  LANGUAGE: "pt-BR"
 };

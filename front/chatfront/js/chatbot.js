@@ -67,7 +67,8 @@ async function enviarMensagem() {
                     },
                     body: JSON.stringify({
                         message: mensagem,
-                        pagina: window.location.pathname
+                        pagina: window.STARDEV_CONTEXT?.pagina || window.location.pathname,
+                        materiaId: window.STARDEV_CONTEXT?.materiaId || null
                     })
                 }
             );

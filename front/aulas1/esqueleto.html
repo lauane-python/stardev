@@ -74,6 +74,12 @@
         // ID DA MATÉRIA VEM DA URL: esqueleto.html?materia=5
         const params = new URLSearchParams(window.location.search);
         const ID_MATERIA = Number(params.get("materia"));
+
+        window.STARDEV_CONTEXT = {
+            pagina: "esqueleto.html",
+            materiaId: ID_MATERIA
+        };
+
         const lista = document.getElementById("listaAulas");
         async function carregarAulas() {
             // Se a URL não trouxer o parâmetro "materia"
