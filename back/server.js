@@ -17,7 +17,7 @@ const fs = require("fs");
 const multer = require("multer");
 fs.mkdirSync(path.join(__dirname, "uploads/fotos"), { recursive: true });
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, "uploads/fotos"),
+    destination: (req, file, cb) => cb(null, path.join(__dirname, "uploads/fotos")),
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         cb(null, `user_${req.usuario.id}${ext}`);
@@ -194,7 +194,7 @@ app.get("/usuario", verificarToken, async (req, res) => {
 });
 const upload = multer({ storage });
 
-app.use("/uploads", express.static("uploads")); // pra servir as imagens
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));// pra servir as imagens
 
 app.post("/usuario/foto", verificarToken, upload.single("foto"), async (req, res) => {
     try {
@@ -315,26 +315,34 @@ app.put("/recuperarSenha", async (req, res) => {
     }
 });
 /*ATUALIZAR USUÁRIO*/
-
 app.put("/usuario", verificarToken, async (req, res) => {
     try {
-        const { nome, email, telefone, bio } = req.body;
+        const { nome = "", email = "", telefone = "", bio = "" } = req.body;
         const userId = req.usuario.id;
-        const sql = `
-            UPDATE cadastro
-            SET nome=?, email=?, telefone=?, bio=?
-            WHERE id_cadastro=?
-        `;
-        const [result] = await conexao.query(sql, [nome, email, telefone, bio, userId]);
-        if (result.affectedRows === 1) {
-            return res.json({ resposta: "Usuário atualizado com sucesso" });
-        }
-        return res.json({ resposta: "Erro ao atualizar usuário" });
+
+        if (nome.trim().length < 6) return res.json({ resposta: "Preencha o nome completo" });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return res.json({ resposta: "Digite um email válido" });
+        if (!/^\d{10,11}$/.test(telefone)) return res.json({ resposta: "Digite um telefone válido" });
+
+        const [dup] = await conexao.query(
+            "SELECT id_cadastro FROM cadastro WHERE email=? AND id_cadastro<>?",
+            [email.trim(), userId]
+        );
+        if (dup.length) return res.json({ resposta: "Email já cadastrado" });
+
+        const [result] = await conexao.query(
+            "UPDATE cadastro SET nome=?, email=?, telefone=?, bio=? WHERE id_cadastro=?",
+            [nome.trim(), email.trim(), telefone, bio.trim(), userId]
+        );
+        return res.json({
+            resposta: result.affectedRows === 1 ? "Usuário atualizado com sucesso" : "Erro ao atualizar usuário"
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
+
 /*listar aulas*/
 app.get("/aulas", async (req, res) => {
     const [dados] = await conexao.query("SELECT * FROM aulas");

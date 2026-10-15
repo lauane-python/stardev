@@ -295,7 +295,7 @@ document.getElementById("inputFoto").addEventListener("change", async (ev) => {
     const dados = await resp.json();
     if (dados.foto) {
       mostrarToast("Foto atualizada com sucesso!", "ok");
-      document.getElementById("sidebarAvatar").src = apiUrl(dados.foto);
+      document.getElementById("sidebarAvatar").src = apiUrl(dados.foto) + "?t=" + Date.now();
     } else {
       mostrarToast(dados.resposta || "Não foi possível atualizar a foto.", "erro");
     }
