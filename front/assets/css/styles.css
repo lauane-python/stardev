@@ -1,13 +1,6 @@
-/* ==========================================================================
-   STARDEV — FOLHA DE ESTILOS PRINCIPAL
-   Identidade visual baseada no terminal / prompt de comando (>_)
-   Paleta oficial extraída do Brand Book da StarDev
-   ========================================================================== */
-
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  /* ---- Paleta oficial StarDev ---- */
   --cor-primaria: #f2e8e0;     /* creme - fundo geral */
   --cor-secundaria: #814456;   /* vinho - header / nav / textos de destaque */
   --cor-destaque: #eace76;     /* amarelo mostarda - hover / avisos / nível */
@@ -17,18 +10,15 @@
   --cor-letras: #000000;       /* preto - texto */
   --cor-branco: #fffaf6;
 
-  /* ---- Variações auxiliares (derivadas, não fazem parte da paleta oficial) ---- */
   --secundaria-escura: #5e2f3c;
   --secundaria-clara: #9c5d70;
   --botoes-hover: #5c5c2c;
   --sucesso: #4c7a4c;
   --erro: #a5333a;
 
-  /* ---- Tipografia ---- */
   --fonte-display: 'Josefin Sans', sans-serif;
   --fonte-mono: 'JetBrains Mono', monospace;
 
-  /* ---- Layout ---- */
   --largura-max: 1440px;
   --topbar-h: 56px;
   --gutter: clamp(16px, 4vw, 48px);
@@ -62,7 +52,6 @@ ul { list-style: none; margin: 0; padding: 0; }
 
 ::selection { background: var(--cor-destaque); color: var(--cor-letras); }
 
-/* Fundo com "grid" técnico sutil, referência a terminal / editor de código */
 .bg-grid {
   background-image:
     linear-gradient(rgba(129, 68, 86, 0.05) 1px, transparent 1px),
@@ -99,7 +88,6 @@ p { line-height: 1.6; }
   color: transparent;
 }
 
-/* ---- Botões ---- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -147,9 +135,6 @@ p { line-height: 1.6; }
 .btn-sm { padding: 9px 16px; font-size: 13px; }
 .btn[disabled] { opacity: .55; cursor: not-allowed; transform: none !important; }
 
-/* ==========================================================================
-   HEADER / NAVEGAÇÃO
-   ========================================================================== */
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -219,9 +204,6 @@ p { line-height: 1.6; }
   .nav-toggle { display: block; }
 }
 
-/* ==========================================================================
-   HERO — JANELA DE TERMINAL
-   ========================================================================== */
 .hero { padding: clamp(112px, 15vh, 150px) 0 clamp(48px, 7vw, 88px); position: relative; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
 @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; } }
@@ -236,7 +218,6 @@ p { line-height: 1.6; }
   color: var(--cor-secundaria);
 }
 
-/* Janela de terminal (mock) */
 .terminal-window {
   background: #241417;
   border-radius: var(--radius-md);
@@ -273,9 +254,6 @@ p { line-height: 1.6; }
 @keyframes piscar { 50% { opacity: 0; } }
 @keyframes surgir { to { opacity: 1; } }
 
-/* ==========================================================================
-   SEÇÕES GERAIS
-   ========================================================================== */
 section { padding: clamp(56px, 8vw, 96px) 0; }
 .section-head { max-width: 760px; margin: 0 0 48px; }
 .section-head h2 { font-size: clamp(28px, 3.4vw, 42px); margin-top: 14px; }
@@ -291,7 +269,6 @@ section { padding: clamp(56px, 8vw, 96px) 0; }
 .section-escura .eyebrow { color: var(--cor-destaque); }
 .section-escura .eyebrow::before { color: var(--cor-destaque); }
 
-/* Trilhas / cards de matérias */
 .grid-trilhas { display: grid; grid-template-columns: 1fr; gap: 22px; }
 @media (min-width: 640px) { .grid-trilhas { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1040px) { .grid-trilhas { grid-template-columns: repeat(3, 1fr); } }
@@ -327,7 +304,6 @@ section { padding: clamp(56px, 8vw, 96px) 0; }
 .badge-nivel.intermediario { background: rgba(234,206,118,.25); color: #8a6d1a; }
 .badge-nivel.avancado { background: rgba(165,51,58,.12); color: var(--erro); }
 
-/* Passos / como funciona */
 .grid-passos { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 26px; counter-reset: passo; }
 .passo { position: relative; padding-left: 6px; }
 .passo-num {
@@ -337,7 +313,6 @@ section { padding: clamp(56px, 8vw, 96px) 0; }
 .passo h3 { font-size: 18px; margin-bottom: 8px; }
 .passo p { font-size: 14.5px; color: #4a373c; }
 
-/* Equipe */
 .grid-equipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 26px; }
 .card-membro {
   background: var(--cor-branco); border-radius: var(--radius-md); padding: 26px;
@@ -355,9 +330,7 @@ section { padding: clamp(56px, 8vw, 96px) 0; }
 .card-membro h3 { font-size: 17px; }
 .card-membro span { font-family: var(--fonte-mono); font-size: 12px; color: var(--cor-reserva); }
 
-/* ==========================================================================
-   FORMULÁRIOS
-   ========================================================================== */
+   /* FORMULÁRIOS */
 .form-card {
   background: var(--cor-branco);
   border-radius: var(--radius-lg);
@@ -437,9 +410,6 @@ section { padding: clamp(56px, 8vw, 96px) 0; }
 .auth-form-side { background: var(--cor-branco); padding: clamp(24px, 4vw, 56px); }
 @media (max-width: 860px) { .auth-grid { grid-template-columns: 1fr; } .auth-lado { display: none; } }
 
-/* ==========================================================================
-   CONTATO
-   ========================================================================== */
 .grid-contato { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: start; }
 @media (max-width: 900px) { .grid-contato { grid-template-columns: 1fr; } }
 .info-contato { display: grid; gap: 18px; }
@@ -448,9 +418,6 @@ section { padding: clamp(56px, 8vw, 96px) 0; }
 .info-item h4 { font-size: 15px; margin-bottom: 4px; }
 .info-item p { font-size: 14px; color: #4a373c; margin: 0; }
 
-/* ==========================================================================
-   ÁREA DO ALUNO (INTRANET)
-   ========================================================================== */
 .app-shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
 .app-sidebar {
   background: var(--cor-secundaria); color: var(--cor-primaria);
@@ -554,9 +521,6 @@ table.tabela-admin tr:hover td { background: rgba(219,156,145,.06); }
 .vazio-estado svg { margin: 0 auto 14px; opacity: .5; }
 .vazio-estado p { font-family: var(--fonte-mono); font-size: 13px; }
 
-/* ==========================================================================
-   FOOTER
-   ========================================================================== */
 .footer { background: #33191f; color: rgba(242,232,224,.7); padding: 56px 0 26px; }
 .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(2, 1fr); gap: 40px; margin-bottom: 40px; }
 @media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
@@ -567,15 +531,10 @@ table.tabela-admin tr:hover td { background: rgba(219,156,145,.06); }
 .footer ul li a:hover { color: var(--cor-primaria); }
 .footer-baixo { border-top: 1px solid rgba(242,232,224,.1); padding-top: 22px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12.5px; font-family: var(--fonte-mono); }
 
-/* ==========================================================================
-   ANIMAÇÕES DE ENTRADA (scroll reveal)
-   ========================================================================== */
+
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.visivel { opacity: 1; transform: translateY(0); }
 
-/* ==========================================================================
-   TOASTS
-   ========================================================================== */
 .toast-container { position: fixed; bottom: 24px; left: 24px; z-index: 4000; display: flex; flex-direction: column; gap: 10px; }
 .toast {
   font-family: var(--fonte-mono); font-size: 13px; padding: 13px 18px; border-radius: 10px;
@@ -587,9 +546,6 @@ table.tabela-admin tr:hover td { background: rgba(219,156,145,.06); }
 .toast.erro { background: var(--erro); }
 @keyframes toast-in { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
 
-/* ==========================================================================
-   LOADER GLOBAL
-   ========================================================================== */
 .loader-pagina {
   position: fixed; inset: 0; background: var(--cor-primaria); z-index: 9000;
   display: flex; align-items: center; justify-content: center; transition: opacity .4s ease, visibility .4s ease;
@@ -597,7 +553,6 @@ table.tabela-admin tr:hover td { background: rgba(219,156,145,.06); }
 .loader-pagina.escondido { opacity: 0; visibility: hidden; pointer-events: none; }
 .loader-terminal { font-family: var(--fonte-mono); color: var(--cor-secundaria); font-size: 15px; }
 
-/* Foco visível para acessibilidade */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 3px solid var(--cor-reserva); outline-offset: 2px;
 }
@@ -606,11 +561,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
 
-/* ==========================================================================
-   ATUALIZAÇÃO — UX, ACESSIBILIDADE E MELHOR USO DO ESPAÇO
-   ========================================================================== */
-
-/* ---- Acessibilidade geral ---- */
 .skip-link {
   position: fixed; top: 8px; left: 8px; z-index: 10000;
   background: var(--cor-destaque); color: var(--cor-letras);
@@ -636,7 +586,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 main:focus { outline: none; }
 @media (scripting: none) { .reveal { opacity: 1; transform: none; } }
 
-/* ---- Home: autoras em destaque no hero ---- */
 .hero-autoras {
   display: inline-flex; align-items: center; gap: 14px; margin-top: 30px;
   padding: 8px 20px 8px 8px; border-radius: 999px;
@@ -656,7 +605,6 @@ main:focus { outline: none; }
 .hero-autoras-texto strong { font-size: 16px; color: var(--secundaria-escura); }
 .hero-autoras-seta { color: var(--cor-secundaria); font-size: 20px; }
 
-/* ---- Home: equipe em grande destaque ---- */
 #equipe .section-head { max-width: 820px; margin-left: auto; margin-right: auto; text-align: center; }
 #equipe .section-head h2 { font-size: clamp(32px, 4.4vw, 56px); }
 #equipe .section-head p { font-size: clamp(16px, 1.6vw, 19px); }
@@ -686,7 +634,6 @@ main:focus { outline: none; }
   font-size: 14px; text-align: center;
 }
 
-/* ---- Home: carrossel de capas das videoaulas ---- */
 .secao-carrossel { padding: clamp(40px, 6vw, 72px) 0 clamp(48px, 7vw, 80px); overflow: hidden; }
 .secao-carrossel[hidden] { display: none; }
 .carrossel-cabecalho { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
@@ -712,7 +659,6 @@ main:focus { outline: none; }
   #carrosselPausa { display: none; }
 }
 
-/* ---- Intranet: barra superior + menu lateral recolhível ---- */
 .mobile-topbar {
   align-items: center; gap: 12px; min-height: var(--topbar-h);
   padding: 6px var(--gutter); background: var(--cor-secundaria);
@@ -746,7 +692,6 @@ main:focus { outline: none; }
   body.menu-aberto .app-overlay { display: block; }
 }
 
-/* ---- Área do aluno ---- */
 .stat-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 22px; }
 .stat-card { padding: 14px 18px; display: flex; align-items: baseline; gap: 12px; }
 .stat-card .valor { font-size: 26px; }
@@ -788,7 +733,6 @@ button.item-aula {
 }
 @media (max-height: 560px) { .aulas-player { position: static; } }
 
-/* Perfil em duas colunas */
 @media (min-width: 900px) {
   .painel-conteudo.ativa[data-conteudo-perfil="dados"] { display: grid; grid-template-columns: 240px 1fr; gap: 12px 40px; align-items: start; }
   .painel-conteudo[data-conteudo-perfil="dados"] > .form-aviso { grid-column: 1 / -1; }
@@ -800,13 +744,11 @@ button.item-aula {
 }
 .painel-conteudo[data-conteudo-perfil="senha"] { max-width: 640px; }
 
-/* ---- Cadastro em duas colunas ---- */
 @media (min-width: 720px) {
   #formCadastro { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; align-items: start; }
   #formCadastro > :nth-child(1), #formCadastro > :last-child { grid-column: 1 / -1; }
 }
 
-/* ---- Painel administrativo ---- */
 .admin-duas-colunas { display: grid; grid-template-columns: 1fr; gap: 22px; align-items: start; }
 .admin-duas-colunas > .painel { margin-bottom: 0; min-width: 0; }
 @media (min-width: 1100px) {
@@ -824,7 +766,6 @@ button.item-aula {
 .thumb-mini { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; background: var(--cor-terciaria); }
 .acoes-tabela button { min-width: 40px; min-height: 40px; }
 
-/* ---- Ajustes finos de espaço ---- */
 .app-main section { padding: 0; }
 .tabela-admin td a { white-space: nowrap; }
 .hero p.lead { max-width: 58ch; }

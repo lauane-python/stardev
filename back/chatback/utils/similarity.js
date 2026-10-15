@@ -1,20 +1,6 @@
-/**
- * ==========================================
- * DEV MENTOR
- * Similaridade entre textos
- * ==========================================
- *
- * Atualmente este arquivo ainda não é utilizado.
- * Ele ficará preparado para a futura versão
- * com RAG e embeddings.
- *
- * Utiliza similaridade de cosseno através
- * da biblioteca cosine-similarity.
- */
 const cosineSimilarity = require("cosine-similarity");
 /**
  * Calcula a similaridade entre dois vetores.
- *
  * @param {number[]} vetorA
  * @param {number[]} vetorB
  * @returns {number}

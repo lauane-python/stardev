@@ -6,12 +6,6 @@ import { colors } from "../theme/colors";
 import { fonts } from "../theme/typography";
 import { extrairIdYoutube } from "../utils/validators";
 
-/**
- * Reproduz a videoaula embutindo o player do YouTube num WebView.
- * Cumpre o RNF03: se o link não tiver um ID válido, ou se o WebView
- * falhar ao carregar (servidor do YouTube fora do ar / vídeo removido),
- * mostra uma mensagem amigável em vez de um erro cru.
- */
 export default function VideoPlayer({ link, nome }) {
   const [carregando, setCarregando] = useState(true);
   const [comErro, setComErro] = useState(false);

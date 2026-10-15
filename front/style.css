@@ -1,7 +1,6 @@
 * {
   box-sizing: border-box;
 }
-
 /* Vídeo logo abaixo da hero */
 .secao-video { padding: 40px 0 96px; }
 .secao-video .section-head { margin-bottom: 36px; }
@@ -75,9 +74,6 @@
     font-size: clamp(1rem, 2vw, 1.3rem);
     line-height: 1.6;
 }
-
-
-/* home (index) — FUNDO ÚNICO E MAIS CLARO (substitui as duas versões antigas) */
 .body_index_cadastro {
   font-family: "Josefin Sans", sans-serif;
   background-color: #f2e9e1;
@@ -531,7 +527,7 @@ button {
 .marrom { background-color: #a56940; }
 .amarelo { background-color: #eccc6e; }
  
-/* GRADE DAS AULAS — 6 COLUNAS x 2 LINHAS */
+/* GRADE DAS AULAS*/
 #section_todas_aulas {
   width: 100%;
   max-width: 1250px;
@@ -631,7 +627,6 @@ button {
   background: #a56940;
   transform: scale(1.05);
 }
-/* continuação... */
 /* VIDEOAULA*/
 #listaAulas {
   width: 100%;
@@ -643,7 +638,6 @@ button {
   align-items: center;
   gap: 35px;
 }
-/* Mensagem de carregamento */
 #listaAulas > p {
     color: #f2e9e1;
     text-align: center;
@@ -800,7 +794,6 @@ button:hover {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-/* ===== CARD 3D ===== */
 .card-3d {
   width: 300px;
   height: 300px;
@@ -846,9 +839,7 @@ button:hover {
 .card-inner.virado {
   transform: rotateY(180deg);
 }
-/* =================================
-   CORREÇÃO DO VÍDEO HERO
-================================= */
+/*CORREÇÃO DO VÍDEO HERO*/
 .video-hero {
     position: relative;
     z-index: 1;
@@ -874,8 +865,6 @@ button:hover {
     position: relative;
     z-index: 2;
 }
-/*HEADER ADMINISTRATIVO extras*/
-/* NAVEGAÇÃO DO HEADER */
 .header_index_cadastro > button {
     background: rgba(242, 233, 225, 0.10);
     border: 1px solid rgba(242, 233, 225, 0.20);
@@ -1079,7 +1068,7 @@ button:hover {
     text-align: center;
     color: rgba(74, 37, 54, 0.75);
 }
-/*ANIMAÇÃO DO FUNDO (compatibilidade)*/
+/*ANIMAÇÃO DO FUNDO*/
 @keyframes adminBackground {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -1296,7 +1285,6 @@ button:hover {
     .card-video h2, .card-video h3 { font-size: 18px; }
     .card-video p { font-size: 13px; }
 }
-/* Evita que qualquer elemento ultrapasse a tela */
 html,
 body {
     width: 100%;
@@ -1304,9 +1292,7 @@ body {
     overflow-x: hidden;
 }
  
-/* ================================
-   PERFIL DO ALUNO
-================================ */
+/*PERFIL DO ALUNO */
 #section_perfil {
   width: 100%;
   max-width: 850px;

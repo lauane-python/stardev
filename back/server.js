@@ -29,9 +29,7 @@ const chatbotRoutes = require(
     "./chatback/routes/chatbot"
 );
 
-/* =========================
-   MIDDLEWARE TOKEN (PADRÃO)
-========================= */
+/*MIDDLEWARE TOKEN*/
 function verificarToken(req, res, next) {
     const authHeader = req.headers["authorization"];
 
@@ -236,7 +234,7 @@ app.delete("/usuario/foto", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro ao remover foto" });
     }
 });
-/*CADASTRO DE AULAS (PROTEGIDO)*/
+/*CADASTRO DE AULAS*/
 app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
         // AQUI SIM!
@@ -259,7 +257,7 @@ app.post("/CadastroAulas", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/*TROCAR SENHA (LOGADO)*/
+/*TROCAR SENHA*/
 app.put("/trocarSenha", verificarToken, async (req, res) => {
     try {
         const { novaSenha } = req.body;
@@ -291,7 +289,7 @@ app.post("/verificarEmail", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/*RECUPERAR SENHA (SEM TOKEN)*/
+/*RECUPERAR SENHA*/
 app.put("/recuperarSenha", async (req, res) => {
     try {
         const { email, novaSenha } = req.body;
@@ -342,7 +340,7 @@ app.get("/aulas", async (req, res) => {
     const [dados] = await conexao.query("SELECT * FROM aulas");
     res.json(dados);
 });
-/*LISTAR FEEDBACKS (ADMIN)*/
+/*LISTAR FEEDBACKS*/
 app.get("/feedbacks", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -430,7 +428,6 @@ app.delete("/feedbacks/:id", verificarToken, async (req, res) => {
         });
     }
 });
-// VIDEOAULAS
 // LISTAR (com nome da matéria)
 app.get('/videoaulas', async (req, res) => {
     try {

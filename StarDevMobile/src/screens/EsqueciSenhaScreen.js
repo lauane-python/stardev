@@ -9,7 +9,7 @@ import { verificarEmailExiste, recuperarSenha } from "../services/authService";
 import { validarEmail } from "../utils/validators";
 
 export default function EsqueciSenhaScreen({ navigation }) {
-  const [etapa, setEtapa] = useState(1); // 1: email, 2: nova senha
+  const [etapa, setEtapa] = useState(1); 
   const [email, setEmail] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmaSenha, setConfirmaSenha] = useState("");

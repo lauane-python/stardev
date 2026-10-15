@@ -140,32 +140,22 @@
       const video = document.getElementById('videoApresentacao');
       const btn = document.getElementById('btnSom');
       if (!video || !btn) return;
-
       const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       let pausadoPeloUsuario = false;
       let pausadoPorScroll = false;
-
-      // Ativar som: recomeça do início para ouvir a apresentação completa
       btn.addEventListener('click', function () {
         video.muted = false;
         video.currentTime = 0;
         video.play();
       });
-
-      // O botão só aparece enquanto o vídeo está mudo
-      // (também funciona se a pessoa mexer no volume pelos controles)
       video.addEventListener('volumechange', function () {
         btn.hidden = !video.muted;
       });
-
-      // Distingue pausa do usuário de pausa automática por scroll
       video.addEventListener('pause', function () {
         if (pausadoPorScroll) { pausadoPorScroll = false; return; }
         if (!video.ended) pausadoPeloUsuario = true;
       });
       video.addEventListener('play', function () { pausadoPeloUsuario = false; });
-
-      // Toca (mudo) quando aparece na tela; pausa quando sai
       const observador = new IntersectionObserver(function (entradas) {
         const visivel = entradas[0].isIntersecting;
         if (visivel) {
@@ -183,7 +173,7 @@
   </script>
 </section>
 
-<!-- ====================== TRILHAS ====================== -->
+<!-- TRILHAS-->
 <section id="trilhas" class="section-alt">
   <div class="container">
     <div class="section-head reveal">
@@ -233,7 +223,7 @@
   </div>
 </section>
 
-<!-- ====================== COMO FUNCIONA ====================== -->
+<!--COMO FUNCIONA-->
 <section id="como-funciona">
   <div class="container">
     <div class="section-head reveal">
@@ -249,7 +239,7 @@
   </div>
 </section>
 
-<!-- ====================== EQUIPE ====================== -->
+<!--EQUIPE-->
 <section id="equipe" class="section-escura">
   <div class="container">
     <div class="section-head reveal">
@@ -271,7 +261,7 @@
     </div>
   </div>
 </section>
-<!-- ====================== CONTATO ====================== -->
+<!--CONTATO-->
 <section id="contato" class="section-alt">
   <div class="container grid-contato">
     <div class="reveal">
@@ -319,7 +309,7 @@
 </section>
 
 
-<!-- ====================== CARROSSEL DE CAPAS ====================== -->
+<!--CARROSSEL DE CAPAS-->
 <section id="aulas-carrossel" class="secao-carrossel" aria-labelledby="carrosselTitulo" hidden>
   <div class="container carrossel-cabecalho">
     <div class="section-head">
@@ -333,7 +323,7 @@
 
 </main>
 
-<!-- ====================== FOOTER ====================== -->
+<!--FOOTER-->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">

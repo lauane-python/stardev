@@ -1,8 +1,4 @@
-/*
-  ==========================================
-  DEV MENTOR - CONFIGURAÇÕES DO CHATBOT
-  ==========================================
-*/
+/*cONFIG- DEVMENTOR*/
 module.exports = {
   // IA
   TEMPERATURE: 0.7,

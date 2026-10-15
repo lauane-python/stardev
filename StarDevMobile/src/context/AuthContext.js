@@ -1,10 +1,3 @@
-/**
- * ==========================================================================
- * AUTH CONTEXT — sessão JWT persistida
- * Equivalente mobile do objeto `Auth` em front/assets/js/auth.js, mas
- * usando AsyncStorage no lugar do localStorage do navegador.
- * ==========================================================================
- */
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_CONFIG } from "../config/api";
@@ -14,11 +7,10 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
-  const [nivel, setNivel] = useState("U"); // "U" aluno, "A" administrador
+  const [nivel, setNivel] = useState("U");
   const [usuario, setUsuario] = useState(null);
   const [carregandoSessao, setCarregandoSessao] = useState(true);
 
-  // restaura sessão salva ao abrir o app
   useEffect(() => {
     (async () => {
       try {

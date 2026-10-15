@@ -86,9 +86,6 @@ async function carregarUsuario() {
   return usuario;
 }
 
-/* ------------------------------------------------------------------ */
-/* TRILHAS / MATÉRIAS / VIDEOAULAS                                     */
-/* ------------------------------------------------------------------ */
 async function carregarTrilhas() {
   try {
     const [aulas, videoaulas] = await Promise.all([
@@ -177,13 +174,11 @@ function abrirMateria(idAula) {
   document.getElementById("painelAulas").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** Extrai o ID de um link do YouTube (watch?v= ou youtu.be/) */
 function extrairIdYoutube(link = "") {
   const m = link.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
   return m ? m[1] : null;
 }
 
-/** Monta o player, com mensagem amigável caso o vídeo não seja carregado (RNF03) */
 function tocarVideo(link, nome, descricao = "") {
   const id = extrairIdYoutube(link);
   const container = document.getElementById("playerAtivo");
@@ -215,7 +210,6 @@ function tocarVideo(link, nome, descricao = "") {
       </div>
     </div>${legenda}`;
 
-  // fallback amigável caso o iframe do YouTube não carregue (servidor fora do ar / vídeo removido)
   const iframe = document.getElementById("iframeAula");
   const erroEl = document.getElementById("playerErro");
   iframe.addEventListener("error", () => erroEl.classList.add("mostrar"));
@@ -233,9 +227,7 @@ document.getElementById("btnVoltarMaterias")?.addEventListener("click", () => {
   document.getElementById("listaMaterias").scrollIntoView({ block: "nearest" });
 });
 
-/* ------------------------------------------------------------------ */
 /* PERFIL — atualizar dados                                            */
-/* ------------------------------------------------------------------ */
 document.querySelectorAll(".tab-btn[data-tab-perfil]").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn[data-tab-perfil]").forEach((b) => b.classList.remove("ativa"));

@@ -1,4 +1,4 @@
-// DEV MENTOR Memória temporária da conversa
+// DEV MENTOR
 const {
     MAX_HISTORY
 } = require("../config/chatConfig");

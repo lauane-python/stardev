@@ -1,9 +1,4 @@
-/**
- * ==========================================
- * DEV MENTOR
- * Validação de mensagens
- * ==========================================
- */
+/*DEV MENTOR Validação de mensagens*/
 function validarMensagem(mensagem) {
     // mensagem inexistente
     if (mensagem === undefined || mensagem === null) {

@@ -73,16 +73,12 @@
         const fotoImg = document.getElementById("perfil-foto-img");
         const removerFotoBtn = document.getElementById("perfil-remover-foto");
         const status = document.getElementById("perfil-status");
-
         const token = localStorage.getItem("token");
-
         const API_URL = "https://stardev-d20v.onrender.com";
-
-        // --- Máscara automática do telefone: +55 (DD) DDDDD-DDDD ---
         const inputPerfilTelefone = document.getElementById("input_perfil_telefone");
 
         function mascaraTelefone(digitos) {
-            digitos = digitos.slice(0, 11); // DDD + até 9 dígitos
+            digitos = digitos.slice(0, 11);
             const ddd = digitos.slice(0, 2);
             const resto = digitos.slice(2);
 
@@ -133,7 +129,7 @@
             setTimeout(() => status.classList.remove("mostrar"), 3000);
         }
 
-        // Carrega os dados do usuário ao abrir a página
+        //Carrega os dados do usuário ao abrir a página
         window.addEventListener("DOMContentLoaded", async () => {
             try {
                 const res = await fetch(`${API_URL}/usuario`, {
@@ -160,12 +156,10 @@
             }
         });
 
-        // Upload de foto (envia direto pro servidor ao selecionar)
         fotoInput.addEventListener("change", async () => {
             const file = fotoInput.files[0];
             if (!file) return;
 
-            // preview local imediato
             const reader = new FileReader();
             reader.onload = (e) => {
                 fotoImg.src = e.target.result;
@@ -174,7 +168,6 @@
             };
             reader.readAsDataURL(file);
 
-            // envia pro servidor
             const formData = new FormData();
             formData.append("foto", file);
 

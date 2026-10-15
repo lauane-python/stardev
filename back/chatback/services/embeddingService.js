@@ -1,23 +1,9 @@
-/**
- * ==========================================
- * DEV MENTOR
- * EMBEDDING SERVICE
- * ==========================================
- *
- * Nesta primeira versão o chatbot NÃO utiliza
- * embeddings.
- *
- * Este arquivo foi criado para manter a
- * arquitetura preparada para um futuro RAG
- * completo.
- */
 const fs = require("fs");
 const path = require("path");
 const caminhoEmbeddings = path.join(
     __dirname,
     "../data/embeddings.json"
 );
-//Carrega os embeddings salvos.
 function carregarEmbeddings() {
     try {
         if (!fs.existsSync(caminhoEmbeddings)) {
@@ -39,7 +25,6 @@ function carregarEmbeddings() {
         return [];
     }
 }
-// Salva embeddings
 function salvarEmbeddings(lista) {
     try {
         fs.writeFileSync(
@@ -58,8 +43,6 @@ function salvarEmbeddings(lista) {
         );
     }
 }
-// Gera embeddings
-//  Ainda não implementado
 async function gerarEmbeddings() {
     console.warn(
         "EmbeddingService: geração de embeddings ainda não implementada."

@@ -1,9 +1,4 @@
-/**
- * ==========================================
- * DEV MENTOR
- * ROTAS DO CHATBOT
- * ==========================================
- */
+/*rotas do devmentor*/
 const express = require("express");
 const router = express.Router();
 const validarMensagem = require(
@@ -23,11 +18,7 @@ const {
 const gerarResposta = require(
     "../services/ollamaService"
 );
-/**
- * ==========================================
- * CHAT
- * ==========================================
- */
+/*CHAT*/
 router.post("/chat", async (req, res) => {
     try {
         const {
