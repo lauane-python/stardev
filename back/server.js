@@ -437,7 +437,7 @@ app.delete("/feedbacks/:id", verificarToken, async (req, res) => {
     }
 });
 // LISTAR (com nome da matéria)
-app.get('/videoaulas', async (req, res) => {
+app.get("/videoaulas", async (req, res) => {
     try {
         const [rows] = await conexao.query(`
             SELECT 
@@ -461,7 +461,7 @@ app.get('/videoaulas', async (req, res) => {
     }
 });
 // CADASTRAR VIDEOAULA
-app.post('/videoaulas', verificarToken, async (req, res) => {
+app.post("/videoaulas", verificarToken, async (req, res) => {
     try {
 
         const {
@@ -542,7 +542,7 @@ app.post('/videoaulas', verificarToken, async (req, res) => {
     }
 });
 // EDITAR VIDEOAULA
-app.put('/videoaulas/:id', verificarToken, async (req, res) => {
+app.put("/videoaulas/:id", verificarToken, async (req, res) => {
     try {
 
         const { id } = req.params;
@@ -575,11 +575,10 @@ app.put('/videoaulas/:id', verificarToken, async (req, res) => {
                 message: "A descrição deve possuir pelo menos 15 caracteres."
             });
         }
-
         const youtubeRegex =
-            /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[A-Za-z0-9_-]{11}$/;
-
-        if (!youtubeRegex.test(url)) {
+            /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[A-Za-z0-9_-]{11}([?&].*)?$/;
+        
+            if (!youtubeRegex.test(url)) {
             return res.status(400).json({
                 message: "Informe um link válido do YouTube."
             });
@@ -624,7 +623,7 @@ app.put('/videoaulas/:id', verificarToken, async (req, res) => {
     }
 });
 // EXCLUIR
-app.delete('/videoaulas/:id', verificarToken, async (req, res) => {
+app.delete("/videoaulas/:id", verificarToken, async (req, res) => {
     try {
         const { id } = req.params;
         const [result] = await conexao.query(
