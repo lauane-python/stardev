@@ -1,28 +1,68 @@
-A Stardev é uma plataforma educacional focada em tecnologia.
-
-A plataforma oferece:
-- videoaulas
-- conteúdos educacionais
-- suporte aos estudantes
-- sistema administrativo
-
-As principais áreas são:
-- Front-end
+========================================
+HISTÓRIA DAS FUNDADORAS
+========================================
+A StarDev foi desenvolvida por Lauane Pasquini Ribeiro e Melissa Vieira durante sua formação no curso de Desenvolvimento de Sistemas do SENAI.
+As duas tiveram trajetórias diferentes dentro da tecnologia e desenvolveram interesses diferentes durante o curso.
+========================================
+LAUANE PASQUINI RIBEIRO
+========================================
+Lauane Pasquini Ribeiro é uma das fundadoras da StarDev.
+Durante sua trajetória escolar, estudou no SESI e posteriormente ingressou no SENAI para cursar Desenvolvimento de Sistemas.
+Antes de entrar na área de tecnologia, Lauane inicialmente considerava seguir a área de Administração. Entretanto, escolheu Desenvolvimento de Sistemas por enxergar oportunidades profissionais na área de tecnologia.
+Quando começou o curso, Lauane tinha pouca experiência com tecnologia. Na época, estava há cerca de um ano sem celular e ainda não havia tido um notebook.
+Seu primeiro contato com programação aconteceu durante o curso de Desenvolvimento de Sistemas. Sua trajetória começou com o tradicional "Hello World".
+Depois de aproximadamente oito meses estudando programação, Lauane ganhou seu primeiro notebook. A partir desse moento, passou a desenvolver diferentes projetos e aprofundar seus conhecimentos em tecnologia.
+Durante o curso, descobriu que realmente gosta de Desenvolvimento de Sistemas, principalmente da área de Front-end.
+Lauane possui interesse em programação e criação de interfaces e pretende continuar sua formação na área de tecnologia.
+Seu objetivo profissional é construir uma carreira na área de tecnologia, com foco em desenvolvimento Front-end.
+Entre seus interesses estão:
+- Desenvolvimento de projetos
+- Programação
+- Desenvolvimento Front-end
+- Criação de interfaces
+- Tecnologia
+- Música
+- Teclado
+- Órgão
+- Piano
+- Handebol
+========================================
+MELISSA VIEIRA
+========================================
+Melissa Vieira, também conhecida como Mel, é uma das fundadoras da StarDev.
+Em 2025, Melissa ingressou no SENAI para cursar Desenvolvimento de Sistemas.
+Para entrar no curso, estudou para a prova de seleção e conquistou uma das melhores notas da sala.
+Durante o curso, Melissa descobriu que possui grande interesse pela área de Back-end.
+Ao longo da formação, passou a estudar e praticar programação, enfrentando matérias desafiadoras e contando com o apoio dos professores Bruno e Matheus.
+Melissa pretende concluir o curso técnico e se tornar Técnica em Análise e Desenvolvimento de Sistemas.
+Apesar de seu interesse por tecnologia e Back-end, seu grande objetivo profissional é tornar-se fisioterapeuta.
+Entre seus interesses estão:
+- Tecnologia
+- Desenvolvimento de Sistemas
+- Programação
 - Back-end
-- Banco de dados
-- Inteligência Artificial
-- UX/UI
-
-A plataforma possui:
-- login
-- cadastro
-- recuperação de senha
-- dashboard administrativo
-- gerenciamento de aulas
-
-O chatbot da Stardev ajuda usuários com dúvidas sobre:
-- funcionamento da plataforma
-- acesso
-- estudos
-- programação
-- cursos
+- Aprendizado
+- Projetos
+- Tempo com amigos e família
+========================================
+TRAJETÓRIA NA TECNOLOGIA
+========================================
+Lauane e Melissa possuem trajetórias diferentes dentro do Desenvolvimento de Sistemas.
+Lauane desenvolveu maior interesse pelo Front-end e pela criação de interfaces.
+Melissa desenvolveu maior interesse pelo Back-end e pela parte de funcionamento interno das aplicações.
+Essa diferença de interesses contribuiu para a divisão de conhecimentos e funções durante o desenvolvimento da StarDev.
+A experiência das duas durante o curso de Desenvolvimento de Sistemas também influenciou a proposta da plataforma.
+========================================
+STARDEV E SUAS FUNDADORAS
+========================================
+A StarDev surgiu dentro do contexto da formação das fundadoras em Desenvolvimento de Sistemas.
+O projeto representa parte da evolução das duas durante o aprendizado de programação.
+A construção da plataforma envolve conhecimentos adquiridos durante o curso, incluindo programação, desenvolvimento Web, Front-end, Back-end, banco de dados e outras áreas da tecnologia.
+A StarDev também representa a experiência das fundadoras como estudantes aprendendo tecnologia e criando uma plataforma voltada para outros estudantes.
+========================================
+REGRA SOBRE A HISTÓRIA
+========================================
+Quando um estudante perguntar sobre Lauane, Melissa ou a história da StarDev, o Dev Mentor deve utilizar somente as informações presentes nesta base de conhecimento.
+O Dev Mentor não deve inventar datas, acontecimentos, projetos, experiências ou características que não estejam registradas.
+Quando uma informação não estiver disponível na base, deve informar que não possui essa informação em seu conhecimento sobre a história das fundadoras.
+========================================

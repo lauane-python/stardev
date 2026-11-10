@@ -46,9 +46,7 @@ function escapar(str = "") {
   return d.innerHTML;
 }
 
-/* ------------------------------------------------------------------ */
 /* SIDEBAR                                                              */
-/* ------------------------------------------------------------------ */
 async function carregarUsuarioAdmin() {
   const usuario = await buscarUsuarioLogado();
   if (!usuario) return;
@@ -61,9 +59,7 @@ async function carregarUsuarioAdmin() {
 }
 document.getElementById("btnSairAdmin").addEventListener("click", () => Auth.sair());
 
-/* ------------------------------------------------------------------ */
 /* DISCIPLINAS (AULAS)                                                  */
-/* ------------------------------------------------------------------ */
 async function carregarAulas() {
   try {
     const dados = await fetch(apiUrl("/aulas")).then((r) => r.json());
@@ -121,9 +117,7 @@ document.getElementById("formAula").addEventListener("submit", async (ev) => {
   }
 });
 
-/* ------------------------------------------------------------------ */
-/* VIDEOAULAS (CRUD)                                                    */
-/* ------------------------------------------------------------------ */
+/* VIDEOAU*/
 async function carregarVideoaulas() {
   try {
     const dados = await fetch(apiUrl("/videoaulas")).then((r) => r.json());
@@ -133,7 +127,7 @@ async function carregarVideoaulas() {
   }
 }
 
-/** Miniatura (capa) do vídeo no YouTube — a mesma que aparece no carrossel da home */
+/* Miniatura (capa) do vídeo no YouTube — a mesma que aparece no carrossel da home */
 function capaVideo(link = "") {
   const m = String(link).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
   if (!m) return `<span class="sr-only">sem capa</span>`;
@@ -236,9 +230,7 @@ document.getElementById("formVideo").addEventListener("submit", async (ev) => {
   }
 });
 
-/* ------------------------------------------------------------------ */
-/* FEEDBACKS                                                            */
-/* ------------------------------------------------------------------ */
+/* FEEDBACKS*/
 async function carregarFeedbacks() {
   try {
     const resp = await fetch(apiUrl("/feedbacks"), { headers: await Auth.cabecalhos() });
@@ -280,7 +272,6 @@ async function excluirFeedback(id) {
   }
 }
 
-/* ------------------------------------------------------------------ */
 document.addEventListener("DOMContentLoaded", async () => {
   await carregarUsuarioAdmin();
   await carregarAulas();

@@ -67,13 +67,17 @@
             const walk = (x - startX) * 2;
             carrossel.scrollLeft = scrollLeft - walk;
         });
-        // ===============================
         // AULAS CADASTRADAS NA INTRANET
-        // ===============================
         const API = "https://stardev-d20v.onrender.com/videoaulas";
         // ID DA MATÉRIA VEM DA URL: esqueleto.html?materia=5
         const params = new URLSearchParams(window.location.search);
         const ID_MATERIA = Number(params.get("materia"));
+
+        window.STARDEV_CONTEXT = {
+            pagina: "esqueleto.html",
+            materiaId: ID_MATERIA
+        };
+
         const lista = document.getElementById("listaAulas");
         async function carregarAulas() {
             // Se a URL não trouxer o parâmetro "materia"
@@ -111,13 +115,11 @@
                 aulasMateria.forEach(aula => {
                     let link = aula.link;
                     // Link do YouTube:
-                    // https://www.youtube.com/watch?v=ABC123
                     if (link.includes("watch?v=")) {
                         const codigo = link.split("watch?v=")[1].split("&")[0];
                         link = `https://www.youtube.com/embed/${codigo}`;
                     }
                     // Link do YouTube:
-                    // https://youtu.be/ABC123
                     else if (link.includes("youtu.be/")) {
                         const codigo = link.split("youtu.be/")[1].split("?")[0];
                         link = `https://www.youtube.com/embed/${codigo}`;

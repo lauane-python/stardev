@@ -1,9 +1,3 @@
-/**
- * ==========================================================================
- * CADASTRO.JS — validação em tempo real + envio para POST /cadastro
- * ==========================================================================
- */
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formCadastro");
   if (!form) return;
@@ -16,18 +10,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const barraForca = document.getElementById("cadForcaBarra");
   const checklist = document.getElementById("cadChecklist");
 
-  // Se já estiver logado, manda direto pra área do aluno
   if (typeof Auth !== "undefined" && Auth.logado()) {
     window.location.href = "area-aluno.html";
   }
 
-  // ---- Automação: máscara de telefone ao digitar ----
   ativarMascaraTelefone(campoTelefone);
 
-  // ---- Automação: olho de mostrar/ocultar senha ----
   document.querySelectorAll(".btn-olho").forEach(ativarOlhoSenha);
 
-  // ---- Força da senha em tempo real ----
   let senhaValida = false;
   campoSenha.addEventListener("input", () => {
     senhaValida = avaliarForcaSenha(campoSenha.value, barraForca, checklist);

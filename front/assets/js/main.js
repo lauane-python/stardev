@@ -113,9 +113,10 @@ async function iniciarCarrosselAulas() {
   try {
     const resp = await fetch(apiUrl("/videoaulas"));
     const dados = await resp.json();
+    console.log("Carrossel: resposta da API", resp.status, dados);
     ids = [...new Set((Array.isArray(dados) ? dados : []).map((v) => idYoutube(v.link)).filter(Boolean))];
-  } catch (e) { return; }
-  if (ids.length === 0) return;
+  } catch (e) { console.error("Carrossel:", e); return; }
+  if (ids.length === 0) { console.warn("Carrossel: nenhum link do YouTube válido"); return; }
 
   const larguraItem = Math.min(320, Math.max(200, window.innerWidth * 0.21)) + 16;
   const porGrupo = Math.max(ids.length, Math.ceil(window.innerWidth / larguraItem) + 2);

@@ -1,17 +1,4 @@
-/**
- * ==========================================================================
- * AUTH SERVICE — espelha front/assets/js/auth.js
- * Endpoints:
- *   POST /cadastro         { nome, email, senha, telefone }
- *   POST /login            { email, senha } -> { token, nivel }
- *   POST /verificarEmail   { email } -> { existe }
- *   PUT  /recuperarSenha   { email, novaSenha }
- *   GET  /usuario          (protegido)
- *   PUT  /usuario          (protegido)
- *   PUT  /trocarSenha      (protegido)
- *   POST /usuario/foto     (protegido, multipart)
- * ==========================================================================
- */
+
 import { apiUrl, fetchComTimeout } from "../config/api";
 
 async function parseJsonSeguro(resp) {
@@ -93,10 +80,6 @@ export async function trocarSenha(token, novaSenha) {
   return parseJsonSeguro(resp);
 }
 
-/**
- * Envia a foto de perfil escolhida via expo-image-picker.
- * `arquivo` é o objeto retornado pelo ImagePicker: { uri, fileName?, mimeType? }
- */
 export async function enviarFotoPerfil(token, arquivo) {
   const formData = new FormData();
   const nomeArquivo = arquivo.fileName || `foto_${Date.now()}.jpg`;
@@ -112,8 +95,6 @@ export async function enviarFotoPerfil(token, arquivo) {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      // NÃO defina "Content-Type" manualmente com FormData no RN —
-      // o boundary multipart é gerado automaticamente pelo fetch.
     },
     body: formData,
   });

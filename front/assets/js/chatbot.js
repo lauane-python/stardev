@@ -23,7 +23,7 @@
         <div class="dm-dots"><span></span><span></span><span></span></div>
         <div class="dm-topbar-info">
           <strong>Dev Mentor</strong>
-          <small>online · roda com Ollama</small>
+          <small>online · DevMentor</small>
         </div>
         <button class="dm-fechar" id="dmFechar" aria-label="Fechar chat">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -31,9 +31,9 @@
       </div>
       <div class="dm-mensagens" id="dmMensagens"></div>
       <div class="dm-sugestoes" id="dmSugestoes">
+        <button class="dm-sugestao">Quem são as Desenvolvedoras?</button>
         <button class="dm-sugestao">Como funciona a StarDev?</button>
         <button class="dm-sugestao">Por onde eu começo?</button>
-        <button class="dm-sugestao">O que é lógica de programação?</button>
       </div>
       <div class="dm-input-area">
         <textarea id="dmInput" rows="1" placeholder="Digite sua dúvida..." maxlength="500"></textarea>
@@ -65,7 +65,7 @@
       launcher.setAttribute("aria-expanded", "true");
       if (!jaAbriu) {
         adicionarMensagemBot(
-          "Oi! Eu sou a Dev Mentor, a IA da StarDev 👾. Pode mandar sua dúvida sobre programação ou sobre a plataforma que eu te ajudo."
+          "Oi! Eu sou a Dev Mentor, a IA da StarDev. Pode mandar sua dúvida sobre programação ou sobre a plataforma que eu te ajudo."
         );
         jaAbriu = true;
       }

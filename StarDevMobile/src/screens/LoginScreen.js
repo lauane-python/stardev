@@ -13,7 +13,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [carregando, setCarregando] = useState(false);
-  const [aviso, setAviso] = useState(null); // { texto, tipo }
+  const [aviso, setAviso] = useState(null);
 
   async function handleLogin() {
     setAviso(null);
@@ -33,7 +33,6 @@ export default function LoginScreen({ navigation }) {
       if (!dados.token) {
         setAviso({ texto: dados.resposta || "Não foi possível entrar.", tipo: "erro" });
       }
-      // se deu certo, o RootNavigator troca de pilha sozinho ao detectar o token
     } catch {
       setAviso({ texto: "Não foi possível falar com o servidor da StarDev.", tipo: "erro" });
     } finally {

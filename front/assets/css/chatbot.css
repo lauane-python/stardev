@@ -61,7 +61,7 @@
 .dm-mensagens::-webkit-scrollbar { width: 6px; }
 .dm-mensagens::-webkit-scrollbar-thumb { background: rgba(242,232,224,.15); border-radius: 3px; }
 
-.dm-msg { max-width: 88%; line-height: 1.55; animation: dm-in .25s ease; }
+.dm-msg { white-space: pre-line; max-width: 88%; line-height: 1.55; animation: dm-in .25s ease; }
 @keyframes dm-in { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
 .dm-msg.bot { align-self: flex-start; color: #e9dcd7; }
 .dm-msg.bot .dm-prompt { color: var(--cor-destaque); margin-right: 6px; }

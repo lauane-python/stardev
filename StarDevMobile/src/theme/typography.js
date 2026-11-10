@@ -1,11 +1,3 @@
-/**
- * ==========================================================================
- * TIPOGRAFIA — STARDEV
- * Web usa 'Josefin Sans' (display) e 'JetBrains Mono' (mono/labels).
- * Carregadas via @expo-google-fonts em App.js. Enquanto não carregam,
- * o app usa a fonte padrão do sistema (fallback definido abaixo).
- * ==========================================================================
- */
 export const fonts = {
   displayRegular: "JosefinSans_400Regular",
   displayMedium: "JosefinSans_500Medium",
@@ -14,7 +6,6 @@ export const fonts = {
   monoMedium: "JetBrainsMono_500Medium",
 };
 
-// usado como fallback até o useFonts() terminar de carregar
 export const systemFallback = {
   display: "System",
   mono: "System",
