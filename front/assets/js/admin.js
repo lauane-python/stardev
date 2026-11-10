@@ -19,7 +19,7 @@ Auth.exigirAdmin();
 
 let AULAS_CACHE = [];
 let EDITANDO_VIDEO_ID = null;
-
+let VIDEO_LINK_ORIGINAL = null;
 /* ------------------------------------------------------------------ */
 /* NAVEGAÇÃO                                                            */
 /* ------------------------------------------------------------------ */
@@ -164,26 +164,41 @@ function renderizarTabelaVideoaulas(lista) {
 }
 
 function editarVideoaula(video) {
-  EDITANDO_VIDEO_ID = video.id_materias;
-  document.getElementById("tituloFormVideo").textContent = "Editar videoaula";
-  document.getElementById("videoMateria").value = video.id_aula;
-  document.getElementById("videoNome").value = video.nome_aulas;
-  document.getElementById("videoDescricao").value = video.descricao;
-  document.getElementById("videoLink").value = video.link;
-  document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
-  document.getElementById("btnCancelarEdicaoVideo").style.display = "inline-flex";
-  document.getElementById("videoNome").focus();
-  document.getElementById("formVideo").scrollIntoView({ block: "nearest" });
+    EDITANDO_VIDEO_ID = video.id_materias;
+
+    // Guarda o link original
+    VIDEO_LINK_ORIGINAL = video.link;
+
+    document.getElementById("tituloFormVideo").textContent = "Editar videoaula";
+    document.getElementById("videoMateria").value = video.id_aula;
+    document.getElementById("videoNome").value = video.nome_aulas;
+    document.getElementById("videoDescricao").value = video.descricao;
+    document.getElementById("videoLink").value = video.link;
+
+    // Permite deixar o link vazio durante a edição
+    document.getElementById("videoLink").required = false;
+
+    document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
+    document.getElementById("btnCancelarEdicaoVideo").style.display = "inline-flex";
+
+    document.getElementById("videoNome").focus();
+    document.getElementById("formVideo").scrollIntoView({ block: "nearest" });
 }
 
 document.getElementById("btnCancelarEdicaoVideo").addEventListener("click", () => resetarFormVideo());
 
 function resetarFormVideo() {
-  EDITANDO_VIDEO_ID = null;
-  document.getElementById("formVideo").reset();
-  document.getElementById("tituloFormVideo").textContent = "Nova videoaula";
-  document.getElementById("btnSalvarVideo").textContent = "Cadastrar videoaula";
-  document.getElementById("btnCancelarEdicaoVideo").style.display = "none";
+    EDITANDO_VIDEO_ID = null;
+    VIDEO_LINK_ORIGINAL = null;
+
+    document.getElementById("formVideo").reset();
+
+    // No cadastro, o link volta a ser obrigatório
+    document.getElementById("videoLink").required = true;
+
+    document.getElementById("tituloFormVideo").textContent = "Nova videoaula";
+    document.getElementById("btnSalvarVideo").textContent = "Cadastrar videoaula";
+    document.getElementById("btnCancelarEdicaoVideo").style.display = "none";
 }
 
 async function excluirVideoaula(id) {
@@ -203,11 +218,16 @@ document.getElementById("formVideo").addEventListener("submit", async (ev) => {
   const aviso = document.getElementById("videoAviso");
   aviso.className = "form-aviso";
 
+  const linkDigitado = document.getElementById("videoLink").value.trim();
+  
+  const linkFinal = EDITANDO_VIDEO_ID && linkDigitado === ""
+    ? VIDEO_LINK_ORIGINAL
+    : linkDigitado;
   const corpo = {
     id_aula: Number(document.getElementById("videoMateria").value),
     nome_aulas: document.getElementById("videoNome").value.trim(),
     descricao: document.getElementById("videoDescricao").value.trim(),
-    link: document.getElementById("videoLink").value.trim(),
+    link: linkFinal
   };
 
   const url = EDITANDO_VIDEO_ID ? apiUrl(`/videoaulas/${EDITANDO_VIDEO_ID}`) : apiUrl("/videoaulas");
