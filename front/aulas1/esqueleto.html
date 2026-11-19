@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aulas</title>
     <link rel="stylesheet" href="/front/style.css">
+    <link rel="stylesheet" href="../assets/css/notas.css">
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
 </head>
 <body class="body_index_cadastro">
@@ -116,21 +117,37 @@
                         link = `https://www.youtube.com/embed/${codigo}`;
                     }
                     lista.innerHTML += `
-                        <article class="card-video">
+                        <article class="card-video" id="cardVideo_${aula.id_materias}">
                             <h2>${aula.nome_aulas}</h2>
                             <p>${aula.descricao}</p>
-                            <iframe
-                                src="${link}"
-                                title="${aula.nome_aulas}"
-                                width="100%"
-                                height="450"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen>
-                            </iframe>
+                            <div class="player-wrap" style="position:relative;margin-top:12px;border-radius:12px;overflow:hidden;background:#000;">
+                                <iframe
+                                    src="${link}?enablejsapi=1&wmode=transparent&rel=0"
+                                    title="${aula.nome_aulas}"
+                                    width="100%"
+                                    height="450"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
                         </article>
                     `;
                 });
+
+                // Monta o bloco de notas StarDev sobre o player
+                setTimeout(() => {
+                    if (window.NotasStarDev && aulasMateria.length > 0) {
+                        const primeiroCard = document.querySelector(".player-wrap");
+                        if (primeiroCard) {
+                            window.NotasStarDev.montarNoPlayer(
+                                primeiroCard,
+                                aulasMateria[0].materia || "Aulas",
+                                aulasMateria[0].nome_aulas
+                            );
+                        }
+                    }
+                }, 150);
             } catch (erro) {
                 console.error("ERRO AO CARREGAR AULAS:", erro);
                 lista.innerHTML = `
@@ -142,6 +159,12 @@
         }
         carregarAulas();
     </script>
+<<<<<<< HEAD
+=======
+    <!-- NOTAS STARDEV -->
+    <script src="../assets/js/notas.js"></script>
+    <!-- CHATBOT -->
+>>>>>>> fb4945d557d50c899ec0f4c7619a0e4b41fee34b
     <div id="chatbot_container"></div>
     <script>
     fetch("/front/chatfront/components/chatbot.html")

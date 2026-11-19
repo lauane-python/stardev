@@ -144,7 +144,61 @@ async function iniciarCarrosselAulas() {
   }
 }
 
+/** Se o usuário estiver logado, adapta a home com acesso ao Dashboard e onde parou */
+function sincronizarEstadoUsuarioHome() {
+  if (typeof Auth === "undefined" || !Auth.logado()) return;
+
+  // Atualiza botões do header
+  const navAcoes = document.querySelector(".header .nav-acoes");
+  if (navAcoes) {
+    const toggleBtn = navAcoes.querySelector(".nav-toggle");
+    navAcoes.innerHTML = `
+      <a href="area-aluno.html" class="btn btn-primario btn-sm">Meu Dashboard</a>
+      <button type="button" class="btn btn-ghost btn-sm" id="btnSairHome">Sair</button>
+    `;
+    if (toggleBtn) navAcoes.appendChild(toggleBtn);
+    document.getElementById("btnSairHome")?.addEventListener("click", () => Auth.sair());
+  }
+
+  // Adiciona itens no menu de navegação
+  const menu = document.getElementById("menuPrincipal");
+  if (menu && !menu.querySelector("[data-home-user]")) {
+    const linkDash = document.createElement("a");
+    linkDash.href = "area-aluno.html";
+    linkDash.className = "nav-link";
+    linkDash.setAttribute("data-home-user", "true");
+    linkDash.textContent = "Dashboard";
+    menu.appendChild(linkDash);
+
+    const linkNotas = document.createElement("a");
+    linkNotas.href = "area-aluno.html#anotacoes";
+    linkNotas.className = "nav-link";
+    linkNotas.setAttribute("data-home-user", "true");
+    linkNotas.textContent = "Minhas anotações";
+    menu.appendChild(linkNotas);
+  }
+
+  // Se houver progresso salvo, exibe banner "onde parou" no topo
+  const progresso = JSON.parse(localStorage.getItem("stardev_progresso") || "null");
+  if (progresso && progresso.nomeAula && !document.getElementById("bannerProgressoHome")) {
+    const banner = document.createElement("div");
+    banner.id = "bannerProgressoHome";
+    banner.className = "banner-progresso-home";
+    banner.innerHTML = `
+      <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 0;">
+        <span style="font-family:var(--fonte-mono);font-size:13px;color:#f2e8e0;">
+          📌 Continue de onde parou: <strong>${progresso.nomeAula}</strong> (${progresso.nomeMateria || "StarDev"})
+        </span>
+        <a href="area-aluno.html" class="btn btn-primario btn-sm" style="padding:6px 14px;font-size:12px;">Retomar estudos ▶</a>
+      </div>
+    `;
+    banner.style.cssText = "background:#241417;border-bottom:1px solid rgba(234,206,118,0.25);position:sticky;top:68px;z-index:900;";
+    document.querySelector(".header")?.after(banner);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  sincronizarEstadoUsuarioHome();
   iniciarTerminalHero();
   iniciarFormContato();
   iniciarCarrosselAulas();
