@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aulas</title>
+    <title>Aulas — StarDev</title>
     <link rel="stylesheet" href="/front/style.css">
     <link rel="stylesheet" href="../assets/css/notas.css">
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
@@ -92,12 +92,10 @@
                     throw new Error("Erro ao buscar as aulas");
                 }
                 const aulas = await resposta.json();
-                console.log("Aulas recebidas:", aulas);
                 lista.innerHTML = "";
                 const aulasMateria = aulas.filter(
                     aula => Number(aula.id_aula) === ID_MATERIA
                 );
-                console.log("Aulas da matéria " + ID_MATERIA + ":", aulasMateria);
                 if (aulasMateria.length === 0) {
                     lista.innerHTML = `
                         <p class="nenhuma-aula">
@@ -135,7 +133,6 @@
                     `;
                 });
 
-                // Monta o bloco de notas StarDev sobre o player
                 setTimeout(() => {
                     if (window.NotasStarDev && aulasMateria.length > 0) {
                         const primeiroCard = document.querySelector(".player-wrap");
@@ -149,7 +146,6 @@
                     }
                 }, 150);
             } catch (erro) {
-                console.error("ERRO AO CARREGAR AULAS:", erro);
                 lista.innerHTML = `
                     <p class="erro-aulas">
                         Não foi possível carregar as aulas.
@@ -159,26 +155,16 @@
         }
         carregarAulas();
     </script>
-<<<<<<< HEAD
-=======
-    <!-- NOTAS STARDEV -->
     <script src="../assets/js/notas.js"></script>
-    <!-- CHATBOT -->
->>>>>>> fb4945d557d50c899ec0f4c7619a0e4b41fee34b
     <div id="chatbot_container"></div>
     <script>
     fetch("/front/chatfront/components/chatbot.html")
     .then(response => response.text())
     .then(data => {
-        document.getElementById(
-            "chatbot_container"
-        ).innerHTML = data;
-        const script =
-            document.createElement("script");
-        script.src =
-            "/front/chatfront/js/chatbot.js";
+        document.getElementById("chatbot_container").innerHTML = data;
+        const script = document.createElement("script");
+        script.src = "/front/chatfront/js/chatbot.js";
         document.body.appendChild(script);
-
     });
     </script>
 </body>

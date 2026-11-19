@@ -128,8 +128,8 @@ function renderizarTabelaVideoaulas(lista) {
       <td><a href="${escapar(v.link)}" target="_blank" rel="noopener" style="color:var(--cor-secundaria); text-decoration:underline;">assistir<span class="sr-only"> (abre em nova aba)</span> ↗</a></td>
       <td>
         <div class="acoes-tabela">
-          <button type="button" data-editar="${v.id_materias}" title="Editar" aria-label="Editar ${escapar(v.nome_aulas)}">✎</button>
-          <button type="button" data-excluir="${v.id_materias}" class="excluir" title="Excluir" aria-label="Excluir ${escapar(v.nome_aulas)}">🗑</button>
+          <button type="button" data-editar="${v.id_materias}" title="Editar" aria-label="Editar ${escapar(v.nome_aulas)}">Editar</button>
+          <button type="button" data-excluir="${v.id_materias}" class="excluir" title="Excluir" aria-label="Excluir ${escapar(v.nome_aulas)}">Excluir</button>
         </div>
       </td>
     </tr>`).join("");
@@ -248,7 +248,7 @@ function renderizarFeedbacks(lista) {
       <td>${escapar(f.nome)}</td>
       <td>${escapar(f.email)}</td>
       <td style="max-width:320px;">${escapar(f.comentario)}</td>
-      <td><div class="acoes-tabela"><button class="excluir" data-excluir-feedback="${f.id_contato}" title="Excluir">🗑</button></div></td>
+      <td><div class="acoes-tabela"><button class="excluir" data-excluir-feedback="${f.id_contato}" title="Excluir">Excluir</button></div></td>
     </tr>`).join("");
 
   corpo.querySelectorAll("[data-excluir-feedback]").forEach((btn) => {

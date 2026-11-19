@@ -1,21 +1,14 @@
-/**
- * ==========================================================================
- * MAIN.JS — PÁGINA INICIAL (index.html)
- * ==========================================================================
- */
-
-/** Anima o "console" da hero digitando linhas de comando */
 function iniciarTerminalHero() {
   const alvo = document.getElementById("terminalHero");
   if (!alvo) return;
 
   const linhas = [
     { prompt: "aluno@stardev", texto: "iniciar --trilha=front-end" },
-    { resposta: "carregando módulos: html, css, javascript ✔" },
+    { resposta: "carregando módulos: html, css, javascript" },
     { prompt: "aluno@stardev", texto: "nivel --escolher" },
     { resposta: "iniciante · intermediário · avançado" },
     { prompt: "aluno@stardev", texto: "abrir dev-mentor" },
-    { resposta: "Dev Mentor pronta para te ajudar 24h ✔" },
+    { resposta: "Dev Mentor pronta para te ajudar 24h" },
   ];
 
   let indice = 0;
@@ -90,7 +83,6 @@ function iniciarFormContato() {
   });
 }
 
-
 function idYoutube(link = "") {
   const m = String(link).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
   return m ? m[1] : null;
@@ -107,10 +99,9 @@ async function iniciarCarrosselAulas() {
   try {
     const resp = await fetch(apiUrl("/videoaulas"));
     const dados = await resp.json();
-    console.log("Carrossel: resposta da API", resp.status, dados);
     ids = [...new Set((Array.isArray(dados) ? dados : []).map((v) => idYoutube(v.link)).filter(Boolean))];
-  } catch (e) { console.error("Carrossel:", e); return; }
-  if (ids.length === 0) { console.warn("Carrossel: nenhum link do YouTube válido"); return; }
+  } catch (e) { return; }
+  if (ids.length === 0) return;
 
   const larguraItem = Math.min(320, Math.max(200, window.innerWidth * 0.21)) + 16;
   const porGrupo = Math.max(ids.length, Math.ceil(window.innerWidth / larguraItem) + 2);
@@ -144,41 +135,37 @@ async function iniciarCarrosselAulas() {
   }
 }
 
-/** Se o usuário estiver logado, adapta a home com acesso ao Dashboard e onde parou */
 function sincronizarEstadoUsuarioHome() {
   if (typeof Auth === "undefined" || !Auth.logado()) return;
 
-  // Atualiza botões do header
   const navAcoes = document.querySelector(".header .nav-acoes");
   if (navAcoes) {
     const toggleBtn = navAcoes.querySelector(".nav-toggle");
     navAcoes.innerHTML = `
-      <a href="area-aluno.html" class="btn btn-primario btn-sm">Meu Dashboard</a>
+      <a href="area-aluno.html" class="btn btn-primario btn-sm">Minha conta</a>
       <button type="button" class="btn btn-ghost btn-sm" id="btnSairHome">Sair</button>
     `;
     if (toggleBtn) navAcoes.appendChild(toggleBtn);
     document.getElementById("btnSairHome")?.addEventListener("click", () => Auth.sair());
   }
 
-  // Adiciona itens no menu de navegação
   const menu = document.getElementById("menuPrincipal");
   if (menu && !menu.querySelector("[data-home-user]")) {
     const linkDash = document.createElement("a");
     linkDash.href = "area-aluno.html";
     linkDash.className = "nav-link";
     linkDash.setAttribute("data-home-user", "true");
-    linkDash.textContent = "Dashboard";
+    linkDash.textContent = "Minha conta";
     menu.appendChild(linkDash);
 
     const linkNotas = document.createElement("a");
     linkNotas.href = "area-aluno.html#anotacoes";
     linkNotas.className = "nav-link";
     linkNotas.setAttribute("data-home-user", "true");
-    linkNotas.textContent = "Minhas anotações";
+    linkNotas.textContent = "Anotações";
     menu.appendChild(linkNotas);
   }
 
-  // Se houver progresso salvo, exibe banner "onde parou" no topo
   const progresso = JSON.parse(localStorage.getItem("stardev_progresso") || "null");
   if (progresso && progresso.nomeAula && !document.getElementById("bannerProgressoHome")) {
     const banner = document.createElement("div");
@@ -187,9 +174,9 @@ function sincronizarEstadoUsuarioHome() {
     banner.innerHTML = `
       <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 0;">
         <span style="font-family:var(--fonte-mono);font-size:13px;color:#f2e8e0;">
-          📌 Continue de onde parou: <strong>${progresso.nomeAula}</strong> (${progresso.nomeMateria || "StarDev"})
+          Continue de onde parou: <strong>${progresso.nomeAula}</strong> (${progresso.nomeMateria || "StarDev"})
         </span>
-        <a href="area-aluno.html" class="btn btn-primario btn-sm" style="padding:6px 14px;font-size:12px;">Retomar estudos ▶</a>
+        <a href="area-aluno.html" class="btn btn-primario btn-sm" style="padding:6px 14px;font-size:12px;">Retomar estudos</a>
       </div>
     `;
     banner.style.cssText = "background:#241417;border-bottom:1px solid rgba(234,206,118,0.25);position:sticky;top:68px;z-index:900;";

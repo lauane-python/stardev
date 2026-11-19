@@ -1,31 +1,20 @@
-/**
- * ==========================================================================
- * DEV MENTOR — WIDGET DE CHATBOT (front-end)
- * ==========================================================================
- * Conversa com POST {API_BASE}/chatback/chat -> { message, pagina }
- * Responde dúvidas sobre a plataforma StarDev e dúvidas de programação.
- * Conta com fallback inteligente para responder dúvidas mesmo se o servidor
- * ou provedores externos de IA estiverem momentaneamente inacessíveis.
- * ==========================================================================
- */
-
 (function iniciarDevMentor() {
   const RESPOSTAS_PLATAFORMA = [
     {
       chaves: ["bloco de nota", "anotac", "circulo", "sobrepor", "youtube", "tela cheia", "tela expandida", "expandir", "anotar"],
-      resposta: "Durante as videoaulas na StarDev, você tem um bloco de notas integrado ao player:\n\n- Círculo com a logo StarDev: Fica flutuando sobre o vídeo enquanto você assiste.\n- Ao clicar no círculo: Ele se expande e vira um pequeno bloco de notas para você escrever sem pausar o vídeo.\n- Salvamento automático: Conforme você digita, tudo é salvo automaticamente com o nome da matéria e o nome da aula atual.\n- Sobreposição do YouTube em tela expandida: Se você colocar em tela cheia/expandida pelo botão de expandir do player, o círculo e o bloco de notas continuam sobrepondo o YouTube normalmente para que você anote à vontade.\n\nPara rever suas anotações antigas, basta abrir o menu hambúrguer e clicar na aba Minhas anotações!"
+      resposta: "Durante as videoaulas na StarDev, você conta com um bloco de notas integrado ao vídeo:\n\n- Círculo com a logo StarDev: Fica flutuando sobre o vídeo enquanto você assiste.\n- Ao clicar no círculo: Ele se expande e vira um pequeno bloco de notas para você escrever sem pausar o vídeo.\n- Salvamento automático: Conforme você digita, tudo é salvo automaticamente com o nome da matéria e o nome da aula atual.\n- Sobreposição do YouTube em tela expandida: Se você colocar em tela cheia ou expandida pelo botão de expandir do player, o círculo e o bloco de notas continuam sobrepondo o YouTube normalmente para que você anote à vontade.\n\nPara rever suas anotações antigas, basta abrir o menu lateral e clicar na aba Anotações."
     },
     {
-      chaves: ["minhas anotac", "antiga", "menu hamburguer", "menu lateral", "onde vejo minhas notas"],
-      resposta: "Para acessar suas anotações antigas:\n\n- Abra o menu hambúrguer / menu lateral no topo da Área do Aluno.\n- Clique na aba Minhas anotações.\n- Suas anotações aparecerão agrupadas pelo nome da matéria e aula onde foram feitas.\n- Você pode lê-las, copiar o texto, excluí-las ou clicar para ir direto para a aula correspondente!"
+      chaves: ["minhas anotac", "antiga", "menu hamburguer", "menu lateral", "onde vejo minhas notas", "anotacoes"],
+      resposta: "Para acessar suas anotações antigas:\n\n- Abra o menu lateral no topo da Área do Aluno.\n- Clique na aba Anotações.\n- Suas anotações aparecerão agrupadas pelo nome da matéria e aula onde foram feitas.\n- Você pode ler o texto, copiar, excluir ou clicar para ir direto para a aula correspondente."
     },
     {
-      chaves: ["dashboard", "onde parou", "onde parei", "continue de onde", "continuar aula", "video especial", "exclusivo", "introducao"],
-      resposta: "Após fazer login na StarDev, você é recebido na Dashboard inicial da Área do Aluno com recursos exclusivos:\n\n- Continue de onde parou: Mostra a última matéria e aula que você assistiu, com um botão direto para você continuar seus estudos de onde parou com 1 clique.\n- Vídeo especial para cadastrados: Área com um vídeo exclusivo gravado pelas fundadoras da StarDev para alunos cadastrados, trazendo dicas e boas-vindas.\n- Breve introdução: Uma mensagem acolhedora que explica o funcionamento das trilhas e da plataforma."
+      chaves: ["dashboard", "onde parou", "onde parei", "continue de onde", "continuar aula", "video especial", "exclusivo", "introducao", "minha conta", "inicio"],
+      resposta: "Após fazer login na StarDev, a tela de Início traz recursos exclusivos para quem tem conta:\n\n- Continue de onde parou: Mostra a última matéria e aula que você assistiu, com um botão direto para você continuar seus estudos de onde parou com apenas um clique.\n- Vídeo especial para cadastrados: Área com um vídeo gravado pelas fundadoras da StarDev exclusivo para alunos cadastrados, trazendo orientações e boas-vindas.\n- Breve introdução: Uma mensagem acolhedora que explica o funcionamento das trilhas e da plataforma."
     },
     {
-      chaves: ["+55", "telefone", "ddi", "prefixo", "brasil", "55"],
-      resposta: "No cadastro e no perfil da StarDev, o prefixo +55 é fixo e visível com a bandeira do Brasil:\n\n- O +55 não pode ser apagado nem editado pelo usuário, garantindo uma melhor experiência (UX).\n- Você deve digitar apenas o DDD e o seu número (por exemplo: 18 99689-0559).\n- O campo aplica a máscara automaticamente à medida que você digita."
+      chaves: ["+55", "telefone", "ddi", "prefixo", "brasil", "55", "celular"],
+      resposta: "No cadastro e no perfil da StarDev, o prefixo +55 é fixo e visível na interface:\n\n- O +55 não pode ser apagado nem editado pelo usuário, garantindo uma melhor experiência de uso.\n- Você deve digitar apenas o DDD e o seu número (por exemplo: 18 99689-0559).\n- O campo aplica a formatação automaticamente à medida que você digita."
     },
     {
       chaves: ["lauane", "melissa", "fundador", "criou", "criadora", "autora", "quem fez", "historia"],
@@ -33,11 +22,11 @@
     },
     {
       chaves: ["cadastr", "criar conta", "registrar"],
-      resposta: "Para criar sua conta gratuita:\n\n- Clique em Criar conta grátis na página inicial.\n- Preencha nome completo, e-mail, telefone (com DDD, o +55 já é fixo) e uma senha segura com 8 ou mais caracteres.\n- Confirme a senha e clique em Criar minha conta. O acesso é liberado na hora!"
+      resposta: "Para criar sua conta gratuita:\n\n- Clique em Criar conta na página inicial.\n- Preencha nome completo, e-mail, telefone (com DDD, o +55 já é fixo) e uma senha segura com 8 ou mais caracteres.\n- Confirme a senha e finalize o cadastro. O acesso é liberado imediatamente."
     },
     {
       chaves: ["login", "entrar", "acessar"],
-      resposta: "Para entrar na sua conta:\n\n- Clique em Entrar no menu superior.\n- Informe seu e-mail e sua senha cadastrados.\n- Clique em Entrar para acessar a Área do Aluno e sua Dashboard com suas trilhas e aulas."
+      resposta: "Para entrar na sua conta:\n\n- Clique em Entrar no menu superior.\n- Informe seu e-mail e sua senha cadastrados.\n- Clique em Entrar para acessar a Área do Aluno."
     },
     {
       chaves: ["esqueci", "recuperar", "redefinir", "trocar senha"],
@@ -45,11 +34,11 @@
     },
     {
       chaves: ["trilha", "materia", "disciplina", "curso", "aulas"],
-      resposta: "A StarDev conta com 12 disciplinas completas do iniciante ao avançado:\n\n- Fundamentos da Programação, Lógica de Programação, Desenvolvimento Web\n- Front-end, Back-end, Banco de Dados\n- Projetos de Software, Segurança da Informação, Código Limpo\n- Desenvolvimento Mobile, Redes e IoT, Linguagem de Programação\n\nVocê pode acessar todas elas pela aba Minhas trilhas na Área do Aluno."
+      resposta: "A StarDev conta com 12 disciplinas completas do iniciante ao avançado:\n\n- Fundamentos da Programação, Lógica de Programação, Desenvolvimento Web\n- Front-end, Back-end, Banco de Dados\n- Projetos de Software, Segurança da Informação, Código Limpo\n- Desenvolvimento Mobile, Redes e IoT, Linguagem de Programação\n\nVocê pode acessar todas elas pela aba Trilhas na Área do Aluno."
     },
     {
       chaves: ["gratis", "gratuito", "pago", "preco", "valor", "pagar"],
-      resposta: "A StarDev é 100% gratuita! Todas as videoaulas, ferramentas de anotação e o mentor inteligente Dev Mentor estão disponíveis sem nenhum custo."
+      resposta: "A StarDev é 100% gratuita. Todas as videoaulas, ferramentas de anotação e as orientações da Dev Mentor estão disponíveis sem nenhum custo."
     },
     {
       chaves: ["certificado"],
@@ -57,9 +46,16 @@
     },
     {
       chaves: ["contato", "suporte", "falar com", "feedback"],
-      resposta: "Você pode falar com a equipe da StarDev pela opção Falar com a StarDev no menu lateral ou pela seção de contato na página inicial. Sua mensagem é enviada diretamente às fundadoras!"
+      resposta: "Você pode falar com a equipe da StarDev pela opção Falar com a StarDev no menu lateral ou pela seção de contato na página inicial. Sua mensagem é enviada diretamente às fundadoras."
     }
   ];
+
+  function removerEmojis(txt = "") {
+    return txt
+      .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}]/gu, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+  }
 
   function normalizar(txt = "") {
     return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
@@ -69,12 +65,12 @@
     const q = normalizar(pergunta);
     for (const item of RESPOSTAS_PLATAFORMA) {
       if (item.chaves.some(k => q.includes(normalizar(k)))) {
-        return item.resposta;
+        return removerEmojis(item.resposta);
       }
     }
     return (
-      "Olá! Sou a Dev Mentor da StarDev. Posso te responder qualquer dúvida sobre a plataforma " +
-      "(como o bloco de notas sobreposto ao vídeo, a Dashboard com onde você parou, o menu hambúrguer com suas anotações, " +
+      "Olá. Sou a Dev Mentor da StarDev. Posso te responder qualquer dúvida sobre a plataforma " +
+      "(como o bloco de notas sobreposto ao vídeo, a tela de Início com onde você parou, a aba de Anotações no menu, " +
       "ou o telefone com +55 fixo) ou tirar dúvidas sobre programação. O que gostaria de saber?"
     );
   }
@@ -90,7 +86,7 @@
         <div class="dm-dots"><span></span><span></span><span></span></div>
         <div class="dm-topbar-info">
           <strong>Dev Mentor</strong>
-          <small>online · StarDev IA</small>
+          <small>online · StarDev</small>
         </div>
         <button class="dm-fechar" id="dmFechar" aria-label="Fechar chat">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -135,7 +131,7 @@
       launcher.setAttribute("aria-expanded", "true");
       if (!jaAbriu) {
         adicionarMensagemBot(
-          "Oi! Eu sou a Dev Mentor, a IA da StarDev. Pode mandar qualquer dúvida sobre a plataforma ou sobre programação que eu te ajudo agora mesmo!"
+          "Olá. Sou a Dev Mentor da StarDev. Pode enviar qualquer dúvida sobre a plataforma ou sobre programação que te ajudo agora mesmo."
         );
         jaAbriu = true;
       }
@@ -158,7 +154,8 @@
     function adicionarMensagemBot(texto) {
       const div = document.createElement("div");
       div.className = "dm-msg bot";
-      div.innerHTML = `<span class="dm-prompt">Dev Mentor $</span>${escaparHTML(texto).replace(/\n/g, "<br>")}`;
+      const textoLimpo = removerEmojis(texto || "");
+      div.innerHTML = `<span class="dm-prompt">Dev Mentor:</span>${escaparHTML(textoLimpo).replace(/\n/g, "<br>")}`;
       mensagensEl.appendChild(div);
       rolarParaFinal();
     }
@@ -212,7 +209,6 @@
         adicionarMensagemBot(dados.reply || obterRespostaLocal(mensagem));
       } catch (erro) {
         esconderDigitando();
-        // Em caso de falha de conexão, responde com a base local da plataforma
         adicionarMensagemBot(obterRespostaLocal(mensagem));
       } finally {
         enviarBtn.disabled = false;
