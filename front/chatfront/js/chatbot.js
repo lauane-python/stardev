@@ -1,4 +1,3 @@
-/* CHATBOT DEV MENTOR */
 console.log("CHATBOT CARREGOU");
 const chatbotModal =
     document.getElementById("chatbot_modal");
@@ -12,7 +11,6 @@ const chatbotInput =
     document.getElementById("chatbot_input");
 const chatbotMessages =
     document.getElementById("chatbot_messages");
-/* ABRIR CHAT */
 chatbotButton.addEventListener(
     "click",
     () => {
@@ -21,7 +19,6 @@ chatbotButton.addEventListener(
         );
     }
 );
-/* FECHAR CHAT */
 chatbotClose.addEventListener(
     "click",
     () => {
@@ -30,7 +27,6 @@ chatbotClose.addEventListener(
         );
     }
 );
-/* CRIAR MENSAGEM */
 function criarMensagem(texto, tipo) {
     const div =
         document.createElement("div");
@@ -42,14 +38,12 @@ function criarMensagem(texto, tipo) {
     chatbotMessages.scrollTop =
         chatbotMessages.scrollHeight;
 }
-/* ENVIAR MENSAGEM */
 async function enviarMensagem() {
     const mensagem =
         chatbotInput.value.trim();
     if (mensagem === "") {
         return;
     }
-    /* mensagem usuário */
     criarMensagem(
         mensagem,
         "user_message"
@@ -74,7 +68,6 @@ async function enviarMensagem() {
             );
         const data =
             await response.json();
-        /* resposta IA */
         criarMensagem(
             data.reply,
             "bot_message"
@@ -87,12 +80,10 @@ async function enviarMensagem() {
         );
     }
 }
-/* BOTÃO ENVIAR */
 chatbotSend.addEventListener(
     "click",
     enviarMensagem
 );
-/* TECLA ENTER */
 chatbotInput.addEventListener(
     "keypress",
     (e) => {

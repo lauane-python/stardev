@@ -12,7 +12,6 @@ const GROQ_URL =
 const GROQ_MODEL =
     process.env.GROQ_MODEL ||
     "llama-3.1-8b-instant";
-// GERA RESPOSTA
 async function gerarResposta({
     pergunta,
     contexto

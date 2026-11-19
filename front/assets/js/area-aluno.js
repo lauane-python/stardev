@@ -17,10 +17,6 @@ Auth.exigirLogin();
 let TODAS_MATERIAS = [];
 let TODAS_VIDEOAULAS = [];
 let MATERIA_SELECIONADA = null;
-
-/* ------------------------------------------------------------------ */
-/* NAVEGAÇÃO ENTRE SEÇÕES                                              */
-/* ------------------------------------------------------------------ */
 function trocarSecao(nome) {
   document.getElementById("secaoTrilhas").style.display = nome === "trilhas" ? "block" : "none";
   document.getElementById("secaoPerfil").style.display = nome === "perfil" ? "block" : "none";
@@ -37,9 +33,6 @@ document.querySelectorAll(".app-nav-link[data-secao]").forEach((link) => {
   });
 });
 
-/* ------------------------------------------------------------------ */
-/* SIDEBAR — dados do usuário logado                                   */
-/* ------------------------------------------------------------------ */
 function iniciaisNome(nome = "") {
   return nome.trim().split(/\s+/).slice(0, 2).map((p) => p[0]?.toUpperCase()).join("") || "?";
 }
@@ -60,7 +53,6 @@ async function carregarUsuario() {
   const foto = usuario.foto ? apiUrl(usuario.foto) : avatarSVGPlaceholder(iniciais);
   document.getElementById("sidebarAvatar").src = foto;
 
-  // preenche o formulário de perfil
   document.getElementById("perfilNome").value = usuario.nome || "";
   document.getElementById("perfilEmail").value = usuario.email || "";
   document.getElementById("perfilBio").value = usuario.bio || "";
@@ -73,7 +65,6 @@ async function carregarUsuario() {
     campoTelefonePerfil.value = formatarTelefoneBR(usuario.telefone);
   }
 
-  // link do painel admin, se for nível A
   if (Auth.nivel() === "A") {
     const nav = document.querySelector(".app-nav");
     const link = document.createElement("a");
@@ -167,7 +158,6 @@ function abrirMateria(idAula) {
       el.addEventListener("click", () => tocarVideo(el.dataset.link, el.dataset.nome, el.dataset.descricao));
     });
 
-    // toca a primeira aula automaticamente
     tocarVideo(aulasDaMateria[0].link, aulasDaMateria[0].nome_aulas, aulasDaMateria[0].descricao);
   }
 
@@ -183,7 +173,6 @@ function tocarVideo(link, nome, descricao = "") {
   const id = extrairIdYoutube(link);
   const container = document.getElementById("playerAtivo");
 
-  // destaca o card da aula que está tocando
   document.querySelectorAll(".item-aula").forEach((el) => {
     if (el.dataset.link === link) el.setAttribute("aria-current", "true");
     else el.removeAttribute("aria-current");
@@ -273,9 +262,6 @@ document.getElementById("formPerfil").addEventListener("submit", async (ev) => {
   }
 });
 
-/* ------------------------------------------------------------------ */
-/* PERFIL — foto                                                       */
-/* ------------------------------------------------------------------ */
 document.getElementById("btnTrocarFoto").addEventListener("click", () => document.getElementById("inputFoto").click());
 document.getElementById("inputFoto").addEventListener("change", async (ev) => {
   const arquivo = ev.target.files[0];
@@ -304,9 +290,6 @@ document.getElementById("inputFoto").addEventListener("change", async (ev) => {
   }
 });
 
-/* ------------------------------------------------------------------ */
-/* PERFIL — trocar senha                                               */
-/* ------------------------------------------------------------------ */
 document.querySelectorAll(".btn-olho").forEach(ativarOlhoSenha);
 
 document.getElementById("formTrocarSenha").addEventListener("submit", async (ev) => {
@@ -352,7 +335,6 @@ document.getElementById("formTrocarSenha").addEventListener("submit", async (ev)
 
 document.getElementById("btnSair").addEventListener("click", () => Auth.sair());
 
-/* ------------------------------------------------------------------ */
 document.addEventListener("DOMContentLoaded", async () => {
   await carregarUsuario();
   await carregarTrilhas();

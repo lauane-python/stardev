@@ -12,7 +12,6 @@ const SECRET = process.env.JWT_SECRET || "segredo_super_secreto";
 app.use(express.json());
 app.use(cors());
 
-// garante que a pasta de upload existe antes de qualquer coisa usar ela
 const fs = require("fs"); 
 const multer = require("multer");
 fs.mkdirSync(path.join(__dirname, "uploads/fotos"), { recursive: true });
@@ -24,12 +23,10 @@ const storage = multer.diskStorage({
     }
 });
 
-// chatbot
 const chatbotRoutes = require(
     "./chatback/routes/chatbot"
 );
 
-/*MIDDLEWARE TOKEN*/
 function verificarToken(req, res, next) {
     const authHeader = req.headers["authorization"];
 
@@ -48,7 +45,6 @@ function verificarToken(req, res, next) {
     }
 }
 
-/*CONTATO*/
 app.post("/contato", async (req, res) => {
     try {
         const { nome = "", email = "", comentario = "" } = req.body;
@@ -73,7 +69,6 @@ app.post("/contato", async (req, res) => {
     }
 });
 
-/*CADASTRO*/
 app.post("/cadastro", async (req, res) => {
     try {
         const {
@@ -209,7 +204,6 @@ app.post("/usuario/foto", verificarToken, upload.single("foto"), async (req, res
     }
 });
 
-/* REMOVER FOTO */
 app.delete("/usuario/foto", verificarToken, async (req, res) => {
     try {
         const userId = req.usuario.id;
@@ -234,10 +228,8 @@ app.delete("/usuario/foto", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro ao remover foto" });
     }
 });
-/*CADASTRO DE AULAS*/
 app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
-        // AQUI SIM!
         if (req.usuario.nivel !== "A") {
             
             return res.status(403).json({ resposta: "Acesso negado" });
@@ -257,7 +249,6 @@ app.post("/CadastroAulas", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/*TROCAR SENHA*/
 app.put("/trocarSenha", verificarToken, async (req, res) => {
     try {
         const { novaSenha } = req.body;
@@ -277,7 +268,6 @@ app.put("/trocarSenha", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/*VERIFICAR EMAIL*/
 app.post("/verificarEmail", async (req, res) => {
     try {
         const { email } = req.body;
@@ -289,7 +279,6 @@ app.post("/verificarEmail", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/*RECUPERAR SENHA*/
 app.put("/recuperarSenha", async (req, res) => {
     try {
         const { email, novaSenha } = req.body;
@@ -314,7 +303,6 @@ app.put("/recuperarSenha", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/*ATUALIZAR USUÁRIO*/
 app.put("/usuario", verificarToken, async (req, res) => {
     try {
         const { nome = "", email = "", telefone = "", bio = "" } = req.body;
@@ -343,12 +331,10 @@ app.put("/usuario", verificarToken, async (req, res) => {
     }
 });
 
-/*listar aulas*/
 app.get("/aulas", async (req, res) => {
     const [dados] = await conexao.query("SELECT * FROM aulas");
     res.json(dados);
 });
-/*LISTAR FEEDBACKS*/
 app.get("/feedbacks", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -370,7 +356,6 @@ app.get("/feedbacks", verificarToken, async (req, res) => {
         });
     }
 });
-/*EDITAR FEEDBACK*/
 app.put("/feedbacks/:id", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -407,7 +392,6 @@ app.put("/feedbacks/:id", verificarToken, async (req, res) => {
         });
     }
 });
-/*EXCLUIR FEEDBACK*/
 app.delete("/feedbacks/:id", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -436,7 +420,6 @@ app.delete("/feedbacks/:id", verificarToken, async (req, res) => {
         });
     }
 });
-// LISTAR (com nome da matéria)
 app.get("/videoaulas", async (req, res) => {
     try {
         const [rows] = await conexao.query(`
@@ -460,43 +443,32 @@ app.get("/videoaulas", async (req, res) => {
         });
     }
 });
-// CADASTRAR VIDEOAULA
 app.post("/videoaulas", verificarToken, async (req, res) => {
     try {
-
         const {
             nome_aulas,
             descricao,
             link,
             id_aula
         } = req.body;
-
         const nome = nome_aulas?.trim();
         const desc = descricao?.trim();
         const url = link?.trim();
-
-        // Verifica campos vazios
         if (!nome || !desc || !url || !id_aula) {
             return res.status(400).json({
                 message: "Preencha todos os campos."
             });
         }
-
-        // Nome
         if (nome.length < 5) {
             return res.status(400).json({
                 message: "O nome da aula deve possuir pelo menos 5 caracteres."
             });
         }
-
-        // Descrição
         if (desc.length < 15) {
             return res.status(400).json({
                 message: "A descrição deve possuir pelo menos 15 caracteres."
             });
         }
-
-        // Link do YouTube
         const youtubeRegex =
         /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})(\?.*)?$/;
 
@@ -509,7 +481,6 @@ app.post("/videoaulas", verificarToken, async (req, res) => {
             });
         }
 
-        // Verifica se a matéria existe
         const [aulaExiste] = await conexao.query(
             "SELECT * FROM aulas WHERE id_aula = ?",
             [id_aula]
@@ -520,8 +491,6 @@ app.post("/videoaulas", verificarToken, async (req, res) => {
                 message: "ID da aula não existe."
             });
         }
-
-        // Insere no banco
         const [result] = await conexao.query(
             `INSERT INTO materias
             (nome_aulas, descricao, link, id_aula)
@@ -541,7 +510,6 @@ app.post("/videoaulas", verificarToken, async (req, res) => {
         });
     }
 });
-// EDITAR VIDEOAULA
 app.put("/videoaulas/:id", verificarToken, async (req, res) => {
     try {
 

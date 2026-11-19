@@ -6,7 +6,6 @@ const caminhoBase = path.join(
     __dirname,
     "../data/base_conhecimento.txt"
 );
-// BASE DE CONHECIMENTO
 function obterBaseConhecimento() {
     try {
         return fs.readFileSync(
@@ -21,7 +20,6 @@ function obterBaseConhecimento() {
         return "";
     }
 }
-// CONTEXTO DA MATÉRIA
 async function obterContextoMateria(
     materiaId
 ) {
@@ -100,7 +98,6 @@ async function obterContextoMateria(
         };
     }
 }
-// CONTEXTO DA PÁGINA
 async function obterContextoPagina({
     pagina = "",
     materiaId = null
@@ -114,7 +111,6 @@ async function obterContextoPagina({
         materia
     };
 }
-// MONTA TODO O CONTEXTO
 async function montarContexto({
     historico = [],
     pagina = "",

@@ -35,7 +35,6 @@ function iniciarTerminalHero() {
   }
   setTimeout(proximaLinha, 500);
 
-  // cursor piscando ao final
   setTimeout(() => {
     const cursor = document.createElement("span");
     cursor.className = "cursor-piscante";
@@ -43,7 +42,6 @@ function iniciarTerminalHero() {
   }, 500 + linhas.length * 650);
 }
 
-/** Liga a validação e o envio do formulário de contato (POST /contato) */
 function iniciarFormContato() {
   const form = document.getElementById("formContato");
   if (!form) return;
@@ -92,11 +90,7 @@ function iniciarFormContato() {
   });
 }
 
-/**
- * Carrossel de capas (thumbnails) das videoaulas — loop infinito, semitransparente
- * e não clicável. Toda videoaula cadastrada no painel entra sozinha aqui, porque a
- * lista vem de GET /videoaulas e a capa é a miniatura do próprio vídeo no YouTube.
- */
+
 function idYoutube(link = "") {
   const m = String(link).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
   return m ? m[1] : null;
@@ -137,7 +131,7 @@ async function iniciarCarrosselAulas() {
     }
     return g;
   };
-  trilho.append(grupo(), grupo()); // dois grupos iguais = volta perfeita
+  trilho.append(grupo(), grupo()); 
   trilho.style.setProperty("--duracao", `${Math.max(30, porGrupo * 6)}s`);
   secao.hidden = false;
 

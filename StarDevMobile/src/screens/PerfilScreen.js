@@ -39,7 +39,6 @@ export default function PerfilScreen() {
         if (dados.foto) setFotoUri(apiUrl(dados.foto));
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleSalvarPerfil() {

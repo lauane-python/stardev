@@ -63,7 +63,6 @@
         </section>
     </main>
     <script>
-        // mostrar e ocultar senha
         function ativarToggleSenha(inputId, btnId, iconAbertoId, iconFechadoId) {
             const input = document.getElementById(inputId);
             const btn = document.getElementById(btnId);
@@ -87,13 +86,11 @@
             const novaSenha = document.getElementById("input_senha_esqueci").value;
             const confirmarSenha = document.getElementById("input_senha_esqueci1").value;
             const token = localStorage.getItem("token");
-            // Verifica se as senhas são iguais
             if (novaSenha !== confirmarSenha) {
                 alert("As senhas não coincidem!");
                 return;
             }
             try {
-                // Verificar se o email existe
                 const verificar = await fetch("https://stardev-d20v.onrender.com/verificarEmail", {
                     method: "POST",
                     headers: {
@@ -106,7 +103,6 @@
                     alert("Email não encontrado!");
                     return;
                 }
-                // Atualizar senha
                 const resposta = await fetch("https://stardev-d20v.onrender.com/trocarSenha", {
                     method: "PUT",
                     headers: {

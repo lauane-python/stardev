@@ -19,14 +19,12 @@ export default function AdminScreen() {
   const [disciplinas, setDisciplinas] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
-  // form nova disciplina
   const [materia, setMateria] = useState("");
   const [duracao, setDuracao] = useState("");
   const [qtdAulas, setQtdAulas] = useState("");
   const [avisoDisciplina, setAvisoDisciplina] = useState(null);
   const [salvandoDisciplina, setSalvandoDisciplina] = useState(false);
 
-  // form nova videoaula
   const [idAulaSelecionada, setIdAulaSelecionada] = useState(null);
   const [nomeAula, setNomeAula] = useState("");
   const [descricaoAula, setDescricaoAula] = useState("");

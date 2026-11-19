@@ -166,7 +166,6 @@ function renderizarTabelaVideoaulas(lista) {
 function editarVideoaula(video) {
     EDITANDO_VIDEO_ID = video.id_materias;
 
-    // Guarda o link original
     VIDEO_LINK_ORIGINAL = video.link;
 
     document.getElementById("tituloFormVideo").textContent = "Editar videoaula";
@@ -175,7 +174,6 @@ function editarVideoaula(video) {
     document.getElementById("videoDescricao").value = video.descricao;
     document.getElementById("videoLink").value = video.link;
 
-    // Permite deixar o link vazio durante a edição
     document.getElementById("videoLink").required = false;
 
     document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
@@ -193,7 +191,6 @@ function resetarFormVideo() {
 
     document.getElementById("formVideo").reset();
 
-    // No cadastro, o link volta a ser obrigatório
     document.getElementById("videoLink").required = true;
 
     document.getElementById("tituloFormVideo").textContent = "Nova videoaula";
@@ -250,7 +247,6 @@ document.getElementById("formVideo").addEventListener("submit", async (ev) => {
   }
 });
 
-/* FEEDBACKS*/
 async function carregarFeedbacks() {
   try {
     const resp = await fetch(apiUrl("/feedbacks"), { headers: await Auth.cabecalhos() });

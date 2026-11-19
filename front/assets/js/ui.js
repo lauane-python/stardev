@@ -1,10 +1,3 @@
-/**
- * ==========================================================================
- * UI — UTILITÁRIOS COMPARTILHADOS (toasts, loader, menu, scroll reveal)
- * ==========================================================================
- */
-
-/** Mostra uma notificação flutuante (toast) no canto da tela */
 function mostrarToast(mensagem, tipo = "ok", duracao = 4200) {
   let container = document.querySelector(".toast-container");
   if (!container) {
@@ -22,14 +15,11 @@ function mostrarToast(mensagem, tipo = "ok", duracao = 4200) {
     setTimeout(() => toast.remove(), 250);
   }, duracao);
 }
-
-/** Esconde o loader de página assim que o DOM estiver pronto */
 function esconderLoaderPagina() {
   const loader = document.querySelector(".loader-pagina");
   if (loader) setTimeout(() => loader.classList.add("escondido"), 350);
 }
 
-/** Liga o botão hambúrguer do header público (com estado para leitores de tela) */
 function ativarMenuMobile() {
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector(".nav-desktop");
@@ -43,7 +33,6 @@ function ativarMenuMobile() {
 
   toggle.addEventListener("click", () => definir(!nav.classList.contains("aberto")));
   nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => definir(false)));
-  // clicar na logo oculta o menu aberto (ideia dos professores)
   document.querySelector(".header .logo")?.addEventListener("click", () => definir(false));
   document.addEventListener("keydown", (ev) => {
     if (ev.key === "Escape" && nav.classList.contains("aberto")) { definir(false); toggle.focus(); }
@@ -53,12 +42,6 @@ function ativarMenuMobile() {
   });
 }
 
-/**
- * Menu lateral da intranet (área do aluno / admin).
- * - Botão hambúrguer OU clique na logo mostram/ocultam o menu.
- * - No desktop o menu recolhe e o conteúdo ocupa a tela toda (preferência salva).
- * - No celular o menu abre como gaveta, com fundo escurecido; Esc ou toque fora fecha.
- */
 function ativarMenuIntranet() {
   const shell = document.querySelector(".app-shell");
   const sidebar = document.querySelector(".app-sidebar");
@@ -106,7 +89,6 @@ function ativarMenuIntranet() {
   sincronizar();
 }
 
-/** Observa elementos .reveal e adiciona .visivel quando entram na tela */
 function ativarScrollReveal() {
   const alvos = document.querySelectorAll(".reveal");
   if (!("IntersectionObserver" in window) || alvos.length === 0) {
@@ -127,7 +109,6 @@ function ativarScrollReveal() {
   alvos.forEach((el) => obs.observe(el));
 }
 
-/** Marca o link de navegação ativo com base no arquivo atual da URL */
 function marcarNavAtiva() {
   const paginaAtual = location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll(".nav-link, .app-nav-link").forEach((link) => {
@@ -136,7 +117,6 @@ function marcarNavAtiva() {
   });
 }
 
-/** Liga cada mensagem de erro ao seu campo, para leitores de tela anunciarem o problema */
 function ligarErrosAosCampos() {
   document.querySelectorAll("[data-erro-de]").forEach((msg) => {
     const campo = document.getElementById(msg.dataset.erroDe);

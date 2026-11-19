@@ -65,7 +65,6 @@
         <p><a href="/front/cadastro.html" target="_self" class="hrefs">Cadastra-se</a></p>
         <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
     </footer>
-    <!-- CHATBOT -->
     <div id="chatbot_container"></div>
     <script>
         const fotoInput = document.getElementById("perfil-foto-input");
@@ -129,7 +128,6 @@
             setTimeout(() => status.classList.remove("mostrar"), 3000);
         }
 
-        //Carrega os dados do usuário ao abrir a página
         window.addEventListener("DOMContentLoaded", async () => {
             try {
                 const res = await fetch(`${API_URL}/usuario`, {
@@ -190,7 +188,6 @@
             }
         });
 
-        // Remover foto (avisa o servidor também)
         removerFotoBtn.addEventListener("click", async () => {
             try {
                 const res = await fetch(`${API_URL}/usuario/foto`, {
@@ -214,7 +211,6 @@
             }
         });
 
-        // Salvar demais dados do perfil
         document.getElementById("formPerfil").addEventListener("submit", async (e) => {
             e.preventDefault();
 
