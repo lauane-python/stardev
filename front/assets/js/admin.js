@@ -1,28 +1,8 @@
-/**
- * ==========================================================================
- * ADMIN.JS — painel administrativo (nível "A")
- * ==========================================================================
- * Endpoints:
- *   POST   /CadastroAulas     (protegido, nivel A)
- *   GET    /aulas
- *   GET    /videoaulas
- *   POST   /videoaulas        (protegido)
- *   PUT    /videoaulas/:id    (protegido)
- *   DELETE /videoaulas/:id    (protegido)
- *   GET    /feedbacks         (protegido, nivel A)
- *   PUT    /feedbacks/:id     (protegido, nivel A)
- *   DELETE /feedbacks/:id     (protegido, nivel A)
- * ==========================================================================
- */
-
 Auth.exigirAdmin();
 
 let AULAS_CACHE = [];
 let EDITANDO_VIDEO_ID = null;
 let VIDEO_LINK_ORIGINAL = null;
-/* ------------------------------------------------------------------ */
-/* NAVEGAÇÃO                                                            */
-/* ------------------------------------------------------------------ */
 function trocarSecaoAdmin(nome) {
   document.getElementById("secaoAulas").style.display = nome === "aulas" ? "block" : "none";
   document.getElementById("secaoVideoaulas").style.display = nome === "videoaulas" ? "block" : "none";
