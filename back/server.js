@@ -336,7 +336,7 @@ app.put("/usuario", verificarToken, async (req, res) => {
     }
 });
 
-app.get("/aulas", verificarToken, async (req, res) => {
+app.get("/aulas", async (req, res) => {
     const [dados] = await conexao.query("SELECT * FROM aulas");
     res.json(dados);
 });
