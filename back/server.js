@@ -127,8 +127,6 @@ app.post("/cadastro", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-
-
 /*LOGIN*/
 app.post("/login", async (req, res) => {
     try {
@@ -175,9 +173,6 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-
-
-
 app.get("/usuario", verificarToken, async (req, res) => {
     try {
         const userId = req.usuario.id;
