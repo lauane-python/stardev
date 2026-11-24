@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Recuperar senha — StarDev</title>
+<link rel="icon" href="assets/icons/icon-192.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/chatbot.css" />
+</head>
+<body class="bg-grid">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
+
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <span class="logo-mark"><svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg></span>
+      <span class="logo-texto">Star Dev</span>
+    </a>
+    <nav class="nav-desktop" id="menuPrincipal" aria-label="Principal">
+      <a href="index.html" class="nav-link">Início</a>
+      <a href="login.html" class="nav-link">Entrar</a>
+    </nav>
+    <div class="nav-acoes">
+      <a href="cadastro.html" class="btn btn-primario btn-sm">Criar conta</a>
+      <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menuPrincipal"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="pagina-auth" id="conteudo" tabindex="-1">
+  <div class="container" style="max-width:520px;">
+    <div class="form-card reveal">
+      <span class="eyebrow">recuperação de acesso</span>
+      <h1 style="font-size:24px; margin-top:12px;">Esqueci minha senha</h1>
+      <p style="color:#4a373c; margin-top:8px; font-size:14.5px;">Confirme seu e-mail cadastrado e defina uma nova senha.</p>
+
+      <div class="form-aviso" id="recAviso" role="status" aria-live="polite"></div>
+
+      <!-- ETAPA 1: confirmar e-mail -->
+      <form id="formEmailRec" style="margin-top:24px;">
+        <div class="campo">
+          <label for="recEmail">E-mail cadastrado</label>
+          <input type="email" id="recEmail" name="email" required placeholder="voce@email.com" />
+        </div>
+        <button type="submit" class="btn btn-primario btn-block" id="btnVerificarEmail">Verificar e-mail</button>
+      </form>
+
+      <!-- ETAPA 2: nova senha (escondida até verificar o e-mail) -->
+      <form id="formNovaSenha" style="margin-top:22px; display:none;">
+        <div class="campo">
+          <label for="recNovaSenha">Nova senha</label>
+          <div class="input-wrap">
+            <input type="password" id="recNovaSenha" name="novaSenha" required minlength="6" placeholder="Digite a nova senha" />
+            <button type="button" class="btn-olho" data-olho-de="recNovaSenha" aria-label="Mostrar senha"></button>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="recNovaSenhaConfirma">Confirmar nova senha</label>
+          <div class="input-wrap">
+            <input type="password" id="recNovaSenhaConfirma" name="novaSenhaConfirma" required minlength="6" placeholder="Repita a nova senha" />
+            <button type="button" class="btn-olho" data-olho-de="recNovaSenhaConfirma" aria-label="Mostrar senha"></button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primario btn-block" id="btnRedefinir">Redefinir senha</button>
+      </form>
+
+      <p class="form-rodape">Lembrou a senha? <a href="login.html">Voltar para o login</a></p>
+    </div>
+  </div>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/mask.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/recuperar-senha.js"></script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Área do aluno — StarDev</title>
+<link rel="icon" href="assets/icons/icon-192.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/chatbot.css" />
+<link rel="stylesheet" href="assets/css/notas.css" />
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --carregando-intranet<span class="cursor-piscante"></span></div></div>
+
+<div class="mobile-topbar">
+  <button type="button" class="topbar-menu" aria-label="Ocultar menu" aria-controls="menuLateral" aria-expanded="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <button type="button" class="topbar-logo" aria-controls="menuLateral" aria-expanded="true" aria-label="Star Dev: mostrar ou ocultar o menu"><span class="logo-mark"><svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg></span><span class="logo-texto">Star Dev</span></button>
+  <span class="topbar-titulo">Área do aluno</span>
+</div>
+
+<div class="app-shell">
+  <aside class="app-sidebar" id="menuLateral" aria-label="Menu da área do aluno">
+    <a href="index.html" class="logo">
+      <span class="logo-mark"><svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg></span>
+      <span class="logo-texto">Star Dev</span>
+    </a>
+
+    <nav class="app-nav">
+      <a href="#" class="app-nav-link ativo" data-secao="inicio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Início
+      </a>
+      <a href="#" class="app-nav-link" data-secao="trilhas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        Trilhas
+      </a>
+      <a href="#" class="app-nav-link" data-secao="perfil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+        Perfil
+      </a>
+      <a href="#" class="app-nav-link" data-secao="anotacoes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Anotações
+      </a>
+      <a href="index.html#contato" class="app-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+        Falar com a StarDev
+      </a>
+    </nav>
+
+    <div class="app-sidebar-rodape">
+      <div class="perfil-mini">
+        <img class="perfil-mini-avatar" id="sidebarAvatar" alt="" />
+        <div>
+          <div class="perfil-mini-nome" id="sidebarNome">Carregando...</div>
+          <div class="perfil-mini-nivel" id="sidebarNivel"></div>
+        </div>
+      </div>
+      <button class="btn-sair" id="btnSair">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        Sair da conta
+      </button>
+    </div>
+  </aside>
+
+  <main class="app-main" id="conteudo" tabindex="-1">
+
+    <section id="secaoInicio">
+      <div class="app-topo">
+        <div>
+          <h1 id="saudacaoNome">Olá</h1>
+          <p>Bem-vindo(a) de volta à StarDev.</p>
+        </div>
+      </div>
+
+      <div class="painel dashboard-intro">
+        <div class="painel-titulo">
+          <h2>Bem-vindo(a) à sua Central de Estudos</h2>
+          <span class="badge-exclusivo">Área do Aluno</span>
+        </div>
+        <p style="margin:0 0 14px;color:#4a373c;line-height:1.65;font-size:14.5px;">
+          Este é o seu painel na <strong>StarDev</strong>. Acompanhe suas disciplinas de tecnologia, continue assistindo exatamente de onde parou na sua última aula, assista a conteúdos especiais gravados exclusivamente para membros cadastrados e consulte todas as anotações que você fez durante os vídeos.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag-mono">12 disciplinas</span>
+          <span class="tag-mono">bloco de notas integrado</span>
+          <span class="tag-mono">salvamento por aula</span>
+          <span class="tag-mono">mentoria 24h</span>
+        </div>
+      </div>
+
+      <div class="painel dashboard-onde-parou" id="painelOndeParou">
+        <div class="painel-titulo"><h2>Continue de onde parou</h2></div>
+        <div id="ondeParouConteudo">
+          <p style="font-family:var(--fonte-mono);font-size:13px;color:#7a6b6e;">Carregando...</p>
+        </div>
+      </div>
+
+      <div class="painel dashboard-video-especial">
+        <div class="painel-titulo">
+          <h2>Vídeo especial para membros</h2>
+          <span class="badge-exclusivo">Exclusivo</span>
+        </div>
+        <p style="margin:0 0 18px;color:#4a373c;line-height:1.65;font-size:14.5px;">
+          Assista à mensagem especial de boas-vindas gravada pelas fundadoras da StarDev (<strong>Lauane e Melissa</strong>) exclusivamente para membros cadastrados da plataforma, com orientações para acelerar sua jornada em tecnologia.
+        </p>
+        <div class="video-especial-wrap" style="position:relative;background:#000;border-radius:var(--radius-md);overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+          <video controls poster="videos/poster.jpg" preload="metadata" style="width:100%;max-height:500px;border-radius:var(--radius-md);display:block;">
+            <source src="videos/apresentacao.mp4" type="video/mp4">
+            Seu navegador não suporta a reprodução deste vídeo.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section id="secaoTrilhas">
+      <div class="app-topo">
+        <div>
+          <h1>Trilhas</h1>
+          <p>Escolha uma disciplina e siga a ordem das aulas do iniciante ao avançado.</p>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="painel">
+        <div class="painel-titulo"><h2>Disciplinas disponíveis</h2></div>
+        <div class="lista-materias" id="listaMaterias">
+          <p style="font-family: var(--fonte-mono); font-size:13px; color:#7a6b6e;">Carregando disciplinas...</p>
+        </div>
+      </div>
+
+      <div class="painel" id="painelAulas" style="display:none;">
+        <div class="painel-titulo">
+          <h2 id="tituloMateriaSelecionada">Aulas</h2>
+          <button class="btn btn-ghost btn-sm" id="btnVoltarMaterias">Voltar</button>
+        </div>
+
+        <div class="aulas-layout">
+          <div class="aulas-player" id="playerAtivo" aria-live="polite"></div>
+          <div class="aulas-lista" tabindex="0" role="region" aria-label="Lista de aulas">
+            <div class="lista-aulas" id="listaAulas"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="secaoPerfil" style="display:none;">
+      <div class="app-topo">
+        <div>
+          <h1>Perfil</h1>
+          <p>Atualize seus dados de contato ou troque sua senha.</p>
+        </div>
+      </div>
+
+      <div class="tabs-form">
+        <button class="tab-btn ativa" data-tab-perfil="dados">Meus dados</button>
+        <button class="tab-btn" data-tab-perfil="senha">Alterar senha</button>
+      </div>
+
+      <div class="painel painel-conteudo ativa" data-conteudo-perfil="dados">
+        <div class="form-aviso" id="perfilAviso" role="status" aria-live="polite"></div>
+
+        <div class="upload-foto">
+          <img class="upload-foto-preview" id="fotoPreview" alt="Foto de perfil" />
+          <div>
+            <input type="file" id="inputFoto" accept="image/*" style="display:none;" />
+            <button type="button" class="btn btn-secundario btn-sm" id="btnTrocarFoto">Trocar foto</button>
+          </div>
+        </div>
+
+        <form id="formPerfil">
+          <div class="campo">
+            <label for="perfilNome">Nome completo</label>
+            <input type="text" id="perfilNome" name="nome" required minlength="6" />
+          </div>
+          <div class="campo">
+            <label for="perfilEmail">E-mail</label>
+            <input type="email" id="perfilEmail" name="email" required />
+          </div>
+          <div class="campo">
+            <label for="perfilTelefone">Telefone <span class="opcional">(DDI +55 fixo · digite DDD e número)</span></label>
+            <input type="tel" id="perfilTelefone" name="telefone" required />
+          </div>
+          <div class="campo">
+            <label for="perfilBio">Bio <span class="opcional">(opcional)</span></label>
+            <textarea id="perfilBio" name="bio" placeholder="Conte um pouco sobre você..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primario" id="btnSalvarPerfil">Salvar alterações</button>
+        </form>
+      </div>
+
+      <div class="painel painel-conteudo" data-conteudo-perfil="senha">
+        <div class="form-aviso" id="senhaAviso" role="status" aria-live="polite"></div>
+        <form id="formTrocarSenha">
+          <div class="campo">
+            <label for="novaSenhaPerfil">Nova senha</label>
+            <div class="input-wrap">
+              <input type="password" id="novaSenhaPerfil" name="novaSenha" required minlength="6" />
+              <button type="button" class="btn-olho" data-olho-de="novaSenhaPerfil" aria-label="Mostrar senha"></button>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="confirmaSenhaPerfil">Confirmar nova senha</label>
+            <div class="input-wrap">
+              <input type="password" id="confirmaSenhaPerfil" name="confirmaSenha" required minlength="6" />
+              <button type="button" class="btn-olho" data-olho-de="confirmaSenhaPerfil" aria-label="Mostrar senha"></button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primario" id="btnTrocarSenha">Atualizar senha</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="secaoAnotacoes" style="display:none;">
+      <div class="app-topo">
+        <div>
+          <h1>Anotações</h1>
+          <p>Tudo o que você anotou durante as aulas, organizado por matéria e aula com salvamento automático.</p>
+        </div>
+      </div>
+      <div class="anotacoes-barra-topo" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+        <input type="search" id="filtroAnotacoes" placeholder="Filtrar por matéria ou aula..." style="max-width:320px;padding:8px 14px;border-radius:var(--radius-sm);border:1.5px solid rgba(129,68,86,.2);background:#fff;font-family:var(--fonte-mono);font-size:13px;" />
+        <button type="button" class="btn btn-secundario btn-sm" id="btnExportarAnotacoes">Baixar anotações (.txt)</button>
+      </div>
+      <div id="listaAnotacoes">
+        <p style="font-family:var(--fonte-mono);font-size:13px;color:#7a6b6e;">Carregando...</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/mask.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/notas.js"></script>
+<script src="assets/js/area-aluno.js"></script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>

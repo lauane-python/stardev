@@ -236,6 +236,7 @@ app.delete("/usuario/foto", verificarToken, async (req, res) => {
 app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
+            
             return res.status(403).json({ resposta: "Acesso negado" });
         }
         const { materia, duracao, qtd_aulas } = req.body;
@@ -253,38 +254,6 @@ app.post("/CadastroAulas", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-
-app.put("/aulas/:id", verificarToken, async (req, res) => {
-  if (req.usuario.nivel !== "A") {
-    return res.status(403).json({ message: "Acesso negado." });
-  }
-  const { materia, duracao, qtd_aulas } = req.body;
-  try {
-    const [r] = await conexao.query(
-      "UPDATE aulas SET materia = ?, duracao = ?, qtd_aulas = ? WHERE id_aula = ?",
-      [materia, duracao, qtd_aulas, req.params.id]
-    );
-    if (r.affectedRows === 0) return res.status(404).json({ message: "Disciplina não encontrada." });
-    res.json({ message: "Disciplina atualizada com sucesso." });
-  } catch (e) {
-    res.status(500).json({ message: "Erro ao atualizar a disciplina." });
-  }
-});
-
-app.delete("/aulas/:id", verificarToken, async (req, res) => {
-  if (req.usuario.nivel !== "A") {
-    return res.status(403).json({ message: "Acesso negado." });
-  }
-  try {
-    const [r] = await conexao.query("DELETE FROM aulas WHERE id_aula = ?", [req.params.id]);
-    if (r.affectedRows === 0) return res.status(404).json({ message: "Disciplina não encontrada." });
-    res.json({ message: "Disciplina removida com sucesso." });
-  } catch (e) {
-    res.status(500).json({ message: "Não foi possível excluir. Verifique se há videoaulas vinculadas." });
-  }
-});
-
-
 app.put("/trocarSenha", verificarToken, async (req, res) => {
     try {
         const { novaSenha } = req.body;
@@ -367,7 +336,7 @@ app.put("/usuario", verificarToken, async (req, res) => {
     }
 });
 
-app.get("/aulas", async (req, res) => {
+app.get("/aulas", verificarToken, async (req, res) => {
     const [dados] = await conexao.query("SELECT * FROM aulas");
     res.json(dados);
 });

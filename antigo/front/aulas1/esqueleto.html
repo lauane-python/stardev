@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aulas — StarDev</title>
+    <link rel="stylesheet" href="/front/style.css">
+    <link rel="stylesheet" href="../assets/css/notas.css">
+    <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+</head>
+<body class="body_index_cadastro">
+    <header class="header_index_cadastro">
+        <figure class="logo">
+            <a href="/front/index.html" target="_self" class="hrefs">
+                <img src="/front/img/logo.svg" alt="LOGOTIPO StarDev">
+            </a>
+        </figure>
+        <nav>
+            <figure class="ftichome">
+                <a href="/front/aulas.html" target="_self" class="hrefs">
+                    <img src="/front/img/home.svg" alt="ICONE HOME">
+                </a>
+            </figure>
+        </nav>
+    </header>
+    <main>
+        <section class="carrossel-container">
+            <section class="carrossel drag">
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html?materia=2" target="_blank" class="hrefs_au">Fundamentos da Programação</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html?materia=3" target="_blank" class="hrefs_au">Lógica de Programação</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html?materia=4" target="_blank" class="hrefs_au">Desenvolvimento Web</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html?materia=5" target="_blank" class="hrefs_au">Front-end</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html?materia=1" target="_blank" class="hrefs_au">Back-End</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html?materia=6" target="_blank" class="hrefs_au">Banco de Dados</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html?materia=7" target="_blank" class="hrefs_au">Projetos</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html?materia=8" target="_blank" class="hrefs_au">Segurança da Informação</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html?materia=9" target="_blank" class="hrefs_au">Código Limpo</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html?materia=10" target="_blank" class="hrefs_au">Desenvolvimento Mobile</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html?materia=11" target="_blank" class="hrefs_au">Redes e IOT</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html?materia=12" target="_blank" class="hrefs_au">Linguagem de Programação</a></p>
+            </section>
+        </section>
+        <section class="listarAulas" id="listaAulas">
+            <p>Carregando aula...</p>
+        </section>
+    </main>
+    <script>
+        const carrossel = document.querySelector('.drag');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        carrossel.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - carrossel.offsetLeft;
+            scrollLeft = carrossel.scrollLeft;
+        });
+        carrossel.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+        carrossel.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+        carrossel.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - carrossel.offsetLeft;
+            const walk = (x - startX) * 2;
+            carrossel.scrollLeft = scrollLeft - walk;
+        });
+        const API = "https://stardev-d20v.onrender.com/videoaulas";
+        const params = new URLSearchParams(window.location.search);
+        const ID_MATERIA = Number(params.get("materia"));
+
+        window.STARDEV_CONTEXT = {
+            pagina: "esqueleto.html",
+            materiaId: ID_MATERIA
+        };
+
+        const lista = document.getElementById("listaAulas");
+        async function carregarAulas() {
+            if (!ID_MATERIA) {
+                lista.innerHTML = `
+                    <p class="erro-aulas">
+                        Nenhuma matéria informada na URL.
+                    </p>
+                `;
+                return;
+            }
+            try {
+                const resposta = await fetch(API);
+                if (!resposta.ok) {
+                    throw new Error("Erro ao buscar as aulas");
+                }
+                const aulas = await resposta.json();
+                lista.innerHTML = "";
+                const aulasMateria = aulas.filter(
+                    aula => Number(aula.id_aula) === ID_MATERIA
+                );
+                if (aulasMateria.length === 0) {
+                    lista.innerHTML = `
+                        <p class="nenhuma-aula">
+                            Nenhuma aula cadastrada para esta matéria.
+                        </p>
+                    `;
+                    return;
+                }
+                aulasMateria.forEach(aula => {
+                    let link = aula.link;
+                    if (link.includes("watch?v=")) {
+                        const codigo = link.split("watch?v=")[1].split("&")[0];
+                        link = `https://www.youtube.com/embed/${codigo}`;
+                    }
+                    else if (link.includes("youtu.be/")) {
+                        const codigo = link.split("youtu.be/")[1].split("?")[0];
+                        link = `https://www.youtube.com/embed/${codigo}`;
+                    }
+                    lista.innerHTML += `
+                        <article class="card-video" id="cardVideo_${aula.id_materias}">
+                            <h2>${aula.nome_aulas}</h2>
+                            <p>${aula.descricao}</p>
+                            <div class="player-wrap" style="position:relative;margin-top:12px;border-radius:12px;overflow:hidden;background:#000;">
+                                <iframe
+                                    src="${link}?enablejsapi=1&wmode=transparent&rel=0"
+                                    title="${aula.nome_aulas}"
+                                    width="100%"
+                                    height="450"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </article>
+                    `;
+                });
+
+                setTimeout(() => {
+                    if (window.NotasStarDev && aulasMateria.length > 0) {
+                        const primeiroCard = document.querySelector(".player-wrap");
+                        if (primeiroCard) {
+                            window.NotasStarDev.montarNoPlayer(
+                                primeiroCard,
+                                aulasMateria[0].materia || "Aulas",
+                                aulasMateria[0].nome_aulas
+                            );
+                        }
+                    }
+                }, 150);
+            } catch (erro) {
+                lista.innerHTML = `
+                    <p class="erro-aulas">
+                        Não foi possível carregar as aulas.
+                    </p>
+                `;
+            }
+        }
+        carregarAulas();
+    </script>
+    <script src="../assets/js/notas.js"></script>
+    <div id="chatbot_container"></div>
+    <script>
+    fetch("/front/chatfront/components/chatbot.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("chatbot_container").innerHTML = data;
+        const script = document.createElement("script");
+        script.src = "/front/chatfront/js/chatbot.js";
+        document.body.appendChild(script);
+    });
+    </script>
+</body>
+</html>

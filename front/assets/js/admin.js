@@ -3,8 +3,6 @@ Auth.exigirAdmin();
 let AULAS_CACHE = [];
 let EDITANDO_VIDEO_ID = null;
 let VIDEO_LINK_ORIGINAL = null;
-let EDITANDO_AULA_ID = null;
-
 function trocarSecaoAdmin(nome) {
   document.getElementById("secaoAulas").style.display = nome === "aulas" ? "block" : "none";
   document.getElementById("secaoVideoaulas").style.display = nome === "videoaulas" ? "block" : "none";
@@ -28,6 +26,7 @@ function escapar(str = "") {
   return d.innerHTML;
 }
 
+/* SIDEBAR                                                              */
 async function carregarUsuarioAdmin() {
   const usuario = await buscarUsuarioLogado();
   if (!usuario) return;
@@ -40,6 +39,7 @@ async function carregarUsuarioAdmin() {
 }
 document.getElementById("btnSairAdmin").addEventListener("click", () => Auth.sair());
 
+/* DISCIPLINAS (AULAS)                                                  */
 async function carregarAulas() {
   try {
     const dados = await fetch(apiUrl("/aulas")).then((r) => r.json());
@@ -47,79 +47,19 @@ async function carregarAulas() {
     renderizarTabelaAulas();
     preencherSelectMaterias();
   } catch {
-    document.getElementById("tabelaAulas").innerHTML = `<tr><td colspan="5">Não foi possível carregar as disciplinas.</td></tr>`;
+    document.getElementById("tabelaAulas").innerHTML = `<tr><td colspan="4">Não foi possível carregar as disciplinas.</td></tr>`;
   }
 }
 
 function renderizarTabelaAulas() {
   const corpo = document.getElementById("tabelaAulas");
   if (AULAS_CACHE.length === 0) {
-    corpo.innerHTML = `<tr><td colspan="5">Nenhuma disciplina cadastrada.</td></tr>`;
+    corpo.innerHTML = `<tr><td colspan="4">Nenhuma disciplina cadastrada.</td></tr>`;
     return;
   }
   corpo.innerHTML = AULAS_CACHE.map((a) => `
-    <tr>
-      <td>${a.id_aula}</td>
-      <td>${escapar(a.materia)}</td>
-      <td>${escapar(a.duracao || "-")}</td>
-      <td>${a.qtd_aulas ?? "-"}</td>
-      <td>
-        <div class="acoes-tabela">
-          <button type="button" data-editar-aula="${a.id_aula}" aria-label="Editar ${escapar(a.materia)}">Editar</button>
-          <button type="button" data-excluir-aula="${a.id_aula}" class="excluir" aria-label="Excluir ${escapar(a.materia)}">Excluir</button>
-        </div>
-      </td>
-    </tr>
+    <tr><td>${a.id_aula}</td><td>${escapar(a.materia)}</td><td>${escapar(a.duracao || "-")}</td><td>${a.qtd_aulas ?? "-"}</td></tr>
   `).join("");
-
-  corpo.querySelectorAll("[data-editar-aula]").forEach((btn) => {
-    const aula = AULAS_CACHE.find((a) => a.id_aula === Number(btn.dataset.editarAula));
-    btn.addEventListener("click", () => editarAula(aula));
-  });
-  corpo.querySelectorAll("[data-excluir-aula]").forEach((btn) => {
-    btn.addEventListener("click", () => excluirAula(Number(btn.dataset.excluirAula)));
-  });
-}
-function editarAula(aula) {
-  EDITANDO_AULA_ID = aula.id_aula;
-
-  document.getElementById("tituloFormAula").textContent = "Editar disciplina";
-  document.getElementById("aulaMateria").value = aula.materia;
-  document.getElementById("aulaDuracao").value = aula.duracao || "";
-  document.getElementById("aulaQtd").value = aula.qtd_aulas ?? "";
-
-  document.getElementById("btnSalvarAula").textContent = "Salvar alterações";
-  document.getElementById("btnCancelarEdicaoAula").style.display = "inline-flex";
-
-  document.getElementById("aulaMateria").focus();
-  document.getElementById("formAula").scrollIntoView({ block: "nearest" });
-}
-
-function resetarFormAula() {
-  EDITANDO_AULA_ID = null;
-  document.getElementById("formAula").reset();
-  document.getElementById("tituloFormAula").textContent = "Nova disciplina";
-  document.getElementById("btnSalvarAula").textContent = "Cadastrar";
-  document.getElementById("btnCancelarEdicaoAula").style.display = "none";
-}
-
-document.getElementById("btnCancelarEdicaoAula").addEventListener("click", resetarFormAula);
-
-async function excluirAula(id) {
-  if (!confirm("Tem certeza que deseja excluir essa disciplina? As videoaulas vinculadas a ela podem ser afetadas.")) return;
-  try {
-    const resp = await fetch(apiUrl(`/aulas/${id}`), { method: "DELETE", headers: await Auth.cabecalhos() });
-    const dados = await resp.json();
-    if (resp.ok) {
-      mostrarToast(dados.message || dados.resposta || "Disciplina removida.", "ok");
-      if (EDITANDO_AULA_ID === id) resetarFormAula();
-      carregarAulas();
-    } else {
-      mostrarToast(dados.message || dados.resposta || "Não foi possível excluir a disciplina.", "erro");
-    }
-  } catch {
-    mostrarToast("Não foi possível excluir a disciplina.", "erro");
-  }
 }
 
 function preencherSelectMaterias() {
@@ -136,22 +76,19 @@ document.getElementById("formAula").addEventListener("submit", async (ev) => {
   const duracao = document.getElementById("aulaDuracao").value.trim();
   const qtd_aulas = document.getElementById("aulaQtd").value || null;
 
-  const url = EDITANDO_AULA_ID ? apiUrl(`/aulas/${EDITANDO_AULA_ID}`) : apiUrl("/CadastroAulas");
-  const metodo = EDITANDO_AULA_ID ? "PUT" : "POST";
-
   try {
-    const resp = await fetch(url, {
-      method: metodo,
+    const resp = await fetch(apiUrl("/CadastroAulas"), {
+      method: "POST",
       headers: await Auth.cabecalhos(),
       body: JSON.stringify({ materia, duracao, qtd_aulas }),
     });
     const dados = await resp.json();
-    const sucesso = EDITANDO_AULA_ID ? resp.ok : /sucesso/i.test(dados.resposta || "");
-    aviso.textContent = dados.message || dados.resposta || (sucesso ? "Salvo com sucesso." : "Não foi possível salvar a disciplina.");
+    const sucesso = /sucesso/i.test(dados.resposta || "");
+    aviso.textContent = dados.resposta || "Não foi possível cadastrar a disciplina.";
     aviso.classList.add("mostrar", sucesso ? "ok" : "erro");
     if (sucesso) {
-      mostrarToast(EDITANDO_AULA_ID ? "Disciplina atualizada!" : "Disciplina cadastrada!", "ok");
-      resetarFormAula();
+      mostrarToast("Disciplina cadastrada!", "ok");
+      ev.target.reset();
       carregarAulas();
     }
   } catch {
@@ -160,6 +97,7 @@ document.getElementById("formAula").addEventListener("submit", async (ev) => {
   }
 });
 
+/* VIDEOAU*/
 async function carregarVideoaulas() {
   try {
     const dados = await fetch(apiUrl("/videoaulas")).then((r) => r.json());
@@ -169,6 +107,7 @@ async function carregarVideoaulas() {
   }
 }
 
+/* Miniatura (capa) do vídeo no YouTube — a mesma que aparece no carrossel da home */
 function capaVideo(link = "") {
   const m = String(link).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
   if (!m) return `<span class="sr-only">sem capa</span>`;
@@ -205,35 +144,38 @@ function renderizarTabelaVideoaulas(lista) {
 }
 
 function editarVideoaula(video) {
-  EDITANDO_VIDEO_ID = video.id_materias;
-  VIDEO_LINK_ORIGINAL = video.link;
+    EDITANDO_VIDEO_ID = video.id_materias;
 
-  document.getElementById("tituloFormVideo").textContent = "Editar videoaula";
-  document.getElementById("videoMateria").value = video.id_aula;
-  document.getElementById("videoNome").value = video.nome_aulas;
-  document.getElementById("videoDescricao").value = video.descricao;
-  document.getElementById("videoLink").value = video.link;
-  document.getElementById("videoLink").required = false;
+    VIDEO_LINK_ORIGINAL = video.link;
 
-  document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
-  document.getElementById("btnCancelarEdicaoVideo").style.display = "inline-flex";
+    document.getElementById("tituloFormVideo").textContent = "Editar videoaula";
+    document.getElementById("videoMateria").value = video.id_aula;
+    document.getElementById("videoNome").value = video.nome_aulas;
+    document.getElementById("videoDescricao").value = video.descricao;
+    document.getElementById("videoLink").value = video.link;
 
-  document.getElementById("videoNome").focus();
-  document.getElementById("formVideo").scrollIntoView({ block: "nearest" });
+    document.getElementById("videoLink").required = false;
+
+    document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
+    document.getElementById("btnCancelarEdicaoVideo").style.display = "inline-flex";
+
+    document.getElementById("videoNome").focus();
+    document.getElementById("formVideo").scrollIntoView({ block: "nearest" });
 }
 
 document.getElementById("btnCancelarEdicaoVideo").addEventListener("click", () => resetarFormVideo());
 
 function resetarFormVideo() {
-  EDITANDO_VIDEO_ID = null;
-  VIDEO_LINK_ORIGINAL = null;
+    EDITANDO_VIDEO_ID = null;
+    VIDEO_LINK_ORIGINAL = null;
 
-  document.getElementById("formVideo").reset();
-  document.getElementById("videoLink").required = true;
+    document.getElementById("formVideo").reset();
 
-  document.getElementById("tituloFormVideo").textContent = "Nova videoaula";
-  document.getElementById("btnSalvarVideo").textContent = "Cadastrar videoaula";
-  document.getElementById("btnCancelarEdicaoVideo").style.display = "none";
+    document.getElementById("videoLink").required = true;
+
+    document.getElementById("tituloFormVideo").textContent = "Nova videoaula";
+    document.getElementById("btnSalvarVideo").textContent = "Cadastrar videoaula";
+    document.getElementById("btnCancelarEdicaoVideo").style.display = "none";
 }
 
 async function excluirVideoaula(id) {
@@ -254,6 +196,7 @@ document.getElementById("formVideo").addEventListener("submit", async (ev) => {
   aviso.className = "form-aviso";
 
   const linkDigitado = document.getElementById("videoLink").value.trim();
+  
   const linkFinal = EDITANDO_VIDEO_ID && linkDigitado === ""
     ? VIDEO_LINK_ORIGINAL
     : linkDigitado;
