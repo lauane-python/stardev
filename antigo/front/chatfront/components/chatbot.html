@@ -1,0 +1,33 @@
+<div id="chatbot_button">
+    <img src="/front/chatfront/assets/logo-chat.svg" alt="Dev Mentor">
+</div>
+<div id="chatbot_modal" class="chat_hidden">
+    <div id="chatbot_header">
+        <div id="chatbot_header_left">
+            <img src="/front/chatfront/assets/logo-chat.svg" alt="Logo">
+            <div>
+                <h3>Dev Mentor</h3>
+            </div>
+        </div>
+        <button id="chatbot_close" type="button" aria-label="Fechar chat">&times;</button>
+    </div>
+    <div id="chatbot_messages">
+        <div class="bot_message">
+            Olá. Sou a Dev Mentor da StarDev.<br><br>
+            Posso tirar todas as suas dúvidas sobre a plataforma e sobre seus estudos de programação:
+            <br><br>
+            - Funcionamento das aulas e anotações<br>
+            - Bloco de notas integrado ao vídeo<br>
+            - Como consultar anotações antigas<br>
+            - HTML, CSS e JavaScript<br>
+            - Back-end, Banco de Dados e Lógica
+        </div>
+    </div>
+    <div id="chatbot_input_area">
+        <input type="text" id="chatbot_input" placeholder="Digite sua dúvida sobre a plataforma ou programação...">
+        <button id="chatbot_send" type="button">Enviar</button>
+    </div>
+</div>
+<link rel="stylesheet" href="/front/chatfront/css/chatbot.css">
+<script src="/front/chatfront/config/api.js"></script>
+<script src="/front/chatfront/js/chatbot.js"></script>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrar — StarDev</title>
+<link rel="icon" href="assets/icons/icon-192.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/chatbot.css" />
+</head>
+<body class="bg-grid">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="loader-pagina" aria-hidden="true"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
+
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg>
+      </span>
+      <span class="logo-texto">Star Dev</span>
+    </a>
+    <nav class="nav-desktop" id="menuPrincipal" aria-label="Principal">
+      <a href="index.html" class="nav-link">Início</a>
+      <a href="index.html#trilhas" class="nav-link">Trilhas</a>
+      <a href="index.html#contato" class="nav-link">Contato</a>
+    </nav>
+    <div class="nav-acoes">
+      <a href="cadastro.html" class="btn btn-primario btn-sm">Criar conta</a>
+      <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menuPrincipal"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="pagina-auth" id="conteudo" tabindex="-1">
+  <div class="container">
+    <div class="auth-grid">
+      <div class="auth-lado">
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg>
+        </span>
+        <h2>Que bom te ver de novo</h2>
+        <p>Entre com seu e-mail e senha para continuar sua trilha de estudos de onde parou.</p>
+        <p style="margin-top:22px;">Ainda não tem conta? <a href="cadastro.html" style="color:var(--cor-destaque); text-decoration:underline;">Criar agora</a></p>
+      </div>
+
+      <div class="auth-form-side">
+        <span class="eyebrow">acesso do aluno</span>
+        <h1 style="font-size:26px; margin-top:12px;">Entrar</h1>
+
+        <div class="form-aviso" id="loginAviso" role="status" aria-live="polite"></div>
+
+        <form id="formLogin" novalidate style="margin-top:22px;">
+          <div class="campo">
+            <label for="loginEmail">E-mail</label>
+            <input type="email" id="loginEmail" name="email" required autocomplete="email" placeholder="voce@email.com" />
+          </div>
+          <div class="campo">
+            <label for="loginSenha">Senha</label>
+            <div class="input-wrap">
+              <input type="password" id="loginSenha" name="senha" required autocomplete="current-password" placeholder="Sua senha" />
+              <button type="button" class="btn-olho" data-olho-de="loginSenha" aria-label="Mostrar senha"></button>
+            </div>
+          </div>
+          <div style="text-align:right; margin-bottom:20px;">
+            <a href="recuperar-senha.html" style="font-size:13px; color:var(--cor-secundaria); text-decoration:underline;">Esqueci minha senha</a>
+          </div>
+          <button type="submit" class="btn btn-primario btn-block" id="btnEntrar">Entrar</button>
+        </form>
+
+        <p class="form-rodape">Ainda não tem conta? <a href="cadastro.html">Criar conta grátis</a></p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/mask.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/login.js"></script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>
