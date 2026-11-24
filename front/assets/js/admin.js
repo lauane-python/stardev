@@ -3,6 +3,8 @@ Auth.exigirAdmin();
 let AULAS_CACHE = [];
 let EDITANDO_VIDEO_ID = null;
 let VIDEO_LINK_ORIGINAL = null;
+let EDITANDO_AULA_ID = null;
+
 function trocarSecaoAdmin(nome) {
   document.getElementById("secaoAulas").style.display = nome === "aulas" ? "block" : "none";
   document.getElementById("secaoVideoaulas").style.display = nome === "videoaulas" ? "block" : "none";
@@ -47,20 +49,82 @@ async function carregarAulas() {
     renderizarTabelaAulas();
     preencherSelectMaterias();
   } catch {
-    document.getElementById("tabelaAulas").innerHTML = `<tr><td colspan="4">Não foi possível carregar as disciplinas.</td></tr>`;
+    document.getElementById("tabelaAulas").innerHTML = `<tr><td colspan="5">Não foi possível carregar as disciplinas.</td></tr>`;
   }
 }
 
 function renderizarTabelaAulas() {
   const corpo = document.getElementById("tabelaAulas");
   if (AULAS_CACHE.length === 0) {
-    corpo.innerHTML = `<tr><td colspan="4">Nenhuma disciplina cadastrada.</td></tr>`;
+    corpo.innerHTML = `<tr><td colspan="5">Nenhuma disciplina cadastrada.</td></tr>`;
     return;
   }
   corpo.innerHTML = AULAS_CACHE.map((a) => `
-    <tr><td>${a.id_aula}</td><td>${escapar(a.materia)}</td><td>${escapar(a.duracao || "-")}</td><td>${a.qtd_aulas ?? "-"}</td></tr>
+    <tr>
+      <td>${a.id_aula}</td>
+      <td>${escapar(a.materia)}</td>
+      <td>${escapar(a.duracao || "-")}</td>
+      <td>${a.qtd_aulas ?? "-"}</td>
+      <td>
+        <div class="acoes-tabela">
+          <button type="button" data-editar-aula="${a.id_aula}" aria-label="Editar ${escapar(a.materia)}">Editar</button>
+          <button type="button" data-excluir-aula="${a.id_aula}" class="excluir" aria-label="Excluir ${escapar(a.materia)}">Excluir</button>
+        </div>
+      </td>
+    </tr>
   `).join("");
+
+  corpo.querySelectorAll("[data-editar-aula]").forEach((btn) => {
+    const aula = AULAS_CACHE.find((a) => a.id_aula === Number(btn.dataset.editarAula));
+    btn.addEventListener("click", () => editarAula(aula));
+  });
+  corpo.querySelectorAll("[data-excluir-aula]").forEach((btn) => {
+    btn.addEventListener("click", () => excluirAula(Number(btn.dataset.excluirAula)));
+  });
 }
+function editarAula(aula) {
+  EDITANDO_AULA_ID = aula.id_aula;
+
+  document.getElementById("tituloFormAula").textContent = "Editar disciplina";
+  document.getElementById("aulaMateria").value = aula.materia;
+  document.getElementById("aulaDuracao").value = aula.duracao || "";
+  document.getElementById("aulaQtd").value = aula.qtd_aulas ?? "";
+
+  document.getElementById("btnSalvarAula").textContent = "Salvar alterações";
+  document.getElementById("btnCancelarEdicaoAula").style.display = "inline-flex";
+
+  document.getElementById("aulaMateria").focus();
+  document.getElementById("formAula").scrollIntoView({ block: "nearest" });
+}
+
+function resetarFormAula() {
+  EDITANDO_AULA_ID = null;
+  document.getElementById("formAula").reset();
+  document.getElementById("tituloFormAula").textContent = "Nova disciplina";
+  document.getElementById("btnSalvarAula").textContent = "Cadastrar";
+  document.getElementById("btnCancelarEdicaoAula").style.display = "none";
+}
+
+document.getElementById("btnCancelarEdicaoAula").addEventListener("click", resetarFormAula);
+
+async function excluirAula(id) {
+  if (!confirm("Tem certeza que deseja excluir essa disciplina? As videoaulas vinculadas a ela podem ser afetadas.")) return;
+  try {
+    const resp = await fetch(apiUrl(`/aulas/${id}`), { method: "DELETE", headers: await Auth.cabecalhos() });
+    const dados = await resp.json();
+    if (resp.ok) {
+      mostrarToast(dados.message || dados.resposta || "Disciplina removida.", "ok");
+      if (EDITANDO_AULA_ID === id) resetarFormAula();
+      carregarAulas();
+    } else {
+      mostrarToast(dados.message || dados.resposta || "Não foi possível excluir a disciplina.", "erro");
+    }
+  } catch {
+    mostrarToast("Não foi possível excluir a disciplina.", "erro");
+  }
+}
+/*editar disciplina*/
+
 
 function preencherSelectMaterias() {
   const select = document.getElementById("videoMateria");
@@ -72,29 +136,28 @@ document.getElementById("formAula").addEventListener("submit", async (ev) => {
   const aviso = document.getElementById("aulaAviso");
   aviso.className = "form-aviso";
 
-  const materia = document.getElementById("aulaMateria").value.trim();
-  const duracao = document.getElementById("aulaDuracao").value.trim();
-  const qtd_aulas = document.getElementById("aulaQtd").value || null;
+    const url = EDITANDO_AULA_ID ? apiUrl(`/aulas/${EDITANDO_AULA_ID}`) : apiUrl("/CadastroAulas");
+    const metodo = EDITANDO_AULA_ID ? "PUT" : "POST";
 
-  try {
-    const resp = await fetch(apiUrl("/CadastroAulas"), {
-      method: "POST",
-      headers: await Auth.cabecalhos(),
-      body: JSON.stringify({ materia, duracao, qtd_aulas }),
-    });
-    const dados = await resp.json();
-    const sucesso = /sucesso/i.test(dados.resposta || "");
-    aviso.textContent = dados.resposta || "Não foi possível cadastrar a disciplina.";
-    aviso.classList.add("mostrar", sucesso ? "ok" : "erro");
-    if (sucesso) {
-      mostrarToast("Disciplina cadastrada!", "ok");
-      ev.target.reset();
-      carregarAulas();
+    try {
+      const resp = await fetch(url, {
+        method: metodo,
+        headers: await Auth.cabecalhos(),
+        body: JSON.stringify({ materia, duracao, qtd_aulas }),
+      });
+      const dados = await resp.json();
+      const sucesso = EDITANDO_AULA_ID ? resp.ok : /sucesso/i.test(dados.resposta || "");
+      aviso.textContent = dados.message || dados.resposta || (sucesso ? "Salvo com sucesso." : "Não foi possível salvar a disciplina.");
+      aviso.classList.add("mostrar", sucesso ? "ok" : "erro");
+      if (sucesso) {
+        mostrarToast(EDITANDO_AULA_ID ? "Disciplina atualizada!" : "Disciplina cadastrada!", "ok");
+        resetarFormAula();
+        carregarAulas();
+      }
+    } catch {
+      aviso.textContent = "Não foi possível falar com o servidor da StarDev.";
+      aviso.classList.add("mostrar", "erro");
     }
-  } catch {
-    aviso.textContent = "Não foi possível falar com o servidor da StarDev.";
-    aviso.classList.add("mostrar", "erro");
-  }
 });
 
 /* VIDEOAU*/

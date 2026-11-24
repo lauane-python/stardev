@@ -228,6 +228,7 @@ app.delete("/usuario/foto", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro ao remover foto" });
     }
 });
+// disciplinas - materias
 app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -249,6 +250,33 @@ app.post("/CadastroAulas", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
+// Atualizar materias
+app.put("/aulas/:id", verificarToken, async (req, res) => {
+  const { materia, duracao, qtd_aulas } = req.body;
+  try {
+    const [r] = await db.query(
+      "UPDATE aulas SET materia = ?, duracao = ?, qtd_aulas = ? WHERE id_aula = ?",
+      [materia, duracao, qtd_aulas, req.params.id]
+    );
+    if (r.affectedRows === 0) return res.status(404).json({ message: "Disciplina não encontrada." });
+    res.json({ message: "Disciplina atualizada com sucesso." });
+  } catch (e) {
+    res.status(500).json({ message: "Erro ao atualizar a disciplina." });
+  }
+});
+
+// Excluir materias
+app.delete("/aulas/:id", verificarToken, async (req, res) => {
+  try {
+    const [r] = await db.query("DELETE FROM aulas WHERE id_aula = ?", [req.params.id]);
+    if (r.affectedRows === 0) return res.status(404).json({ message: "Disciplina não encontrada." });
+    res.json({ message: "Disciplina removida com sucesso." });
+  } catch (e) {
+    res.status(500).json({ message: "Não foi possível excluir. Verifique se há videoaulas vinculadas." });
+  }
+});
+
+
 app.put("/trocarSenha", verificarToken, async (req, res) => {
     try {
         const { novaSenha } = req.body;
