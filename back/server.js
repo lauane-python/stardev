@@ -127,6 +127,8 @@ app.post("/cadastro", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
+
+
 /*LOGIN*/
 app.post("/login", async (req, res) => {
     try {
@@ -173,6 +175,9 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
+
+
+
 app.get("/usuario", verificarToken, async (req, res) => {
     try {
         const userId = req.usuario.id;
@@ -331,7 +336,7 @@ app.put("/usuario", verificarToken, async (req, res) => {
     }
 });
 
-app.get("/aulas", async (req, res) => {
+app.get("/aulas", verificarToken, async (req, res) => {
     const [dados] = await conexao.query("SELECT * FROM aulas");
     res.json(dados);
 });
