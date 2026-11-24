@@ -1,7 +1,10 @@
+<!-- BOTÃO FLUTUANTE -->
 <div id="chatbot_button">
     <img src="/front/chatfront/assets/logo-chat.svg" alt="Dev Mentor">
 </div>
+<!-- CHAT -->
 <div id="chatbot_modal" class="chat_hidden">
+    <!-- HEADER -->
     <div id="chatbot_header">
         <div id="chatbot_header_left">
             <img src="/front/chatfront/assets/logo-chat.svg" alt="Logo">
@@ -9,23 +12,26 @@
                 <h3>Dev Mentor</h3>
             </div>
         </div>
-        <button id="chatbot_close" type="button" aria-label="Fechar chat">&times;</button>
+        <button id="chatbot_close">✕</button>
     </div>
+    <!-- MENSAGENS -->
     <div id="chatbot_messages">
         <div class="bot_message">
-            Olá. Sou a Dev Mentor da StarDev.<br><br>
-            Posso tirar todas as suas dúvidas sobre a plataforma e sobre seus estudos de programação:
+            Olá, estudante.<br><br>
+            Sou a Dev Mentor da StarDev.<br>
+            Posso ajudar você com:
             <br><br>
-            - Funcionamento das aulas e anotações<br>
-            - Bloco de notas integrado ao vídeo<br>
-            - Como consultar anotações antigas<br>
-            - HTML, CSS e JavaScript<br>
-            - Back-end, Banco de Dados e Lógica
+            • HTML<br>
+            • CSS<br>
+            • JavaScript<br>
+            • Back-end<br>
+            • Banco de Dados<br>
+            • Lógica de Programação
         </div>
     </div>
     <div id="chatbot_input_area">
-        <input type="text" id="chatbot_input" placeholder="Digite sua dúvida sobre a plataforma ou programação...">
-        <button id="chatbot_send" type="button">Enviar</button>
+        <input type="text" id="chatbot_input" placeholder="Digite sua dúvida...">
+        <button id="chatbot_send">Enviar</button>
     </div>
 </div>
 <link rel="stylesheet" href="/front/chatfront/css/chatbot.css">

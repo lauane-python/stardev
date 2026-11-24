@@ -1,4 +1,17 @@
+/**
+ * ==========================================================================
+ * NOTAS.JS — BLOCO DE NOTAS FLUTUANTE STARDEV
+ * ==========================================================================
+ * - Círculo flutuante com a logo StarDev sobreposto ao vídeo
+ * - Ao clicar, expande em um bloco de notas compacto
+ * - Salva automaticamente no localStorage com nome da matéria e aula
+ * - Funciona perfeitamente em tela expandida / tela cheia sobrepondo o YouTube
+ * - Controle integrado de expansão de tela (Modo Expandido / Fullscreen)
+ * ==========================================================================
+ */
+
 (function NotasStarDev() {
+  // Logo SVG da StarDev (ícone terminal estilizado >_)
   const LOGO_SVG = `<svg viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
     <line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/>
@@ -46,17 +59,19 @@
 
     localStorage.setItem("stardev_anotacoes", JSON.stringify(todas));
 
+    // Feedback visual de salvamento automático
     const statusEl = blocoEl?.querySelector(".nota-salvo-status");
     if (statusEl) {
-      statusEl.textContent = "Salvo";
+      statusEl.textContent = "✓ salvo";
       statusEl.classList.add("visivel");
       clearTimeout(statusEl._timer);
       statusEl._timer = setTimeout(() => {
         statusEl.textContent = "";
         statusEl.classList.remove("visivel");
-      }, 2000);
+      }, 2200);
     }
 
+    // Se a aba de anotações estiver visível, atualiza a lista
     if (typeof window.renderizarAnotacoes === "function") {
       window.renderizarAnotacoes();
     }
@@ -70,6 +85,9 @@
     textareaEl.value = nota?.texto || "";
   }
 
+  /**
+   * Cria o círculo flutuante com a logo StarDev
+   */
   function criarFAB() {
     const btn = document.createElement("button");
     btn.type = "button";
@@ -91,6 +109,9 @@
     return btn;
   }
 
+  /**
+   * Cria o bloco de notas expansível
+   */
   function criarBloco() {
     const div = document.createElement("div");
     div.className = "nota-bloco";
@@ -113,15 +134,15 @@
         </div>
       </div>
       <div class="nota-bloco-body">
-        <textarea class="nota-textarea" id="notaTextarea" placeholder="Digite suas anotações aqui enquanto assiste ao vídeo. Suas notas são salvas automaticamente com o nome da matéria e aula."></textarea>
+        <textarea class="nota-textarea" id="notaTextarea" placeholder="Digite suas anotações aqui enquanto assiste ao vídeo... Suas notas são salvas automaticamente!"></textarea>
       </div>
       <div class="nota-bloco-footer">
         <div class="nota-footer-esquerda">
-          <span class="nota-tag-auto">Salvamento automático</span>
+          <span class="nota-tag-auto">💾 auto-save</span>
           <span class="nota-salvo-status"></span>
         </div>
         <div class="nota-footer-acoes">
-          <button type="button" class="nota-btn-copiar" id="notaBtnCopiar" title="Copiar anotações">Copiar</button>
+          <button type="button" class="nota-btn-copiar" id="notaBtnCopiar" title="Copiar anotações">📋 Copiar</button>
         </div>
       </div>
     `;
@@ -137,8 +158,8 @@
       if (!txt.trim()) return;
       navigator.clipboard.writeText(txt).then(() => {
         const btn = div.querySelector("#notaBtnCopiar");
-        btn.textContent = "Copiado";
-        setTimeout(() => (btn.textContent = "Copiar"), 2000);
+        btn.textContent = "✓ Copiado!";
+        setTimeout(() => (btn.textContent = "📋 Copiar"), 2000);
       });
     });
 
@@ -148,6 +169,7 @@
       saveTimeout = setTimeout(salvarNota, 600);
     });
 
+    // Salva também ao sair do foco
     textareaEl.addEventListener("blur", salvarNota);
 
     return div;
@@ -168,11 +190,14 @@
     if (fabEl) fabEl.style.display = "flex";
   }
 
+  /**
+   * Cria o botão customizado de expandir tela / sobrepor o YouTube
+   */
   function criarBotaoExpandir() {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "btn-expandir-player";
-    btn.setAttribute("title", "Expandir tela");
+    btn.setAttribute("title", "Expandir tela (permite sobrepor o bloco de notas ao YouTube)");
     btn.innerHTML = `
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
@@ -188,6 +213,9 @@
     return btn;
   }
 
+  /**
+   * Alterna modo expandido / tela cheia que sobrepõe o YouTube
+   */
   function alternarTelaExpandida() {
     if (!playerWrapEl) return;
 
@@ -195,6 +223,7 @@
       document.fullscreenElement === playerWrapEl;
 
     if (estaExpandido) {
+      // Sair do expandido
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => {});
       }
@@ -202,12 +231,17 @@
       document.body.classList.remove("player-expandido-ativo");
       atualizarBotaoExpandir(false);
     } else {
+      // Entrar no modo expandido que sobrepõe o YouTube
       playerWrapEl.classList.add("modo-expandido");
       document.body.classList.add("player-expandido-ativo");
       atualizarBotaoExpandir(true);
 
+      // Tenta também a API nativa de Fullscreen se permitida
       if (playerWrapEl.requestFullscreen) {
-        playerWrapEl.requestFullscreen().catch(() => {});
+        playerWrapEl.requestFullscreen().catch(() => {
+          // Se falhar o requestFullscreen nativo, o .modo-expandido CSS garante
+          // a expansão 100vw x 100vh cobrindo a tela toda perfeitamente!
+        });
       }
     }
   }
@@ -251,14 +285,19 @@
     return d.innerHTML;
   }
 
+  /**
+   * Monta o círculo e o bloco de notas sobre o container do player de vídeo
+   */
   function montarNoPlayer(container, materia, aula) {
     if (!container) return;
 
+    // Remove instâncias antigas
     document.querySelectorAll(".nota-fab, .nota-bloco, .btn-expandir-player").forEach((el) => el.remove());
 
     contextoAtual = { materia: materia || "Geral", aula: aula || "Aula" };
     playerWrapEl = container;
 
+    // Garante position relative para que os elementos posicionados fiquem por cima do iframe
     const estilo = window.getComputedStyle(container);
     if (estilo.position === "static") {
       container.style.position = "relative";
@@ -272,11 +311,14 @@
     container.appendChild(fabEl);
     container.appendChild(blocoEl);
 
+    // Carrega dados iniciais da anotação
     carregarNotaAtual();
 
+    // Eventos de teclado (Esc para sair do modo expandido)
     document.removeEventListener("keydown", lidarComTeclas);
     document.addEventListener("keydown", lidarComTeclas);
 
+    // Eventos de tela cheia do navegador
     document.removeEventListener("fullscreenchange", sincronizarFullscreen);
     document.addEventListener("fullscreenchange", sincronizarFullscreen);
   }
@@ -289,10 +331,12 @@
     }
   }
 
+  // Salva automaticamente antes de fechar a página
   window.addEventListener("beforeunload", () => {
     salvarNota();
   });
 
+  // Expõe globalmente para uso no area-aluno.js e em páginas com vídeo
   window.NotasStarDev = {
     montarNoPlayer,
     salvarNota,

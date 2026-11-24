@@ -1,3 +1,11 @@
+/* ==========================================================================
+ * NOTAS.CSS — ESTILOS DO BLOCO DE NOTAS FLUTUANTE STARDEV
+ * ==========================================================================
+ * Permite que o círculo da logo StarDev e o bloco de notas sobreponham o
+ * player do YouTube inclusive quando a tela estiver cheia / expandida.
+ * ========================================================================== */
+
+/* --- Círculo flutuante com a logo StarDev (FAB) --- */
 .nota-fab {
   position: absolute;
   bottom: 24px;
@@ -76,6 +84,7 @@
   transform: translateX(50%) translateY(-2px);
 }
 
+/* --- Bloco de notas expandido --- */
 .nota-bloco {
   position: absolute;
   bottom: 24px;
@@ -239,7 +248,7 @@
 }
 
 .nota-salvo-status {
-  color: #70cf70;
+  color: #707039;
   font-weight: 700;
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -247,6 +256,7 @@
 
 .nota-salvo-status.visivel {
   opacity: 1;
+  color: #70cf70;
 }
 
 .nota-btn-copiar {
@@ -266,6 +276,7 @@
   color: #fff;
 }
 
+/* --- Botão Expandir Tela (Permite sobrepor o YouTube) --- */
 .btn-expandir-player {
   position: absolute;
   top: 14px;
@@ -304,6 +315,7 @@
   color: #fff;
 }
 
+/* --- Modo Expandido / Cinema (Sobreposição garantida do YouTube) --- */
 .player-wrap.modo-expandido {
   position: fixed !important;
   inset: 0 !important;
@@ -332,6 +344,7 @@ body.player-expandido-ativo {
   overflow: hidden !important;
 }
 
+/* Garante que em fullscreen nativo ou webkit os elementos fiquem visíveis e sobreponham */
 :-webkit-full-screen .nota-fab,
 :-webkit-full-screen .nota-bloco,
 :-webkit-full-screen .btn-expandir-player,

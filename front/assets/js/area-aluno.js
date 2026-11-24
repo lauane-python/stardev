@@ -1,9 +1,22 @@
+/**
+ * ==========================================================================
+ * AREA-ALUNO.JS — intranet do aluno
+ * ==========================================================================
+ * Endpoints usados:
+ *   GET /usuario              (dados do usuário logado)
+ *   GET /aulas                (lista de disciplinas/matérias)
+ *   GET /videoaulas           (lista de vídeos, já com o nome da matéria)
+ *   PUT /usuario              (atualizar nome/email/telefone/bio)
+ *   POST /usuario/foto        (upload de foto de perfil)
+ *   PUT /trocarSenha          (logado, troca a própria senha)
+ * ==========================================================================
+ */
+
 Auth.exigirLogin();
 
 let TODAS_MATERIAS = [];
 let TODAS_VIDEOAULAS = [];
 let MATERIA_SELECIONADA = null;
-
 function trocarSecao(nome) {
   document.getElementById("secaoInicio").style.display = nome === "inicio" ? "block" : "none";
   document.getElementById("secaoTrilhas").style.display = nome === "trilhas" ? "block" : "none";
@@ -15,6 +28,9 @@ function trocarSecao(nome) {
   window.fecharMenuMobile?.();
 }
 
+/* ------------------------------------------------------------------ */
+/* DASHBOARD — onde parou                                              */
+/* ------------------------------------------------------------------ */
 function salvarProgresso(nomeMateria, nomeAula, linkVideo) {
   localStorage.setItem("stardev_progresso", JSON.stringify({ nomeMateria, nomeAula, linkVideo, ts: Date.now() }));
 }
@@ -23,7 +39,7 @@ function renderizarOndeParou() {
   const dados = JSON.parse(localStorage.getItem("stardev_progresso") || "null");
   const el = document.getElementById("ondeParouConteudo");
   if (!dados) {
-    el.innerHTML = `<p style="font-family:var(--fonte-mono);font-size:13px;color:#7a6b6e;">Você ainda não assistiu nenhuma aula. Explore as <a href="#" data-secao="trilhas" style="color:var(--cor-secundaria);text-decoration:underline;">trilhas</a>.</p>`;
+    el.innerHTML = `<p style="font-family:var(--fonte-mono);font-size:13px;color:#7a6b6e;">Você ainda não assistiu nenhuma aula. Explore as <a href="#" data-secao="trilhas" style="color:var(--cor-secundaria);text-decoration:underline;">trilhas</a>!</p>`;
     el.querySelector("[data-secao]")?.addEventListener("click", (e) => { e.preventDefault(); trocarSecao("trilhas"); });
     return;
   }
@@ -35,7 +51,7 @@ function renderizarOndeParou() {
         <strong class="onde-parou-aula">${escapar(dados.nomeAula)}</strong>
         <span class="onde-parou-data">Última vez: ${data}</span>
       </div>
-      <button class="btn btn-primario btn-sm" id="btnContinuar">Continuar</button>
+      <button class="btn btn-primario btn-sm" id="btnContinuar">Continuar ▶</button>
     </div>`;
   document.getElementById("btnContinuar")?.addEventListener("click", () => {
     trocarSecao("trilhas");
@@ -70,8 +86,7 @@ async function carregarUsuario() {
   document.getElementById("sidebarNome").textContent = usuario.nome || "Aluno(a)";
   document.getElementById("sidebarNivel").textContent = Auth.nivel() === "A" ? "administrador" : "estudante";
   if (document.getElementById("saudacaoNome")) {
-    const primeiroNome = (usuario.nome || "").split(" ")[0];
-    document.getElementById("saudacaoNome").textContent = primeiroNome ? `Olá, ${primeiroNome}` : "Olá";
+    document.getElementById("saudacaoNome").textContent = `Olá, ${(usuario.nome || "").split(" ")[0]}! 👋`;
   }
 
   const iniciais = iniciaisNome(usuario.nome);
@@ -185,8 +200,13 @@ function abrirMateria(idAula, nomeAulaDesejada = null) {
       el.addEventListener("click", () => tocarVideo(el.dataset.link, el.dataset.nome, el.dataset.descricao));
     });
 
+<<<<<<< HEAD
+    tocarVideo(aulasDaMateria[0].link, aulasDaMateria[0].nome_aulas, aulasDaMateria[0].descricao);
+=======
+    // toca a aula desejada ou a primeira automaticamente
     const aulaAlvo = (nomeAulaDesejada && aulasDaMateria.find(a => a.nome_aulas === nomeAulaDesejada)) || aulasDaMateria[0];
     tocarVideo(aulaAlvo.link, aulaAlvo.nome_aulas, aulaAlvo.descricao);
+>>>>>>> fb4945d557d50c899ec0f4c7619a0e4b41fee34b
   }
 
   document.getElementById("painelAulas").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -201,9 +221,14 @@ function tocarVideo(link, nome, descricao = "") {
   const id = extrairIdYoutube(link);
   const container = document.getElementById("playerAtivo");
 
+<<<<<<< HEAD
+=======
+  // salva progresso para o dashboard
   const materiaAtual = TODAS_MATERIAS.find(m => m.id_aula === MATERIA_SELECIONADA);
   if (materiaAtual) salvarProgresso(materiaAtual.materia, nome, link);
 
+  // destaca o card da aula que está tocando
+>>>>>>> fb4945d557d50c899ec0f4c7619a0e4b41fee34b
   document.querySelectorAll(".item-aula").forEach((el) => {
     if (el.dataset.link === link) el.setAttribute("aria-current", "true");
     else el.removeAttribute("aria-current");
@@ -234,9 +259,11 @@ function tocarVideo(link, nome, descricao = "") {
   const erroEl = document.getElementById("playerErro");
   iframe.addEventListener("error", () => erroEl.classList.add("mostrar"));
 
+  // Bloco de notas
   setTimeout(() => {
     const playerWrap = container.querySelector(".player-wrap");
     if (playerWrap && window.NotasStarDev) {
+      const materiaAtual = TODAS_MATERIAS.find(m => m.id_aula === MATERIA_SELECIONADA);
       window.NotasStarDev.montarNoPlayer(playerWrap, materiaAtual?.materia || "Aula", nome);
     }
   }, 100);
@@ -254,6 +281,7 @@ document.getElementById("btnVoltarMaterias")?.addEventListener("click", () => {
   document.getElementById("listaMaterias").scrollIntoView({ block: "nearest" });
 });
 
+/* PERFIL — atualizar dados                                            */
 document.querySelectorAll(".tab-btn[data-tab-perfil]").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn[data-tab-perfil]").forEach((b) => b.classList.remove("ativa"));
@@ -372,6 +400,11 @@ document.getElementById("formTrocarSenha").addEventListener("submit", async (ev)
 
 document.getElementById("btnSair").addEventListener("click", () => Auth.sair());
 
+<<<<<<< HEAD
+=======
+/* ------------------------------------------------------------------ */
+/* ANOTAÇÕES                                                           */
+/* ------------------------------------------------------------------ */
 function renderizarAnotacoes(termoFiltro = "") {
   const container = document.getElementById("listaAnotacoes");
   const anotacoes = JSON.parse(localStorage.getItem("stardev_anotacoes") || "{}");
@@ -392,13 +425,14 @@ function renderizarAnotacoes(termoFiltro = "") {
         <div class="vazio-estado" style="text-align:center;padding:40px 20px;">
           <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="rgba(129,68,86,.35)" stroke-width="1.3" style="margin:0 auto 16px;display:block"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
           <p style="font-family:var(--fonte-mono);font-size:13px;color:#7a6b6e;">
-            ${termoFiltro ? "Nenhuma anotação corresponde ao seu filtro." : "Você ainda não tem anotações.<br>Abra qualquer videoaula e clique no círculo da StarDev para anotar em tempo real."}
+            ${termoFiltro ? "Nenhuma anotação corresponde ao seu filtro." : "Você ainda não tem anotações.<br>Abra qualquer videoaula e clique no círculo da StarDev para anotar em tempo real!"}
           </p>
         </div>
       </div>`;
     return;
   }
 
+  // agrupar por matéria
   const grupos = {};
   lista.forEach(a => {
     const mat = a.materia || "Geral";
@@ -419,9 +453,9 @@ function renderizarAnotacoes(termoFiltro = "") {
             </div>
             <pre class="anotacao-texto">${escapar(nota.texto)}</pre>
             <div class="anotacao-acoes">
-              <button class="btn btn-primario btn-sm" onclick="irParaAulaAnotada('${escapar(materia)}', '${escapar(nota.aula)}')">Ir para aula</button>
-              <button class="btn btn-ghost btn-sm" onclick="copiarAnotacao(this)" data-texto="${escapar(nota.texto)}">Copiar</button>
-              <button class="btn btn-ghost btn-sm anotacao-deletar" onclick="deletarAnotacao('${escapar(materia)}', '${escapar(nota.aula)}')">Excluir</button>
+              <button class="btn btn-primario btn-sm" onclick="irParaAulaAnotada('${escapar(materia)}', '${escapar(nota.aula)}')">▶ Ir para aula</button>
+              <button class="btn btn-ghost btn-sm" onclick="copiarAnotacao(this)" data-texto="${escapar(nota.texto)}">📋 Copiar</button>
+              <button class="btn btn-ghost btn-sm anotacao-deletar" onclick="deletarAnotacao('${escapar(materia)}', '${escapar(nota.aula)}')">🗑 Excluir</button>
             </div>
           </div>`;
       }).join("")}
@@ -446,8 +480,8 @@ window.irParaAulaAnotada = function(materiaNome, aulaNome) {
 window.copiarAnotacao = function(btn) {
   const texto = btn.dataset.texto;
   navigator.clipboard.writeText(texto).then(() => {
-    btn.textContent = "Copiado";
-    setTimeout(() => { btn.textContent = "Copiar"; }, 2000);
+    btn.textContent = "✓ Copiado!";
+    setTimeout(() => { btn.textContent = "📋 Copiar"; }, 2000);
   });
 };
 
@@ -461,6 +495,7 @@ window.deletarAnotacao = function(materia, aula) {
     .replace(/[^a-z0-9]/g, "_");
 
   delete anotacoes[chave];
+  // Remove também formato legado caso exista
   const chaveLegada = `stardev_nota__${materia}__${aula}`.replace(/\s+/g,"_").toLowerCase();
   delete anotacoes[chaveLegada];
 
@@ -476,7 +511,7 @@ window.exportarAnotacoes = function() {
     return;
   }
   let conteudo = "============================================================\n";
-  conteudo += "STARDEV — ANOTAÇÕES DE ESTUDO\n";
+  conteudo += "STARDEV — MINHAS ANOTAÇÕES DE ESTUDO\n";
   conteudo += `Data de exportação: ${new Date().toLocaleString("pt-BR")}\n`;
   conteudo += "============================================================\n\n";
 
@@ -500,10 +535,13 @@ window.exportarAnotacoes = function() {
   mostrarToast("Anotações exportadas com sucesso!", "ok");
 };
 
+/* ------------------------------------------------------------------ */
+>>>>>>> fb4945d557d50c899ec0f4c7619a0e4b41fee34b
 document.addEventListener("DOMContentLoaded", async () => {
   await carregarUsuario();
   await carregarTrilhas();
 
+  // Filtro de anotações
   const filtroInput = document.getElementById("filtroAnotacoes");
   if (filtroInput) {
     filtroInput.addEventListener("input", (e) => {
@@ -511,11 +549,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Exportar anotações
   const btnExportar = document.getElementById("btnExportarAnotacoes");
   if (btnExportar) {
     btnExportar.addEventListener("click", () => window.exportarAnotacoes());
   }
 
+  // Tratamento da URL inicial com hash
   const hash = window.location.hash;
   if (hash === "#anotacoes") {
     trocarSecao("anotacoes");

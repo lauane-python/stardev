@@ -1,9 +1,24 @@
+/**
+ * ==========================================================================
+ * MASK.JS — MÁSCARAS DE ENTRADA E UTILITÁRIOS DE UX
+ * ==========================================================================
+ * Inclui:
+ *   - Prefixo fixo +55 com bandeira do Brasil (🇧🇷 +55) e UX aprimorada
+ *   - Máscara dinâmica de telefone brasileiro: (XX) XXXXX-XXXX
+ *   - Tratamento automático de cola/digitação de 55 duplicado
+ *   - Toggle de visualização de senha (olho aberto / fechado)
+ *   - Checklist e medidor de força de senha
+ * ==========================================================================
+ */
+
 function apenasDigitos(valor) {
   return (valor || "").replace(/\D/g, "");
 }
 
+/** Formata apenas o DDD + número para o input que já possui o prefixo +55 fixo */
 function formatarApenasNumeroBR(digitos) {
   let d = apenasDigitos(digitos);
+  // Se veio com 55 na frente (ex: 5518996890559), remove o 55
   if (d.startsWith("55") && d.length > 11) {
     d = d.slice(2);
   }
@@ -31,6 +46,7 @@ function formatarApenasNumeroBR(digitos) {
   return saida;
 }
 
+/** Formata telefone com +55 completo para exibição textual */
 function formatarTelefoneBR(digitosCompletos) {
   let d = apenasDigitos(digitosCompletos);
   if (d.startsWith("55") && d.length > 11) {
@@ -40,9 +56,14 @@ function formatarTelefoneBR(digitosCompletos) {
   return numeroFormatado ? `+55 ${numeroFormatado}` : "";
 }
 
+/**
+ * Cria o wrapper com o prefixo fixo "+55" visível e destacado (com bandeira do Brasil)
+ * O span .tel-pais exibe o prefixo de forma não editável para uma melhor UX.
+ */
 function criarCampoTelefoneComPrefixo(input) {
   if (!input) return;
 
+  // Atributos de usabilidade
   input.placeholder = "(18) 99689-0559";
   input.setAttribute("inputmode", "numeric");
   input.setAttribute("maxlength", "15");
@@ -51,17 +72,20 @@ function criarCampoTelefoneComPrefixo(input) {
   function aplicarMascara() {
     let digitos = apenasDigitos(input.value);
 
+    // Se o usuário digitou ou colou o 55 no início junto com o DDD
     if (digitos.startsWith("55") && digitos.length > 11) {
       digitos = digitos.slice(2);
     }
     digitos = digitos.slice(0, 11);
     input.dataset.digitos = digitos;
+
     input.value = formatarApenasNumeroBR(digitos);
   }
 
   input.addEventListener("input", aplicarMascara);
   input.addEventListener("paste", () => setTimeout(aplicarMascara, 10));
 
+  // Limpa se apenas DDD incompleto foi digitado ao sair do campo
   input.addEventListener("blur", () => {
     const d = apenasDigitos(input.value);
     if (d.length > 0 && d.length < 10) {
@@ -69,7 +93,9 @@ function criarCampoTelefoneComPrefixo(input) {
     }
   });
 
+  // Se já possui o wrapper, não monta de novo
   if (input.parentElement?.classList.contains("telefone-prefixo-wrap")) {
+    // Apenas garante o valor formatado
     if (input.dataset.digitos) {
       input.value = formatarApenasNumeroBR(input.dataset.digitos);
     }
@@ -83,23 +109,27 @@ function criarCampoTelefoneComPrefixo(input) {
   span.className = "tel-pais";
   span.setAttribute("title", "Código do Brasil (+55) fixo");
   span.setAttribute("aria-label", "Código do país +55 Brasil fixo");
-  span.innerHTML = `<span class="tel-pais-badge">BR</span> +55`;
+  span.innerHTML = `<span class="tel-pais-flag">🇧🇷</span> +55`;
 
+  // Clicar no prefixo foca o campo de entrada
   span.addEventListener("click", () => input.focus());
 
   input.parentNode.insertBefore(wrap, input);
   wrap.appendChild(span);
   wrap.appendChild(input);
 
+  // Formata valor inicial se houver
   if (input.value) {
     aplicarMascara();
   }
 }
 
+/** Ativa máscara de telefone — mantém compatibilidade */
 function ativarMascaraTelefone(input) {
   criarCampoTelefoneComPrefixo(input);
 }
 
+/** Retorna somente os 10 ou 11 dígitos válidos para envio ao back-end */
 function digitosTelefone(input) {
   let digitos = input?.dataset?.digitos || apenasDigitos(input?.value || "");
   if (digitos.startsWith("55") && digitos.length > 11) {
@@ -108,67 +138,53 @@ function digitosTelefone(input) {
   return digitos.slice(0, 11);
 }
 
-function ativarOlhoSenha(btn) {
-  const alvoId = btn.getAttribute("data-olho-de");
+function ativarOlhoSenha(botao) {
+  const alvoId = botao.dataset.olhoDe;
   const input = document.getElementById(alvoId);
   if (!input) return;
 
-  function renderIcone(aberto) {
-    btn.innerHTML = aberto
-      ? `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
-      : `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
-  }
-
-  renderIcone(false);
-  btn.addEventListener("click", () => {
-    const atual = input.type === "text";
-    input.type = atual ? "password" : "text";
-    renderIcone(!atual);
-    btn.setAttribute("aria-label", atual ? "Mostrar senha" : "Ocultar senha");
+  botao.addEventListener("click", () => {
+    const visivel = input.type === "text";
+    input.type = visivel ? "password" : "text";
+    botao.innerHTML = visivel ? svgOlhoAberto() : svgOlhoFechado();
+    botao.setAttribute("aria-label", visivel ? "Mostrar senha" : "Ocultar senha");
+    input.focus({ preventScroll: true });
   });
+
+  botao.innerHTML = svgOlhoAberto();
 }
 
-function avaliarForcaSenha(senha, elBarra, elChecklist) {
+function svgOlhoAberto() {
+  return `<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+function svgOlhoFechado() {
+  return `<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"/><path d="M10.6 5.2A10.9 10.9 0 0 1 12 5c7 0 10.5 7 10.5 7a13.6 13.6 0 0 1-3.1 4.1M6.6 6.6C3.5 8.5 1.5 12 1.5 12s3.5 7 10.5 7a10.7 10.7 0 0 0 4.4-.9"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>`;
+}
+
+function avaliarForcaSenha(senha, elementoBarra, elementoChecklist) {
   const regras = {
     tamanho: senha.length >= 8,
-    maiuscula: /[A-Z]/.test(senha),
     minuscula: /[a-z]/.test(senha),
-    numero: /[0-9]/.test(senha),
+    maiuscula: /[A-Z]/.test(senha),
+    numero: /\d/.test(senha),
     especial: /[@$!%*?&.#_-]/.test(senha),
   };
+  const pontos = Object.values(regras).filter(Boolean).length;
 
-  let pontos = 0;
-  Object.entries(regras).forEach(([regra, ok]) => {
-    if (ok) pontos++;
-    if (elChecklist) {
-      const li = elChecklist.querySelector(`[data-regra="${regra}"]`);
-      if (li) li.classList.toggle("ok", ok);
-    }
-  });
+  if (elementoBarra) {
+    const barras = elementoBarra.querySelectorAll(".forca-barra");
+    const cores = ["#a5333a", "#a5333a", "#eace76", "#eace76", "#707039"];
+    barras.forEach((b, i) => {
+      b.style.background = i < pontos ? cores[pontos - 1] : "rgba(129,68,86,.12)";
+    });
+  }
 
-  if (elBarra) {
-    elBarra.className = "forca-senha";
-    if (pontos === 0) {
-    } else if (pontos <= 2) {
-      elBarra.classList.add("fraca");
-    } else if (pontos <= 4) {
-      elBarra.classList.add("media");
-    } else {
-      elBarra.classList.add("forte");
-    }
+  if (elementoChecklist) {
+    elementoChecklist.querySelectorAll("li").forEach((li) => {
+      const regra = li.dataset.regra;
+      li.classList.toggle("ok", !!regras[regra]);
+    });
   }
 
   return pontos === 5;
-}
-
-function inicializarMascarasGlobais() {
-  document.querySelectorAll('input[type="tel"]').forEach((input) => {
-    criarCampoTelefoneComPrefixo(input);
-  });
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", inicializarMascarasGlobais);
-} else {
-  inicializarMascarasGlobais();
 }

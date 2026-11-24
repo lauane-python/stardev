@@ -62,7 +62,7 @@ DASHBOARD (INÍCIO DA ÁREA DO ALUNO)
 ========================================
 Ao fazer login na plataforma StarDev, o usuário é recebido imediatamente na seção "Início", que funciona como uma Dashboard completa e personalizada:
 1. Breve introdução para os usuários: Uma mensagem acolhedora que explica o funcionamento da plataforma, incentivando os estudos e apresentando os recursos disponíveis.
-2. Continue de onde parou: Um painel inteligente que identifica automaticamente a última aula e matéria que o aluno assistiu. Ele exibe o nome da matéria, o nome da aula, a data do último acesso e um botão "Continuar" para retomar o estudo diretamente naquela aula com apenas um clique.
+2. Continue de onde parou: Um painel inteligente que identifica automaticamente a última aula e matéria que o aluno assistiu. Ele exibe o nome da matéria, o nome da aula, a data do último acesso e um botão "Continuar ▶" para retomar o estudo diretamente naquela aula com apenas um clique.
 3. Vídeo especial para membros cadastrados: Uma área exclusiva contendo um vídeo especial com introdução das fundadoras da StarDev (disponível somente para quem possui cadastro na plataforma), dando boas-vindas e dicas valiosas de aprendizado.
 
 ========================================
@@ -73,25 +73,25 @@ Durante a exibição das videoaulas, o estudante conta com um bloco de notas exc
 2. Ao clicar no círculo: Ele se expande suavemente e vira um bloco de notas compacto e prático. O estudante pode fazer todas as suas anotações em tempo real enquanto assiste ao vídeo, sem pausar ou perder o raciocínio.
 3. Salvamento automático: Todas as anotações são salvas automaticamente no armazenamento local (localStorage) enquanto o aluno digita. Não é preciso clicar em salvar.
 4. Identificação da anotação: Cada anotação é salva automaticamente com o nome exato da matéria e o nome da aula que o estudante estava assistindo no momento da anotação.
-5. Funcionamento em tela expandida / Sobreposição do YouTube: O bloco de notas e o botão circular da StarDev possuem um recurso especial que permite sobrepor o YouTube perfeitamente. Quando o estudante ativa a tela expandida ou tela cheia através dos controles do player, todo o container do vídeo é expandido e o círculo da StarDev junto com o bloco de notas continuam visíveis e utilizáveis flutuando por cima do vídeo em execução, garantindo que o aluno anote em tela cheia sem nenhuma interrupção.
+5. Funcionamento em tela expandida / Sobreposição do YouTube: O bloco de notas e o botão circular da StarDev possuem um recurso especial que permite sobrepor o YouTube perfeitamente. Quando o estudante ativa a tela expandida ou tela cheia através dos controles do player, todo o container do vídeo é expandido e o círculo da StarDev junto com o bloco de notas continuam visíveis e utilizáveis flutuando por cima do vídeo em execução, garantindo que o aluno anote em tela cheia sem nenhuma interrupção!
 
 ========================================
-ABA ANOTAÇÕES NO MENU HAMBÚRGUER
+ABA MINHAS ANOTAÇÕES NO MENU HAMBÚRGUER
 ========================================
-No menu lateral / menu hambúrguer da área do aluno, existe a aba "Anotações":
-1. Ao clicar na aba "Anotações", o estudante tem acesso imediato a todas as suas anotações antigas.
+No menu lateral / menu hambúrguer da área do aluno, existe a aba "Minhas anotações":
+1. Ao clicar na aba "Minhas anotações", o estudante tem acesso imediato a todas as suas anotações antigas.
 2. As anotações são organizadas por matéria e por aula, mostrando o nome da disciplina, o título da aula e a data da última edição.
 3. Recursos disponíveis nas anotações antigas:
-   - "Ir para aula": Permite abrir a videoaula correspondente de onde a anotação foi feita.
+   - "Ir para esta aula": Permite abrir a videoaula correspondente de onde a anotação foi feita.
    - "Copiar": Copia o texto anotado para a área de transferência com um clique.
    - "Excluir": Permite remover anotações que o estudante não queira mais manter.
-   - "Baixar anotações (.txt)": Permite salvar um resumo em texto de todas as anotações no computador ou celular.
+   - "Exportar anotações": Permite salvar um resumo em texto de todas as anotações no computador ou celular.
 
 ========================================
 CAMPO DE TELEFONE COM PREFIXO +55 FIXO (MELHOR UX)
 ========================================
 No formulário de cadastro e na edição de perfil da StarDev, o campo de telefone possui o prefixo internacional +55 (DDI do Brasil) totalmente fixo e destacado:
-1. O +55 é exibido em um elemento visual fixo e destacado (BR +55).
+1. O +55 é exibido em um elemento visual fixo acompanhado da bandeira do Brasil (🇧🇷 +55).
 2. O usuário percebe claramente que o prefixo é fixo e não editável, evitando que ele tente apagar o +55 ou digite o código do país novamente.
 3. O usuário precisa preencher apenas o DDD e o número do seu telefone (exemplo: (18) 99689-0559).
 4. O campo formata automaticamente no formato telefônico brasileiro à medida que os números são digitados.
@@ -101,7 +101,7 @@ No formulário de cadastro e na edição de perfil da StarDev, o campo de telefo
 CADASTRO E CRIAÇÃO DE CONTA
 ========================================
 Para criar uma conta na StarDev:
-1. Acesse o site e clique em "Criar conta" ou acesse a página de cadastro.
+1. Acesse o site e clique em "Criar conta grátis" ou acesse a página de cadastro.
 2. Preencha o seu nome completo (pelo menos 6 caracteres).
 3. Informe um e-mail válido.
 4. Preencha o telefone com DDD (o prefixo +55 já fica fixo).
@@ -114,7 +114,7 @@ LOGIN E AUTENTICAÇÃO
 Para entrar na sua conta:
 1. Clique no botão "Entrar" no topo da página inicial ou acesse a página de login.
 2. Digite o e-mail e a senha cadastrados.
-3. Clique em "Entrar". O sistema autentica via token seguro (JWT) e redireciona para a área do aluno.
+3. Clique em "Entrar". O sistema autentica via token seguro (JWT) e redireciona para a área do aluno com a sua Dashboard personalizada.
 
 ========================================
 RECUPERAÇÃO DE SENHA
@@ -125,9 +125,9 @@ Se você esqueceu sua senha:
 3. O sistema redefinirá a senha com segurança para que você volte a acessar a plataforma normalmente.
 
 ========================================
-PERFIL DO ALUNO (PERFIL)
+PERFIL DO ALUNO (MEU PERFIL)
 ========================================
-Na aba "Perfil" dentro da área do aluno, o estudante pode:
+Na aba "Meu perfil" dentro da área do aluno, o estudante pode:
 1. Atualizar seu nome completo, e-mail, telefone (com +55 fixo) e escrever uma breve biografia ("Sobre mim").
 2. Alterar a foto de perfil: O aluno pode enviar uma foto do seu computador ou celular, que é salva no servidor e exibida no avatar do menu.
 3. Alterar a senha atual por uma nova senha com confirmação.
@@ -152,13 +152,13 @@ A StarDev organiza seus cursos nas seguintes matérias:
 ========================================
 O QUE É A DEV MENTOR
 ========================================
-A Dev Mentor é a assistente oficial da plataforma StarDev.
-Ela está disponível em todas as páginas e foi desenvolvida para:
-- Tirar todas as dúvidas sobre o uso da plataforma StarDev (aulas, anotações, login, perfil, início).
+A Dev Mentor é a inteligência artificial oficial e assistente virtual da plataforma StarDev.
+Ela está disponível em todas as páginas e foi desenvolvida especialmente para:
+- Tirar todas as dúvidas sobre o uso da plataforma StarDev (aulas, anotações, login, perfil, dashboard).
 - Responder dúvidas técnicas sobre programação e tecnologia em geral de forma didática e acessível.
 - Ajudar estudantes iniciantes e intermediários com explicações passo a passo e exemplos práticos.
 - Orientar o aluno sobre qual trilha seguir e como aproveitar melhor os estudos.
-A Dev Mentor responde sempre em português do Brasil, de forma clara, completa e sem emojis.
+A Dev Mentor é uma assistente exclusiva da StarDev e sempre responde em português do Brasil, com linguagem acolhedora, clara e sem termos desnecessariamente difíceis.
 
 ========================================
 PLAYER DE VÍDEO E SOBREPOSIÇÃO
@@ -170,17 +170,17 @@ O player conta com suporte a tela cheia, modo expandido, e mantém o círculo da
 PERGUNTAS FREQUENTES (FAQ)
 ========================================
 - A StarDev é paga?
-Não, a StarDev é 100% gratuita.
+Não! A StarDev é 100% gratuita.
 
 - Posso assistir no celular?
 Sim, a plataforma é responsiva e adaptada para celulares, tablets e computadores.
 
 - Minhas anotações somem se eu fechar o navegador?
-Não, as anotações são salvas localmente no seu dispositivo no localStorage. Elas permanecem guardadas e disponíveis na aba "Anotações" no menu hambúrguer.
+Não! As anotações são salvas localmente no seu dispositivo no localStorage. Elas permanecem guardadas e disponíveis na aba "Minhas anotações" no menu hambúrguer.
 
 - Onde vejo o vídeo exclusivo para quem tem conta?
-Na tela de Início da Área do Aluno, na seção de vídeo especial para membros.
+No Dashboard inicial da Área do Aluno, logo abaixo do card "Continue de onde parou".
 
 - Como funciona o "Continue de onde parou"?
-Toda vez que você abre uma videoaula, a StarDev registra automaticamente a matéria e o nome da aula. Quando você volta ao Início, um card mostra sua última aula e basta clicar em "Continuar" para voltar direto a ela.
+Toda vez que você abre uma videoaula, a StarDev registra automaticamente a matéria e o nome da aula. Quando você volta ao Dashboard, um card mostra sua última aula e basta clicar em "Continuar ▶" para voltar direto a ela.
 ========================================

@@ -803,18 +803,6 @@ button.item-aula {
   letter-spacing: .04em;
   cursor: pointer;
 }
-
-.tel-pais-badge {
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: var(--cor-secundaria);
-  color: var(--cor-primaria);
-  letter-spacing: .05em;
-  display: inline-block;
-  line-height: 1.2;
-}
 .tel-pais-flag {
   font-size: 16px;
   line-height: 1;
