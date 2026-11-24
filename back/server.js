@@ -233,11 +233,9 @@ app.delete("/usuario/foto", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro ao remover foto" });
     }
 });
-// disciplinas - materias
 app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
-            
             return res.status(403).json({ resposta: "Acesso negado" });
         }
         const { materia, duracao, qtd_aulas } = req.body;
@@ -255,11 +253,14 @@ app.post("/CadastroAulas", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-// Atualizar materias
+
 app.put("/aulas/:id", verificarToken, async (req, res) => {
+  if (req.usuario.nivel !== "A") {
+    return res.status(403).json({ message: "Acesso negado." });
+  }
   const { materia, duracao, qtd_aulas } = req.body;
   try {
-    const [r] = await db.query(
+    const [r] = await conexao.query(
       "UPDATE aulas SET materia = ?, duracao = ?, qtd_aulas = ? WHERE id_aula = ?",
       [materia, duracao, qtd_aulas, req.params.id]
     );
@@ -270,10 +271,12 @@ app.put("/aulas/:id", verificarToken, async (req, res) => {
   }
 });
 
-// Excluir materias
 app.delete("/aulas/:id", verificarToken, async (req, res) => {
+  if (req.usuario.nivel !== "A") {
+    return res.status(403).json({ message: "Acesso negado." });
+  }
   try {
-    const [r] = await db.query("DELETE FROM aulas WHERE id_aula = ?", [req.params.id]);
+    const [r] = await conexao.query("DELETE FROM aulas WHERE id_aula = ?", [req.params.id]);
     if (r.affectedRows === 0) return res.status(404).json({ message: "Disciplina não encontrada." });
     res.json({ message: "Disciplina removida com sucesso." });
   } catch (e) {

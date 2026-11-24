@@ -28,7 +28,6 @@ function escapar(str = "") {
   return d.innerHTML;
 }
 
-/* SIDEBAR                                                              */
 async function carregarUsuarioAdmin() {
   const usuario = await buscarUsuarioLogado();
   if (!usuario) return;
@@ -41,7 +40,6 @@ async function carregarUsuarioAdmin() {
 }
 document.getElementById("btnSairAdmin").addEventListener("click", () => Auth.sair());
 
-/* DISCIPLINAS (AULAS)                                                  */
 async function carregarAulas() {
   try {
     const dados = await fetch(apiUrl("/aulas")).then((r) => r.json());
@@ -123,8 +121,6 @@ async function excluirAula(id) {
     mostrarToast("Não foi possível excluir a disciplina.", "erro");
   }
 }
-/*editar disciplina*/
-
 
 function preencherSelectMaterias() {
   const select = document.getElementById("videoMateria");
@@ -136,31 +132,34 @@ document.getElementById("formAula").addEventListener("submit", async (ev) => {
   const aviso = document.getElementById("aulaAviso");
   aviso.className = "form-aviso";
 
-    const url = EDITANDO_AULA_ID ? apiUrl(`/aulas/${EDITANDO_AULA_ID}`) : apiUrl("/CadastroAulas");
-    const metodo = EDITANDO_AULA_ID ? "PUT" : "POST";
+  const materia = document.getElementById("aulaMateria").value.trim();
+  const duracao = document.getElementById("aulaDuracao").value.trim();
+  const qtd_aulas = document.getElementById("aulaQtd").value || null;
 
-    try {
-      const resp = await fetch(url, {
-        method: metodo,
-        headers: await Auth.cabecalhos(),
-        body: JSON.stringify({ materia, duracao, qtd_aulas }),
-      });
-      const dados = await resp.json();
-      const sucesso = EDITANDO_AULA_ID ? resp.ok : /sucesso/i.test(dados.resposta || "");
-      aviso.textContent = dados.message || dados.resposta || (sucesso ? "Salvo com sucesso." : "Não foi possível salvar a disciplina.");
-      aviso.classList.add("mostrar", sucesso ? "ok" : "erro");
-      if (sucesso) {
-        mostrarToast(EDITANDO_AULA_ID ? "Disciplina atualizada!" : "Disciplina cadastrada!", "ok");
-        resetarFormAula();
-        carregarAulas();
-      }
-    } catch {
-      aviso.textContent = "Não foi possível falar com o servidor da StarDev.";
-      aviso.classList.add("mostrar", "erro");
+  const url = EDITANDO_AULA_ID ? apiUrl(`/aulas/${EDITANDO_AULA_ID}`) : apiUrl("/CadastroAulas");
+  const metodo = EDITANDO_AULA_ID ? "PUT" : "POST";
+
+  try {
+    const resp = await fetch(url, {
+      method: metodo,
+      headers: await Auth.cabecalhos(),
+      body: JSON.stringify({ materia, duracao, qtd_aulas }),
+    });
+    const dados = await resp.json();
+    const sucesso = EDITANDO_AULA_ID ? resp.ok : /sucesso/i.test(dados.resposta || "");
+    aviso.textContent = dados.message || dados.resposta || (sucesso ? "Salvo com sucesso." : "Não foi possível salvar a disciplina.");
+    aviso.classList.add("mostrar", sucesso ? "ok" : "erro");
+    if (sucesso) {
+      mostrarToast(EDITANDO_AULA_ID ? "Disciplina atualizada!" : "Disciplina cadastrada!", "ok");
+      resetarFormAula();
+      carregarAulas();
     }
+  } catch {
+    aviso.textContent = "Não foi possível falar com o servidor da StarDev.";
+    aviso.classList.add("mostrar", "erro");
+  }
 });
 
-/* VIDEOAU*/
 async function carregarVideoaulas() {
   try {
     const dados = await fetch(apiUrl("/videoaulas")).then((r) => r.json());
@@ -170,7 +169,6 @@ async function carregarVideoaulas() {
   }
 }
 
-/* Miniatura (capa) do vídeo no YouTube — a mesma que aparece no carrossel da home */
 function capaVideo(link = "") {
   const m = String(link).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
   if (!m) return `<span class="sr-only">sem capa</span>`;
@@ -207,38 +205,35 @@ function renderizarTabelaVideoaulas(lista) {
 }
 
 function editarVideoaula(video) {
-    EDITANDO_VIDEO_ID = video.id_materias;
+  EDITANDO_VIDEO_ID = video.id_materias;
+  VIDEO_LINK_ORIGINAL = video.link;
 
-    VIDEO_LINK_ORIGINAL = video.link;
+  document.getElementById("tituloFormVideo").textContent = "Editar videoaula";
+  document.getElementById("videoMateria").value = video.id_aula;
+  document.getElementById("videoNome").value = video.nome_aulas;
+  document.getElementById("videoDescricao").value = video.descricao;
+  document.getElementById("videoLink").value = video.link;
+  document.getElementById("videoLink").required = false;
 
-    document.getElementById("tituloFormVideo").textContent = "Editar videoaula";
-    document.getElementById("videoMateria").value = video.id_aula;
-    document.getElementById("videoNome").value = video.nome_aulas;
-    document.getElementById("videoDescricao").value = video.descricao;
-    document.getElementById("videoLink").value = video.link;
+  document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
+  document.getElementById("btnCancelarEdicaoVideo").style.display = "inline-flex";
 
-    document.getElementById("videoLink").required = false;
-
-    document.getElementById("btnSalvarVideo").textContent = "Salvar alterações";
-    document.getElementById("btnCancelarEdicaoVideo").style.display = "inline-flex";
-
-    document.getElementById("videoNome").focus();
-    document.getElementById("formVideo").scrollIntoView({ block: "nearest" });
+  document.getElementById("videoNome").focus();
+  document.getElementById("formVideo").scrollIntoView({ block: "nearest" });
 }
 
 document.getElementById("btnCancelarEdicaoVideo").addEventListener("click", () => resetarFormVideo());
 
 function resetarFormVideo() {
-    EDITANDO_VIDEO_ID = null;
-    VIDEO_LINK_ORIGINAL = null;
+  EDITANDO_VIDEO_ID = null;
+  VIDEO_LINK_ORIGINAL = null;
 
-    document.getElementById("formVideo").reset();
+  document.getElementById("formVideo").reset();
+  document.getElementById("videoLink").required = true;
 
-    document.getElementById("videoLink").required = true;
-
-    document.getElementById("tituloFormVideo").textContent = "Nova videoaula";
-    document.getElementById("btnSalvarVideo").textContent = "Cadastrar videoaula";
-    document.getElementById("btnCancelarEdicaoVideo").style.display = "none";
+  document.getElementById("tituloFormVideo").textContent = "Nova videoaula";
+  document.getElementById("btnSalvarVideo").textContent = "Cadastrar videoaula";
+  document.getElementById("btnCancelarEdicaoVideo").style.display = "none";
 }
 
 async function excluirVideoaula(id) {
@@ -259,7 +254,6 @@ document.getElementById("formVideo").addEventListener("submit", async (ev) => {
   aviso.className = "form-aviso";
 
   const linkDigitado = document.getElementById("videoLink").value.trim();
-  
   const linkFinal = EDITANDO_VIDEO_ID && linkDigitado === ""
     ? VIDEO_LINK_ORIGINAL
     : linkDigitado;
