@@ -3,6 +3,12 @@ Auth.exigirLogin();
 let TODAS_MATERIAS = [];
 let TODAS_VIDEOAULAS = [];
 let MATERIA_SELECIONADA = null;
+let FOTO_ATUAL_URL = "";
+
+window.STARDEV_CONTEXT = {
+  pagina: "area-aluno.html",
+  materiaId: null,
+};
 
 function trocarSecao(nome) {
   document.getElementById("secaoInicio").style.display = nome === "inicio" ? "block" : "none";
@@ -12,21 +18,55 @@ function trocarSecao(nome) {
   document.querySelectorAll(".app-nav-link[data-secao]").forEach((a) => {
     a.classList.toggle("ativo", a.dataset.secao === nome);
   });
+
+  if (nome === "inicio") {
+    renderizarOndeParou();
+  } else if (nome === "anotacoes") {
+    renderizarAnotacoes(document.getElementById("filtroAnotacoes")?.value || "");
+  }
+
   window.fecharMenuMobile?.();
 }
 
-function salvarProgresso(nomeMateria, nomeAula, linkVideo) {
-  localStorage.setItem("stardev_progresso", JSON.stringify({ nomeMateria, nomeAula, linkVideo, ts: Date.now() }));
+function salvarProgresso(idAula, nomeMateria, nomeAula, linkVideo) {
+  localStorage.setItem(
+    "stardev_progresso",
+    JSON.stringify({ idAula, nomeMateria, nomeAula, linkVideo, ts: Date.now() })
+  );
+}
+
+function abrirUltimaAulaSalva() {
+  const dados = JSON.parse(localStorage.getItem("stardev_progresso") || "null");
+  if (!dados) return;
+
+  trocarSecao("trilhas");
+  setTimeout(() => {
+    const materia =
+      TODAS_MATERIAS.find((m) => m.id_aula === Number(dados.idAula)) ||
+      TODAS_MATERIAS.find((m) =>
+        TODAS_VIDEOAULAS.some((v) => v.id_aula === m.id_aula && v.nome_aulas === dados.nomeAula)
+      ) ||
+      TODAS_MATERIAS.find(
+        (m) => (m.materia || "").toLowerCase() === (dados.nomeMateria || "").toLowerCase()
+      );
+    if (materia) abrirMateria(materia.id_aula, dados.nomeAula);
+  }, 100);
 }
 
 function renderizarOndeParou() {
   const dados = JSON.parse(localStorage.getItem("stardev_progresso") || "null");
   const el = document.getElementById("ondeParouConteudo");
-  if (!dados) {
+  if (!el) return;
+
+  if (!dados || !dados.nomeAula) {
     el.innerHTML = `<p style="font-family:var(--fonte-mono);font-size:13px;color:#7a6b6e;">Você ainda não assistiu nenhuma aula. Explore as <a href="#" data-secao="trilhas" style="color:var(--cor-secundaria);text-decoration:underline;">trilhas</a>.</p>`;
-    el.querySelector("[data-secao]")?.addEventListener("click", (e) => { e.preventDefault(); trocarSecao("trilhas"); });
+    el.querySelector("[data-secao]")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      trocarSecao("trilhas");
+    });
     return;
   }
+
   const data = new Date(dados.ts).toLocaleDateString("pt-BR");
   el.innerHTML = `
     <div class="onde-parou-card">
@@ -35,21 +75,14 @@ function renderizarOndeParou() {
         <strong class="onde-parou-aula">${escapar(dados.nomeAula)}</strong>
         <span class="onde-parou-data">Última vez: ${data}</span>
       </div>
-      <button class="btn btn-primario btn-sm" id="btnContinuar">Continuar</button>
+      <button type="button" class="btn btn-primario btn-sm" id="btnContinuar">Continuar</button>
     </div>`;
-  document.getElementById("btnContinuar")?.addEventListener("click", () => {
-    trocarSecao("trilhas");
-    setTimeout(() => {
-      const materia = TODAS_MATERIAS.find(m => TODAS_VIDEOAULAS.some(v => v.id_aula === m.id_aula && v.nome_aulas === dados.nomeAula));
-      if (materia) abrirMateria(materia.id_aula, dados.nomeAula);
-    }, 100);
-  });
+  document.getElementById("btnContinuar")?.addEventListener("click", abrirUltimaAulaSalva);
 }
 
 document.querySelectorAll(".app-nav-link[data-secao]").forEach((link) => {
   link.addEventListener("click", (ev) => {
     ev.preventDefault();
-    if (link.dataset.secao === "anotacoes") renderizarAnotacoes();
     trocarSecao(link.dataset.secao);
   });
 });
@@ -63,42 +96,66 @@ function avatarSVGPlaceholder(iniciais) {
   return "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg)));
 }
 
+function atualizarBotaoRemoverFoto(temFotoCustomizada) {
+  const btn = document.getElementById("btnRemoverFoto");
+  if (btn) {
+    btn.style.display = temFotoCustomizada ? "inline-flex" : "none";
+  }
+}
+
 async function carregarUsuario() {
   const usuario = await buscarUsuarioLogado();
   if (!usuario) return null;
 
   document.getElementById("sidebarNome").textContent = usuario.nome || "Aluno(a)";
-  document.getElementById("sidebarNivel").textContent = Auth.nivel() === "A" ? "administrador" : "estudante";
+  document.getElementById("sidebarNivel").textContent =
+    (usuario.nivel || Auth.nivel()) === "A" ? "administrador" : "estudante";
+
   if (document.getElementById("saudacaoNome")) {
-    const primeiroNome = (usuario.nome || "").split(" ")[0];
+    const primeiroNome = (usuario.nome || "").trim().split(/\s+/)[0];
     document.getElementById("saudacaoNome").textContent = primeiroNome ? `Olá, ${primeiroNome}` : "Olá";
   }
 
   const iniciais = iniciaisNome(usuario.nome);
-  const foto = usuario.foto ? apiUrl(usuario.foto) : avatarSVGPlaceholder(iniciais);
-  document.getElementById("sidebarAvatar").src = foto;
+  const placeholder = avatarSVGPlaceholder(iniciais);
+  const foto = usuario.foto ? apiUrl(usuario.foto) : placeholder;
+  FOTO_ATUAL_URL = foto;
+
+  const sidebarAvatar = document.getElementById("sidebarAvatar");
+  const fotoPreview = document.getElementById("fotoPreview");
+  sidebarAvatar.src = foto;
+  fotoPreview.src = foto;
+  sidebarAvatar.onerror = () => {
+    sidebarAvatar.src = placeholder;
+  };
+  fotoPreview.onerror = () => {
+    fotoPreview.src = placeholder;
+  };
+  atualizarBotaoRemoverFoto(Boolean(usuario.foto));
 
   document.getElementById("perfilNome").value = usuario.nome || "";
   document.getElementById("perfilEmail").value = usuario.email || "";
   document.getElementById("perfilBio").value = usuario.bio || "";
-  document.getElementById("fotoPreview").src = foto;
 
   const campoTelefonePerfil = document.getElementById("perfilTelefone");
   ativarMascaraTelefone(campoTelefonePerfil);
   if (usuario.telefone) {
     campoTelefonePerfil.dataset.digitos = usuario.telefone;
-    campoTelefonePerfil.value = typeof formatarApenasNumeroBR === "function"
-      ? formatarApenasNumeroBR(usuario.telefone)
-      : formatarTelefoneBR(usuario.telefone);
+    campoTelefonePerfil.value =
+      typeof formatarApenasNumeroBR === "function"
+        ? formatarApenasNumeroBR(usuario.telefone)
+        : formatarTelefoneBR(usuario.telefone);
   }
 
-  if (Auth.nivel() === "A") {
+  if ((usuario.nivel || Auth.nivel()) === "A") {
     const nav = document.querySelector(".app-nav");
-    const link = document.createElement("a");
-    link.href = "admin.html";
-    link.className = "app-nav-link";
-    link.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Painel administrativo`;
-    nav.appendChild(link);
+    if (!nav.querySelector('a[href="admin.html"]')) {
+      const link = document.createElement("a");
+      link.href = "admin.html";
+      link.className = "app-nav-link";
+      link.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Painel administrativo`;
+      nav.appendChild(link);
+    }
   }
 
   return usuario;
@@ -106,10 +163,25 @@ async function carregarUsuario() {
 
 async function carregarTrilhas() {
   try {
-    const [aulas, videoaulas] = await Promise.all([
-      fetch(apiUrl("/aulas")).then((r) => r.json()),
-      fetch(apiUrl("/videoaulas")).then((r) => r.json()),
+    const headers = await Auth.cabecalhos();
+    const [respAulas, respVideoaulas] = await Promise.all([
+      fetch(apiUrl("/aulas"), { headers }),
+      fetch(apiUrl("/videoaulas")),
     ]);
+
+    if (respAulas.status === 401 || respAulas.status === 403) {
+      Auth.sair();
+      return;
+    }
+    if (!respAulas.ok || !respVideoaulas.ok) {
+      throw new Error("Erro ao carregar trilhas");
+    }
+
+    const [aulas, videoaulas] = await Promise.all([
+      respAulas.json(),
+      respVideoaulas.json(),
+    ]);
+
     TODAS_MATERIAS = Array.isArray(aulas) ? aulas : [];
     TODAS_VIDEOAULAS = Array.isArray(videoaulas) ? videoaulas : [];
     renderizarEstatisticas();
@@ -152,6 +224,11 @@ function renderizarMaterias() {
 
 function abrirMateria(idAula, nomeAulaDesejada = null) {
   MATERIA_SELECIONADA = idAula;
+  window.STARDEV_CONTEXT = {
+    pagina: "area-aluno.html",
+    materiaId: idAula,
+  };
+
   document.querySelectorAll(".item-materia").forEach((el) => {
     el.setAttribute("aria-pressed", String(Number(el.dataset.idAula) === idAula));
   });
@@ -166,12 +243,13 @@ function abrirMateria(idAula, nomeAulaDesejada = null) {
   if (aulasDaMateria.length === 0) {
     lista.innerHTML = `<div class="vazio-estado"><p>Ainda não há videoaulas publicadas para essa disciplina.</p></div>`;
   } else {
-    lista.innerHTML = aulasDaMateria.map((aula, i) => {
-      const idVideo = extrairIdYoutube(aula.link);
-      const capa = idVideo
-        ? `<img src="https://img.youtube.com/vi/${idVideo}/mqdefault.jpg" alt="" loading="lazy" />`
-        : "";
-      return `
+    lista.innerHTML = aulasDaMateria
+      .map((aula, i) => {
+        const idVideo = extrairIdYoutube(aula.link);
+        const capa = idVideo
+          ? `<img src="https://img.youtube.com/vi/${idVideo}/mqdefault.jpg" alt="" loading="lazy" />`
+          : "";
+        return `
       <button type="button" class="item-aula" data-link="${escapar(aula.link)}" data-nome="${escapar(aula.nome_aulas)}" data-descricao="${escapar(aula.descricao)}">
         <span class="aula-thumb">${capa}<span class="num">${String(i + 1).padStart(2, "0")}</span></span>
         <span class="info">
@@ -179,13 +257,18 @@ function abrirMateria(idAula, nomeAulaDesejada = null) {
           <span class="aula-desc">${escapar(aula.descricao)}</span>
         </span>
       </button>`;
-    }).join("");
+      })
+      .join("");
 
     lista.querySelectorAll(".item-aula").forEach((el) => {
-      el.addEventListener("click", () => tocarVideo(el.dataset.link, el.dataset.nome, el.dataset.descricao));
+      el.addEventListener("click", () =>
+        tocarVideo(el.dataset.link, el.dataset.nome, el.dataset.descricao)
+      );
     });
 
-    const aulaAlvo = (nomeAulaDesejada && aulasDaMateria.find(a => a.nome_aulas === nomeAulaDesejada)) || aulasDaMateria[0];
+    const aulaAlvo =
+      (nomeAulaDesejada && aulasDaMateria.find((a) => a.nome_aulas === nomeAulaDesejada)) ||
+      aulasDaMateria[0];
     tocarVideo(aulaAlvo.link, aulaAlvo.nome_aulas, aulaAlvo.descricao);
   }
 
@@ -193,7 +276,9 @@ function abrirMateria(idAula, nomeAulaDesejada = null) {
 }
 
 function extrairIdYoutube(link = "") {
-  const m = link.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  const m = String(link).match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  );
   return m ? m[1] : null;
 }
 
@@ -201,12 +286,17 @@ function tocarVideo(link, nome, descricao = "") {
   const id = extrairIdYoutube(link);
   const container = document.getElementById("playerAtivo");
 
-  const materiaAtual = TODAS_MATERIAS.find(m => m.id_aula === MATERIA_SELECIONADA);
-  if (materiaAtual) salvarProgresso(materiaAtual.materia, nome, link);
+  const materiaAtual = TODAS_MATERIAS.find((m) => m.id_aula === MATERIA_SELECIONADA);
+  if (materiaAtual) {
+    salvarProgresso(materiaAtual.id_aula, materiaAtual.materia, nome, link);
+  }
 
   document.querySelectorAll(".item-aula").forEach((el) => {
-    if (el.dataset.link === link) el.setAttribute("aria-current", "true");
-    else el.removeAttribute("aria-current");
+    if (el.dataset.link === link && el.dataset.nome === nome) {
+      el.setAttribute("aria-current", "true");
+    } else {
+      el.removeAttribute("aria-current");
+    }
   });
 
   const legenda = `<div class="aula-atual"><h3>${escapar(nome)}</h3>${descricao ? `<p>${escapar(descricao)}</p>` : ""}</div>`;
@@ -243,12 +333,17 @@ function tocarVideo(link, nome, descricao = "") {
 }
 
 function escapar(str = "") {
-  const d = document.createElement("div");
-  d.textContent = str ?? "";
-  return d.innerHTML;
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 document.getElementById("btnVoltarMaterias")?.addEventListener("click", () => {
+  MATERIA_SELECIONADA = null;
+  window.STARDEV_CONTEXT = { pagina: "area-aluno.html", materiaId: null };
   document.getElementById("painelAulas").style.display = "none";
   document.querySelectorAll(".item-materia").forEach((el) => el.setAttribute("aria-pressed", "false"));
   document.getElementById("listaMaterias").scrollIntoView({ block: "nearest" });
@@ -288,7 +383,12 @@ document.getElementById("formPerfil").addEventListener("submit", async (ev) => {
     aviso.classList.add("mostrar", sucesso ? "ok" : "erro");
     if (sucesso) {
       mostrarToast("Perfil atualizado com sucesso!", "ok");
-      document.getElementById("sidebarNome").textContent = document.getElementById("perfilNome").value.trim();
+      const nomeAtualizado = document.getElementById("perfilNome").value.trim();
+      document.getElementById("sidebarNome").textContent = nomeAtualizado;
+      const primeiro = nomeAtualizado.split(/\s+/)[0];
+      if (document.getElementById("saudacaoNome") && primeiro) {
+        document.getElementById("saudacaoNome").textContent = `Olá, ${primeiro}`;
+      }
     }
   } catch {
     aviso.textContent = "Não foi possível falar com o servidor da StarDev.";
@@ -299,12 +399,27 @@ document.getElementById("formPerfil").addEventListener("submit", async (ev) => {
   }
 });
 
-document.getElementById("btnTrocarFoto").addEventListener("click", () => document.getElementById("inputFoto").click());
+document.getElementById("btnTrocarFoto").addEventListener("click", () => {
+  document.getElementById("inputFoto").click();
+});
+
 document.getElementById("inputFoto").addEventListener("change", async (ev) => {
   const arquivo = ev.target.files[0];
   if (!arquivo) return;
 
-  document.getElementById("fotoPreview").src = URL.createObjectURL(arquivo);
+  if (!arquivo.type.startsWith("image/")) {
+    mostrarToast("Selecione um arquivo de imagem válido (JPG, PNG, WEBP ou GIF).", "erro");
+    ev.target.value = "";
+    return;
+  }
+  if (arquivo.size > 5 * 1024 * 1024) {
+    mostrarToast("A imagem deve ter no máximo 5 MB.", "erro");
+    ev.target.value = "";
+    return;
+  }
+
+  const previewUrl = URL.createObjectURL(arquivo);
+  document.getElementById("fotoPreview").src = previewUrl;
 
   const formData = new FormData();
   formData.append("foto", arquivo);
@@ -316,14 +431,48 @@ document.getElementById("inputFoto").addEventListener("change", async (ev) => {
       body: formData,
     });
     const dados = await resp.json();
-    if (dados.foto) {
+    if (resp.ok && dados.foto) {
+      const novaUrl = apiUrl(dados.foto) + "?t=" + Date.now();
+      FOTO_ATUAL_URL = novaUrl;
+      document.getElementById("sidebarAvatar").src = novaUrl;
+      document.getElementById("fotoPreview").src = novaUrl;
+      atualizarBotaoRemoverFoto(true);
       mostrarToast("Foto atualizada com sucesso!", "ok");
-      document.getElementById("sidebarAvatar").src = apiUrl(dados.foto) + "?t=" + Date.now();
     } else {
+      document.getElementById("fotoPreview").src = FOTO_ATUAL_URL;
       mostrarToast(dados.resposta || "Não foi possível atualizar a foto.", "erro");
     }
   } catch {
+    document.getElementById("fotoPreview").src = FOTO_ATUAL_URL;
     mostrarToast("Não foi possível enviar a foto agora.", "erro");
+  } finally {
+    URL.revokeObjectURL(previewUrl);
+  }
+});
+
+document.getElementById("btnRemoverFoto")?.addEventListener("click", async () => {
+  if (!confirm("Deseja remover sua foto de perfil?")) return;
+  try {
+    const resp = await fetch(apiUrl("/usuario/foto"), {
+      method: "DELETE",
+      headers: await Auth.cabecalhos(),
+    });
+    const dados = await resp.json();
+    if (resp.ok) {
+      const placeholder = avatarSVGPlaceholder(
+        iniciaisNome(document.getElementById("perfilNome").value)
+      );
+      FOTO_ATUAL_URL = placeholder;
+      document.getElementById("fotoPreview").src = placeholder;
+      document.getElementById("sidebarAvatar").src = placeholder;
+      document.getElementById("inputFoto").value = "";
+      atualizarBotaoRemoverFoto(false);
+      mostrarToast(dados.resposta || "Foto removida com sucesso!", "ok");
+    } else {
+      mostrarToast(dados.resposta || "Não foi possível remover a foto.", "erro");
+    }
+  } catch {
+    mostrarToast("Não foi possível remover a foto agora.", "erro");
   }
 });
 
@@ -337,6 +486,11 @@ document.getElementById("formTrocarSenha").addEventListener("submit", async (ev)
   const novaSenha = document.getElementById("novaSenhaPerfil").value;
   const confirma = document.getElementById("confirmaSenhaPerfil").value;
 
+  if (novaSenha.trim().length < 6) {
+    aviso.textContent = "A nova senha deve ter pelo menos 6 caracteres.";
+    aviso.classList.add("mostrar", "erro");
+    return;
+  }
   if (novaSenha !== confirma) {
     aviso.textContent = "As senhas não coincidem.";
     aviso.classList.add("mostrar", "erro");
@@ -351,7 +505,7 @@ document.getElementById("formTrocarSenha").addEventListener("submit", async (ev)
     const resp = await fetch(apiUrl("/trocarSenha"), {
       method: "PUT",
       headers: await Auth.cabecalhos(),
-      body: JSON.stringify({ novaSenha }),
+      body: JSON.stringify({ novaSenha: novaSenha.trim() }),
     });
     const dados = await resp.json();
     const sucesso = /sucesso/i.test(dados.resposta || "");
@@ -372,21 +526,42 @@ document.getElementById("formTrocarSenha").addEventListener("submit", async (ev)
 
 document.getElementById("btnSair").addEventListener("click", () => Auth.sair());
 
+function copiarParaClipboard(texto) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(texto);
+  }
+  const aux = document.createElement("textarea");
+  aux.value = texto;
+  aux.style.position = "fixed";
+  aux.style.opacity = "0";
+  document.body.appendChild(aux);
+  aux.select();
+  try {
+    document.execCommand("copy");
+  } finally {
+    aux.remove();
+  }
+  return Promise.resolve();
+}
+
 function renderizarAnotacoes(termoFiltro = "") {
   const container = document.getElementById("listaAnotacoes");
+  if (!container) return;
+
   const anotacoes = JSON.parse(localStorage.getItem("stardev_anotacoes") || "{}");
-  let lista = Object.values(anotacoes).filter(a => a.texto?.trim());
+  let entradas = Object.entries(anotacoes).filter(([, a]) => a && a.texto?.trim());
 
   if (termoFiltro.trim()) {
     const q = termoFiltro.toLowerCase().trim();
-    lista = lista.filter(a =>
-      (a.materia && a.materia.toLowerCase().includes(q)) ||
-      (a.aula && a.aula.toLowerCase().includes(q)) ||
-      (a.texto && a.texto.toLowerCase().includes(q))
+    entradas = entradas.filter(
+      ([, a]) =>
+        (a.materia && a.materia.toLowerCase().includes(q)) ||
+        (a.aula && a.aula.toLowerCase().includes(q)) ||
+        (a.texto && a.texto.toLowerCase().includes(q))
     );
   }
 
-  if (lista.length === 0) {
+  if (entradas.length === 0) {
     container.innerHTML = `
       <div class="painel">
         <div class="vazio-estado" style="text-align:center;padding:40px 20px;">
@@ -400,42 +575,83 @@ function renderizarAnotacoes(termoFiltro = "") {
   }
 
   const grupos = {};
-  lista.forEach(a => {
-    const mat = a.materia || "Geral";
+  entradas.forEach(([chave, nota]) => {
+    const mat = nota.materia || "Geral";
     if (!grupos[mat]) grupos[mat] = [];
-    grupos[mat].push(a);
+    grupos[mat].push({ chave, ...nota });
   });
 
-  container.innerHTML = Object.entries(grupos).map(([materia, notas]) => `
+  container.innerHTML = Object.entries(grupos)
+    .map(
+      ([materia, notas]) => `
     <div class="painel anotacao-grupo">
       <div class="painel-titulo"><h2>${escapar(materia)}</h2></div>
-      ${notas.sort((a,b) => new Date(b.atualizadoEm) - new Date(a.atualizadoEm)).map(nota => {
-        const data = new Date(nota.atualizadoEm).toLocaleDateString("pt-BR", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
-        return `
-          <div class="anotacao-item">
+      ${notas
+        .sort((a, b) => new Date(b.atualizadoEm) - new Date(a.atualizadoEm))
+        .map((nota) => {
+          const data = new Date(nota.atualizadoEm).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          return `
+          <div class="anotacao-item" data-nota-chave="${escapar(nota.chave)}">
             <div class="anotacao-meta">
               <strong class="anotacao-aula">${escapar(nota.aula)}</strong>
               <span class="anotacao-data">Última edição: ${data}</span>
             </div>
             <pre class="anotacao-texto">${escapar(nota.texto)}</pre>
             <div class="anotacao-acoes">
-              <button class="btn btn-primario btn-sm" onclick="irParaAulaAnotada('${escapar(materia)}', '${escapar(nota.aula)}')">Ir para aula</button>
-              <button class="btn btn-ghost btn-sm" onclick="copiarAnotacao(this)" data-texto="${escapar(nota.texto)}">Copiar</button>
-              <button class="btn btn-ghost btn-sm anotacao-deletar" onclick="deletarAnotacao('${escapar(materia)}', '${escapar(nota.aula)}')">Excluir</button>
+              <button type="button" class="btn btn-primario btn-sm js-ir-aula" data-materia="${escapar(materia)}" data-aula="${escapar(nota.aula)}">Ir para aula</button>
+              <button type="button" class="btn btn-ghost btn-sm js-copiar-nota">Copiar</button>
+              <button type="button" class="btn btn-ghost btn-sm anotacao-deletar js-deletar-nota" data-chave="${escapar(nota.chave)}" data-aula="${escapar(nota.aula)}">Excluir</button>
             </div>
           </div>`;
-      }).join("")}
-    </div>`).join("");
+        })
+        .join("")}
+    </div>`
+    )
+    .join("");
+
+  container.querySelectorAll(".js-ir-aula").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      window.irParaAulaAnotada(btn.dataset.materia, btn.dataset.aula);
+    });
+  });
+
+  container.querySelectorAll(".js-copiar-nota").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const texto = btn.closest(".anotacao-item")?.querySelector(".anotacao-texto")?.textContent || "";
+      copiarParaClipboard(texto).then(() => {
+        btn.textContent = "Copiado";
+        setTimeout(() => {
+          btn.textContent = "Copiar";
+        }, 2000);
+      });
+    });
+  });
+
+  container.querySelectorAll(".js-deletar-nota").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      deletarAnotacaoPorChave(btn.dataset.chave, btn.dataset.aula);
+    });
+  });
 }
 
-window.irParaAulaAnotada = function(materiaNome, aulaNome) {
+window.renderizarAnotacoes = renderizarAnotacoes;
+
+window.irParaAulaAnotada = function (materiaNome, aulaNome) {
   trocarSecao("trilhas");
   setTimeout(() => {
-    const materia = TODAS_MATERIAS.find(m => (m.materia || "").toLowerCase() === (materiaNome || "").toLowerCase());
+    const materia = TODAS_MATERIAS.find(
+      (m) => (m.materia || "").toLowerCase() === (materiaNome || "").toLowerCase()
+    );
     if (materia) {
       abrirMateria(materia.id_aula, aulaNome);
     } else {
-      const aulaObj = TODAS_VIDEOAULAS.find(v => v.nome_aulas === aulaNome);
+      const aulaObj = TODAS_VIDEOAULAS.find((v) => v.nome_aulas === aulaNome);
       if (aulaObj) {
         abrirMateria(aulaObj.id_aula, aulaNome);
       }
@@ -443,34 +659,17 @@ window.irParaAulaAnotada = function(materiaNome, aulaNome) {
   }, 120);
 };
 
-window.copiarAnotacao = function(btn) {
-  const texto = btn.dataset.texto;
-  navigator.clipboard.writeText(texto).then(() => {
-    btn.textContent = "Copiado";
-    setTimeout(() => { btn.textContent = "Copiar"; }, 2000);
-  });
-};
-
-window.deletarAnotacao = function(materia, aula) {
+function deletarAnotacaoPorChave(chave, aula) {
   if (!confirm(`Excluir anotação de "${aula}"?`)) return;
   const anotacoes = JSON.parse(localStorage.getItem("stardev_anotacoes") || "{}");
-  const chave = `stardev_nota__${materia}__${aula}`
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]/g, "_");
-
   delete anotacoes[chave];
-  const chaveLegada = `stardev_nota__${materia}__${aula}`.replace(/\s+/g,"_").toLowerCase();
-  delete anotacoes[chaveLegada];
-
   localStorage.setItem("stardev_anotacoes", JSON.stringify(anotacoes));
   renderizarAnotacoes(document.getElementById("filtroAnotacoes")?.value || "");
-};
+}
 
-window.exportarAnotacoes = function() {
+window.exportarAnotacoes = function () {
   const anotacoes = JSON.parse(localStorage.getItem("stardev_anotacoes") || "{}");
-  const lista = Object.values(anotacoes).filter(a => a.texto?.trim());
+  const lista = Object.values(anotacoes).filter((a) => a.texto?.trim());
   if (lista.length === 0) {
     mostrarToast("Você ainda não possui anotações para exportar.", "erro");
     return;
@@ -480,12 +679,12 @@ window.exportarAnotacoes = function() {
   conteudo += `Data de exportação: ${new Date().toLocaleString("pt-BR")}\n`;
   conteudo += "============================================================\n\n";
 
-  lista.forEach(nota => {
-    conteudo += `------------------------------------------------------------\n`;
+  lista.forEach((nota) => {
+    conteudo += "------------------------------------------------------------\n";
     conteudo += `MATÉRIA: ${nota.materia || "Geral"}\n`;
     conteudo += `AULA:    ${nota.aula}\n`;
     conteudo += `DATA:    ${new Date(nota.atualizadoEm).toLocaleString("pt-BR")}\n`;
-    conteudo += `------------------------------------------------------------\n`;
+    conteudo += "------------------------------------------------------------\n";
     conteudo += `${nota.texto}\n\n`;
   });
 
@@ -496,7 +695,10 @@ window.exportarAnotacoes = function() {
   a.download = `stardev_anotacoes_${Date.now()}.txt`;
   document.body.appendChild(a);
   a.click();
-  setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 500);
+  setTimeout(() => {
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, 500);
   mostrarToast("Anotações exportadas com sucesso!", "ok");
 };
 
@@ -519,13 +721,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const hash = window.location.hash;
   if (hash === "#anotacoes") {
     trocarSecao("anotacoes");
-    renderizarAnotacoes();
   } else if (hash === "#trilhas") {
     trocarSecao("trilhas");
   } else if (hash === "#perfil") {
     trocarSecao("perfil");
+  } else if (hash === "#continuar") {
+    abrirUltimaAulaSalva();
   } else {
     trocarSecao("inicio");
-    renderizarOndeParou();
   }
 });

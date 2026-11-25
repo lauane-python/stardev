@@ -186,6 +186,19 @@
       return d.innerHTML;
     }
 
+    function obterSessionId() {
+      try {
+        let sid = sessionStorage.getItem("stardev_chat_session");
+        if (!sid) {
+          sid = "sess_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+          sessionStorage.setItem("stardev_chat_session", sid);
+        }
+        return sid;
+      } catch {
+        return "default";
+      }
+    }
+
     async function enviarMensagem(texto) {
       const mensagem = texto.trim();
       if (!mensagem) return;
@@ -200,7 +213,12 @@
         const resp = await fetch(apiUrl("/chatback/chat"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: mensagem, pagina: paginaAtual() }),
+          body: JSON.stringify({
+            message: mensagem,
+            pagina: window.STARDEV_CONTEXT?.pagina || paginaAtual(),
+            materiaId: window.STARDEV_CONTEXT?.materiaId || null,
+            sessionId: obterSessionId(),
+          }),
         });
 
         if (!resp.ok) throw new Error("Status " + resp.status);

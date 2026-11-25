@@ -28,11 +28,33 @@
     }
   }
 
+  function copiarTextoSeguro(texto) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(texto);
+    }
+    const aux = document.createElement("textarea");
+    aux.value = texto;
+    aux.style.position = "fixed";
+    aux.style.opacity = "0";
+    document.body.appendChild(aux);
+    aux.select();
+    try {
+      document.execCommand("copy");
+    } finally {
+      aux.remove();
+    }
+    return Promise.resolve();
+  }
+
   function salvarNota() {
     if (!contextoAtual.aula || !textareaEl) return;
     const texto = textareaEl.value;
     const chave = normalizarChave(contextoAtual.materia, contextoAtual.aula);
     const todas = carregarTodasAnotacoes();
+
+    if (!texto.trim() && !todas[chave]) {
+      return;
+    }
 
     const notaExistente = todas[chave] || {};
     todas[chave] = {
@@ -58,7 +80,7 @@
     }
 
     if (typeof window.renderizarAnotacoes === "function") {
-      window.renderizarAnotacoes();
+      window.renderizarAnotacoes(document.getElementById("filtroAnotacoes")?.value || "");
     }
   }
 
@@ -135,7 +157,7 @@
       e.stopPropagation();
       const txt = textareaEl?.value || "";
       if (!txt.trim()) return;
-      navigator.clipboard.writeText(txt).then(() => {
+      copiarTextoSeguro(txt).then(() => {
         const btn = div.querySelector("#notaBtnCopiar");
         btn.textContent = "Copiado";
         setTimeout(() => (btn.textContent = "Copiar"), 2000);
@@ -148,7 +170,10 @@
       saveTimeout = setTimeout(salvarNota, 600);
     });
 
-    textareaEl.addEventListener("blur", salvarNota);
+    textareaEl.addEventListener("blur", () => {
+      clearTimeout(saveTimeout);
+      salvarNota();
+    });
 
     return div;
   }
@@ -163,6 +188,7 @@
 
   function ocultarBloco() {
     if (!blocoEl) return;
+    clearTimeout(saveTimeout);
     salvarNota();
     blocoEl.style.display = "none";
     if (fabEl) fabEl.style.display = "flex";
@@ -191,12 +217,15 @@
   function alternarTelaExpandida() {
     if (!playerWrapEl) return;
 
-    const estaExpandido = playerWrapEl.classList.contains("modo-expandido") ||
-      document.fullscreenElement === playerWrapEl;
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    const estaExpandido =
+      playerWrapEl.classList.contains("modo-expandido") || fsEl === playerWrapEl;
 
     if (estaExpandido) {
-      if (document.fullscreenElement) {
+      if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen().catch(() => {});
+      } else if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
       }
       playerWrapEl.classList.remove("modo-expandido");
       document.body.classList.remove("player-expandido-ativo");
@@ -208,6 +237,8 @@
 
       if (playerWrapEl.requestFullscreen) {
         playerWrapEl.requestFullscreen().catch(() => {});
+      } else if (playerWrapEl.webkitRequestFullscreen) {
+        playerWrapEl.webkitRequestFullscreen();
       }
     }
   }
@@ -254,6 +285,15 @@
   function montarNoPlayer(container, materia, aula) {
     if (!container) return;
 
+    if (saveTimeout) {
+      clearTimeout(saveTimeout);
+      saveTimeout = null;
+      salvarNota();
+    } else if (textareaEl && contextoAtual.aula) {
+      salvarNota();
+    }
+
+    document.body.classList.remove("player-expandido-ativo");
     document.querySelectorAll(".nota-fab, .nota-bloco, .btn-expandir-player").forEach((el) => el.remove());
 
     contextoAtual = { materia: materia || "Geral", aula: aula || "Aula" };
@@ -290,6 +330,7 @@
   }
 
   window.addEventListener("beforeunload", () => {
+    clearTimeout(saveTimeout);
     salvarNota();
   });
 

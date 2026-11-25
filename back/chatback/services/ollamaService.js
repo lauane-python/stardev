@@ -1,6 +1,4 @@
 const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
 const limparMarkdown = require("../utils/limparMarkdown");
 const {
     BOT_NAME,
@@ -178,7 +176,7 @@ function responderPelaBaseConhecimento(pergunta, contexto) {
 
     if (q.includes("quem e voce") || q.includes("o que e voce") || q.includes("dev mentor") || q.includes("seu nome")) {
         return (
-            "Sou a Dev Mentor, assistente oficial da plataforma StarDev.\n\n" +
+            `Sou a ${BOT_NAME}, assistente oficial da plataforma ${PLATFORM_NAME}.\n\n` +
             "Estou aqui para apoiar sua rotina de estudos. Você pode me perguntar sobre:\n" +
             "- O funcionamento da plataforma, bloco de notas, anotações e trilhas.\n" +
             "- Dúvidas sobre conceitos de código em HTML, CSS, JavaScript, lógica e bancos de dados.\n" +
@@ -198,6 +196,65 @@ function responderPelaBaseConhecimento(pergunta, contexto) {
         return "Você pode entrar em contato com a equipe pela opção Falar com a StarDev no menu lateral ou pela seção de contato na página inicial. Sua mensagem é recebida diretamente pelas fundadoras.";
     }
 
+    if (q.includes("html")) {
+        return (
+            "HTML (HyperText Markup Language) define a estrutura e o significado do conteúdo de uma página web:\n\n" +
+            "- Tags semânticas como header, main, section, article e footer organizam o documento.\n" +
+            "- Elementos como a, button, form, input e img criam navegação, formulários e mídia.\n" +
+            "- Uma boa semântica melhora a acessibilidade e o SEO do projeto."
+        );
+    }
+
+    if (q.includes("css")) {
+        return (
+            "CSS (Cascading Style Sheets) controla a apresentação visual da página:\n\n" +
+            "- Cores, fontes e variáveis customizadas (:root) mantêm a identidade visual consistente.\n" +
+            "- Flexbox e CSS Grid organizam alinhamentos e layouts responsivos.\n" +
+            "- Media queries adaptam a interface para celulares, tablets e telas maiores."
+        );
+    }
+
+    if (q.includes("javascript") || q.includes(" js")) {
+        return (
+            "JavaScript adiciona interatividade e comportamento dinâmico às páginas e também roda no servidor via Node.js:\n\n" +
+            "- No front-end, manipula o DOM, valida formulários e consome APIs usando fetch.\n" +
+            "- No back-end com Express, cria rotas HTTP, autentica usuários com JWT e consulta o banco de dados."
+        );
+    }
+
+    if (q.includes("python")) {
+        return (
+            "Python é uma linguagem muito usada para aprender lógica e algoritmos pela sintaxe clara:\n\n" +
+            "- input() lê dados do usuário e print() exibe resultados no terminal.\n" +
+            "- Estruturas como if, elif e else tomam decisões, enquanto for e while repetem tarefas."
+        );
+    }
+
+    if (q.includes("variavel") || q.includes("constante") || q.includes("tipo de dado")) {
+        return (
+            "Variáveis guardam valores que podem mudar durante a execução do programa, enquanto constantes guardam valores fixos:\n\n" +
+            "- Em JavaScript usamos let (mutável) e const (referência fixa).\n" +
+            "- Os tipos básicos mais comuns são texto (string), números (inteiros e decimais), booleanos (verdadeiro/falso), listas (arrays) e objetos."
+        );
+    }
+
+    if (q.includes("funcao") || q.includes("loop") || q.includes("repetic") || q.includes("condicional")) {
+        return (
+            "Estruturas fundamentais para organizar código:\n\n" +
+            "- Condicionais (if/else): executam blocos diferentes conforme uma regra lógica.\n" +
+            "- Loops (for/while): repetem ações sem duplicar código.\n" +
+            "- Funções: encapsulam uma responsabilidade reutilizável com parâmetros de entrada e valor de retorno."
+        );
+    }
+
+    if (q.includes("api") || q.includes("rest") || q.includes("http") || q.includes("jwt")) {
+        return (
+            "Uma API REST permite que o front-end converse com o back-end via requisições HTTP:\n\n" +
+            "- GET busca dados, POST cria registros, PUT/PATCH atualiza e DELETE remove.\n" +
+            "- O token JWT é enviado no cabeçalho Authorization (Bearer token) para proteger rotas privadas."
+        );
+    }
+
     if (q.includes("front-end") || q.includes("frontend")) {
         return (
             "Front-end é a camada de interface visível com a qual o usuário interage diretamente no navegador ou aplicativo.\n\n" +
@@ -214,14 +271,14 @@ function responderPelaBaseConhecimento(pergunta, contexto) {
             "Ele é responsável por:\n" +
             "- Processamento de regras de negócio e validação de dados.\n" +
             "- Comunicação segura com o Banco de Dados.\n" +
-            "- Criação e fornecimento de APIs para o Front-end e o aplicativo mobile."
+            "- Criação e fornecimento de APIs para o Front-end."
         );
     }
 
     if (q.includes("banco de dados") || q.includes("sql")) {
         return (
             "Banco de dados é o sistema que armazena, organiza e protege as informações de forma persistente.\n\n" +
-            "Na StarDev, o banco guarda os dados de cadastro dos alunos, o catálogo de matérias e o registro das aulas assistidas."
+            "Na StarDev, o banco guarda os dados de cadastro dos alunos, o catálogo de matérias, as videoaulas e os feedbacks."
         );
     }
 
@@ -235,6 +292,11 @@ function responderPelaBaseConhecimento(pergunta, contexto) {
         );
     }
 
+    if (contexto.trechosRelevantes && contexto.trechosRelevantes.length > 0 && contexto.trechosRelevantes[0].score >= 0.18) {
+        const melhor = contexto.trechosRelevantes[0];
+        return `${melhor.titulo}:\n\n${melhor.conteudo}`;
+    }
+
     if (materiaNome) {
         return (
             `Você está estudando a disciplina ${materiaNome}. ` +
@@ -243,7 +305,7 @@ function responderPelaBaseConhecimento(pergunta, contexto) {
     }
 
     return (
-        "Olá. Sou a Dev Mentor da StarDev. Posso te orientar sobre o uso da plataforma " +
+        `Olá. Sou a ${BOT_NAME} da ${PLATFORM_NAME}. Posso te orientar sobre o uso da plataforma ` +
         "(como o bloco de notas sobreposto ao vídeo, a tela de Início com onde você parou, a aba de Anotações no menu e o telefone com +55 fixo) " +
         "ou esclarecer dúvidas sobre os conteúdos de programação das trilhas. Como posso te ajudar?"
     );
@@ -254,11 +316,11 @@ async function gerarResposta({ pergunta, contexto }) {
     const nomeMateria = materia?.nome || "não identificada";
     const aulas = materia?.aulas || [];
     const listaAulas = aulas.length > 0
-        ? aulas.map(a => `- ${a.nome}: ${a.descricao || ""}`).join("\n")
+        ? aulas.map((a) => `- ${a.nome}: ${a.descricao || ""}`).join("\n")
         : "Nenhuma aula cadastrada encontrada.";
 
     const systemPrompt = `
-Você é a Dev Mentor, assistente oficial da plataforma educacional StarDev.
+Você é a ${BOT_NAME}, assistente oficial da plataforma educacional ${PLATFORM_NAME}.
 Seu objetivo é orientar estudantes iniciantes e intermediários sobre o uso da plataforma e sobre programação.
 
 DIRETRIZES FUNDAMENTAIS:
@@ -269,7 +331,7 @@ DIRETRIZES FUNDAMENTAIS:
 - Nunca use Markdown complexo como tabelas ou títulos com cerquilha (#). Use texto corrido e, quando necessário listar itens, use "- " no início da linha.
 - Quando a pergunta for sobre a StarDev, siga rigorosamente as funcionalidades reais da plataforma:
   * Tela de Início: possui o "Continue de onde parou" com atalho para a última aula, um vídeo especial gravado pelas fundadoras exclusivo para cadastrados, e uma mensagem de introdução aos estudos.
-  * Bloco de notas durante o vídeo: há um círculo com a logo da StarDev flutuando sobre o vídeo. Ao clicar, expande em um bloco de notas compacto. As anotações são salvas automaticamente com o nome da matéria e o nome da aula. Ao usar o botão de expandir tela, o círculo e as anotações continuam sobrepondo o YouTube normalmente.
+  * Bloco de notas durante as aulas: há um círculo com a logo da StarDev flutuando sobre o vídeo. Ao clicar, expande em um bloco de notas compacto. As anotações são salvas automaticamente com o nome da matéria e o nome da aula. Ao usar o botão de expandir tela, o círculo e as anotações continuam sobrepondo o YouTube normalmente.
   * Menu lateral: possui a aba Anotações para consultar todas as anotações antigas, organizadas por matéria e aula, com opções de copiar, excluir, baixar em .txt e botão para ir direto até a aula correspondente. As outras abas são Início, Trilhas e Perfil.
   * Telefone no cadastro e perfil: o prefixo +55 é fixo e visível, não pode ser apagado nem editado pelo usuário, garantindo uma melhor experiência (UX). O aluno só digita o DDD e o número.
   * Fundadoras: Lauane Pasquini Ribeiro (foco em Front-end) e Melissa Vieira (foco em Back-end), alunas do SENAI que desenvolveram a plataforma.
@@ -279,7 +341,7 @@ Página atual: ${contexto.contextoPagina?.pagina || "Não identificada"}
 Matéria atual: ${nomeMateria}
 Aulas da matéria: ${listaAulas}
 
-Base de conhecimento:
+Base de conhecimento relevante:
 ${contexto.baseConhecimento || ""}
 `.trim();
 
@@ -287,11 +349,11 @@ ${contexto.baseConhecimento || ""}
         try {
             const mensagens = [
                 { role: "system", content: systemPrompt },
-                ...contexto.historico.map(linha => {
+                ...contexto.historico.map((linha) => {
                     const ehAluno = linha.startsWith("Aluno:");
                     return {
                         role: ehAluno ? "user" : "assistant",
-                        content: linha.replace(/^(Aluno|Dev Mentor):\s*/, "")
+                        content: linha.replace(new RegExp(`^(Aluno|${BOT_NAME}):\\s*`), "")
                     };
                 }),
                 { role: "user", content: pergunta }
@@ -310,7 +372,7 @@ ${contexto.baseConhecimento || ""}
                         Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
                         "Content-Type": "application/json"
                     },
-                    timeout: 10000
+                    timeout: 12000
                 }
             );
 
@@ -322,18 +384,21 @@ ${contexto.baseConhecimento || ""}
     }
 
     try {
+        const historicoTexto = contexto.historico.length > 0
+            ? `${contexto.historico.join("\n")}\n`
+            : "";
         const ollamaResp = await axios.post(
             OLLAMA_URL,
             {
                 model: OLLAMA_MODEL,
-                prompt: `${systemPrompt}\nAluno: ${pergunta}\nDev Mentor:`,
+                prompt: `${systemPrompt}\n${historicoTexto}Aluno: ${pergunta}\n${BOT_NAME}:`,
                 stream: false,
                 options: {
                     temperature: TEMPERATURE,
                     num_predict: MAX_TOKENS
                 }
             },
-            { timeout: 4000 }
+            { timeout: 15000 }
         );
         if (ollamaResp?.data?.response) {
             const limpo = limparMarkdown(ollamaResp.data.response);

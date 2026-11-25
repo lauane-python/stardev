@@ -11,6 +11,23 @@
  * ==========================================================================
  */
 
+function decodificarPayloadJwt(token) {
+  try {
+    const partes = String(token || "").split(".");
+    if (partes.length !== 3) return null;
+    const base64 = partes[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
 const Auth = {
   salvarSessao(token, nivel) {
     localStorage.setItem(STARDEV_CONFIG.CHAVE_TOKEN, token);
@@ -18,6 +35,10 @@ const Auth = {
   },
   token() {
     return localStorage.getItem(STARDEV_CONFIG.CHAVE_TOKEN);
+  },
+  limparSessao() {
+    localStorage.removeItem(STARDEV_CONFIG.CHAVE_TOKEN);
+    localStorage.removeItem(STARDEV_CONFIG.CHAVE_USUARIO);
   },
   nivel() {
     try {
@@ -27,11 +48,17 @@ const Auth = {
     }
   },
   logado() {
-    return !!this.token();
+    const token = this.token();
+    if (!token) return false;
+    const payload = decodificarPayloadJwt(token);
+    if (payload && typeof payload.exp === "number" && Date.now() >= payload.exp * 1000) {
+      this.limparSessao();
+      return false;
+    }
+    return true;
   },
   sair() {
-    localStorage.removeItem(STARDEV_CONFIG.CHAVE_TOKEN);
-    localStorage.removeItem(STARDEV_CONFIG.CHAVE_USUARIO);
+    this.limparSessao();
     window.location.href = "login.html";
   },
   /** Protege páginas da intranet: redireciona para o login se não houver sessão */
@@ -105,8 +132,11 @@ async function buscarUsuarioLogado() {
   const resp = await fetch(apiUrl("/usuario"), {
     headers: await Auth.cabecalhos(),
   });
-  if (resp.status === 401 || resp.status === 403) {
+  if (resp.status === 401 || resp.status === 403 || resp.status === 404) {
     Auth.sair();
+    return null;
+  }
+  if (!resp.ok) {
     return null;
   }
   return resp.json();
