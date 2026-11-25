@@ -1,1 +1,0 @@
-const API_URL = "https://stardev-d20v.onrender.com";
