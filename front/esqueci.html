@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/front/style.css">
+    <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+    <title>Esqueci-StarDev</title>
+</head>
+<body id="body_login">
+    <main id="main_divisao_ld">
+        <section id="esquerda">
+            <figure id="img_logo_login">
+                <a href="/front/index.html" target="_self"><img src="/front/img/logo.svg" alt="LOGO_LOGIN_ESQUERDA"></a>
+            </figure>
+        </section>
+        <section id="direita">
+            <figure id="img_logoflu_login">
+                <img src="/front/img/logoflu.svg" alt="LOGO_LOGIN_DIREITA">
+            </figure>
+            <h1>Recuperar Acesso</h1>
+            <label><strong>E-mail</strong>
+                <input type="email" id="input_email_esqueci" placeholder="Digite um email...">
+            </label>
+            <br><br>
+            <label><strong>Nova Senha</strong>
+                <div class="wrapper-senha" id="wrapper_senha_esqueci">
+                    <input type="password" id="input_senha_esqueci" placeholder="Digite uma senha">
+                    <button type="button" id="btn_toggle_senha_esqueci" class="btn-toggle-senha" aria-label="Mostrar senha" tabindex="-1">
+                        <svg id="icon_olho_aberto_esqueci" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg id="icon_olho_fechado_esqueci" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.9 18.9 0 0 1 5.06-5.94"></path>
+                            <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                            <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+            </label>
+            <br>
+            <label><strong>Confirmar Nova Senha</strong>
+                <div class="wrapper-senha" id="wrapper_senha_esqueci1">
+                    <input type="password" id="input_senha_esqueci1" placeholder="Digite uma senha">
+                    <button type="button" id="btn_toggle_senha_esqueci1" class="btn-toggle-senha" aria-label="Mostrar senha" tabindex="-1">
+                        <svg id="icon_olho_aberto_esqueci1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg id="icon_olho_fechado_esqueci1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.9 18.9 0 0 1 5.06-5.94"></path>
+                            <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                            <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+            </label>
+            <br><br>
+            <button id="btn_atualizar"><strong>Atualizar</strong></button>
+        </section>
+    </main>
+    <script>
+        function ativarToggleSenha(inputId, btnId, iconAbertoId, iconFechadoId) {
+            const input = document.getElementById(inputId);
+            const btn = document.getElementById(btnId);
+            const iconAberto = document.getElementById(iconAbertoId);
+            const iconFechado = document.getElementById(iconFechadoId);
+
+            btn.addEventListener("click", () => {
+                const mostrando = input.type === "text";
+                input.type = mostrando ? "password" : "text";
+                iconAberto.style.display = mostrando ? "block" : "none";
+                iconFechado.style.display = mostrando ? "none" : "block";
+                btn.setAttribute("aria-label", mostrando ? "Mostrar senha" : "Ocultar senha");
+            });
+        }
+
+        ativarToggleSenha("input_senha_esqueci", "btn_toggle_senha_esqueci", "icon_olho_aberto_esqueci", "icon_olho_fechado_esqueci");
+        ativarToggleSenha("input_senha_esqueci1", "btn_toggle_senha_esqueci1", "icon_olho_aberto_esqueci1", "icon_olho_fechado_esqueci1");
+
+        document.getElementById("btn_atualizar").addEventListener("click", async () => {
+            const email = document.getElementById("input_email_esqueci").value;
+            const novaSenha = document.getElementById("input_senha_esqueci").value;
+            const confirmarSenha = document.getElementById("input_senha_esqueci1").value;
+            const token = localStorage.getItem("token");
+            if (novaSenha !== confirmarSenha) {
+                alert("As senhas não coincidem!");
+                return;
+            }
+            try {
+                const verificar = await fetch("https://stardev-d20v.onrender.com/verificarEmail", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email })
+                });
+                const res = await verificar.json();
+                if (!res.existe) {
+                    alert("Email não encontrado!");
+                    return;
+                }
+                const resposta = await fetch("https://stardev-d20v.onrender.com/trocarSenha", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        novaSenha: novaSenha
+                    })
+                });
+                const dados = await resposta.json();
+                alert(dados.resposta);
+                if (dados.resposta === "Senha redefinida com sucesso") {
+                    localStorage.removeItem("token");
+                    window.location.href = "login.html";
+                }
+            } catch (erro) {
+                console.log(erro);
+                alert("Erro ao conectar com o servidor.");
+            }
+        });
+    </script>
+</body>
+</html>

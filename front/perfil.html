@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil</title>
+    <link rel="stylesheet" href="/front/style.css">
+    <link rel="stylesheet" href="/front/chatfront/css/chatbot.css">
+    <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+</head>
+<body class="body_index_cadastro">
+    <header class="header_index_cadastro">
+        <figure class="logo">
+            <a href="/front/index.html" target="_self" class="hrefs"><img src="/front/img/logo.svg" alt="LOGOTIPO StarDev" href="/front/index.html"></a>
+        </figure>
+        <nav>
+            <figure class="ftichome">
+                <a href="/front/aulas.html" target="_self" class="hrefs"><img src="/front/img/home.svg" alt="ICONE HOME.SVG"></a>
+            </figure>
+            <a href="/front/perfil.html" target="_self" class="hrefs">
+                <img src="/front/img/perfil-icon.svg" alt="ICONE PERFIL.SVG" class="icone-perfil-nav">
+            </a>
+        </nav>
+    </header>
+    <main>
+        <section id="section_perfil">
+            <div class="perfil-card">
+                <div class="perfil-foto-wrapper">
+                    <label for="perfil-foto-input" class="perfil-foto" id="perfil-foto">
+                        <img src="/front/img/perfil-icon.svg" alt="ICONE PERFIL.SVG" class="perfil-foto-icone">
+                        <img src="" alt="Foto de perfil" id="perfil-foto-img">
+                    </label>
+                    <label for="perfil-foto-input" class="perfil-foto-label">&#9998;</label>
+                    <input type="file" accept="image/*" id="perfil-foto-input" class="perfil-foto-input">
+                </div>
+                <button type="button" id="perfil-remover-foto">Remover foto</button>
+                <h2 class="perfil-nome-topo" id="perfil-nome-topo">Nome do Aluno</h2>
+                <p class="perfil-curso-topo" id="perfil-curso-topo">Curso atual</p>
+                <form id="formPerfil">
+                    <div class="campo">
+                        <label for="input_perfil_nome">Nome completo</label>
+                        <input type="text" id="input_perfil_nome" name="nome" placeholder="Digite seu nome completo">
+                    </div>
+                    <div class="perfil-linha-dupla">
+                        <div class="campo">
+                            <label for="input_perfil_email">E-mail</label>
+                            <input type="email" id="input_perfil_email" name="email" placeholder="Digite seu e-mail">
+                        </div>
+                        <div class="campo">
+                            <label for="input_perfil_telefone">Telefone <span style="font-size:12px;opacity:0.8;">(DDI +55 fixo · digite DDD + número)</span></label>
+                            <input type="tel" id="input_perfil_telefone" name="telefone" placeholder="+55 (00) 00000-0000" maxlength="19" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="campo">
+                        <label for="input_perfil_bio">Sobre mim</label>
+                        <textarea id="input_perfil_bio" name="bio" placeholder="Conte um pouco sobre você"></textarea>
+                    </div>
+                    <button type="submit">Salvar alterações</button>
+                    <p id="perfil-status"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer id="footer_index_cadastro">
+        <p><a href="/front/cadastro.html" target="_self" class="hrefs">Cadastra-se</a></p>
+        <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
+    </footer>
+    <div id="chatbot_container"></div>
+    <script>
+        const fotoInput = document.getElementById("perfil-foto-input");
+        const fotoLabel = document.getElementById("perfil-foto");
+        const fotoImg = document.getElementById("perfil-foto-img");
+        const removerFotoBtn = document.getElementById("perfil-remover-foto");
+        const status = document.getElementById("perfil-status");
+        const token = localStorage.getItem("token");
+        const API_URL = "https://stardev-d20v.onrender.com";
+        const inputPerfilTelefone = document.getElementById("input_perfil_telefone");
+
+        function mascaraTelefone(digitos) {
+            digitos = digitos.slice(0, 11);
+            const ddd = digitos.slice(0, 2);
+            const resto = digitos.slice(2);
+
+            let parte1 = resto;
+            let parte2 = "";
+            if (resto.length > 4) {
+                parte1 = resto.slice(0, resto.length - 4);
+                parte2 = resto.slice(resto.length - 4);
+            }
+
+            let resultado = "+55";
+            if (ddd.length > 0) {
+                resultado += " (" + ddd + (ddd.length === 2 ? ")" : "");
+            }
+            if (parte1.length > 0) {
+                resultado += (ddd.length === 2 ? " " : "") + parte1;
+            }
+            if (parte2.length > 0) {
+                resultado += "-" + parte2;
+            }
+            return resultado;
+        }
+
+        inputPerfilTelefone.addEventListener("input", () => {
+            let digitos = inputPerfilTelefone.value.replace(/\D/g, "");
+            if (digitos.startsWith("55")) {
+                digitos = digitos.slice(2);
+            }
+            inputPerfilTelefone.value = mascaraTelefone(digitos);
+        });
+
+        inputPerfilTelefone.addEventListener("focus", () => {
+            if (inputPerfilTelefone.value.trim() === "") {
+                inputPerfilTelefone.value = "+55 (";
+            }
+        });
+
+        inputPerfilTelefone.addEventListener("blur", () => {
+            const digitos = inputPerfilTelefone.value.replace(/\D/g, "").replace(/^55/, "");
+            if (digitos.length === 0) {
+                inputPerfilTelefone.value = "";
+            }
+        });
+
+        function mostrarStatus(mensagem) {
+            status.textContent = mensagem;
+            status.classList.add("mostrar");
+            setTimeout(() => status.classList.remove("mostrar"), 3000);
+        }
+
+        window.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await fetch(`${API_URL}/usuario`, {
+                    method: "GET",
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                const dados = await res.json();
+
+                document.getElementById("input_perfil_nome").value = dados.nome || "";
+                document.getElementById("input_perfil_email").value = dados.email || "";
+                const telefoneSalvo = (dados.telefone || "").replace(/\D/g, "");
+                document.getElementById("input_perfil_telefone").value = telefoneSalvo ? mascaraTelefone(telefoneSalvo) : "";
+                document.getElementById("input_perfil_bio").value = dados.bio || "";
+
+                document.getElementById("perfil-nome-topo").textContent = dados.nome || "Nome do Aluno";
+
+                if (dados.foto) {
+                    fotoImg.src = `${API_URL}${dados.foto}`;
+                    fotoImg.classList.add("ativo");
+                    fotoLabel.classList.add("tem-foto");
+                }
+            } catch (error) {
+                console.error("Erro ao carregar perfil:", error);
+            }
+        });
+
+        fotoInput.addEventListener("change", async () => {
+            const file = fotoInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                fotoImg.src = e.target.result;
+                fotoImg.classList.add("ativo");
+                fotoLabel.classList.add("tem-foto");
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append("foto", file);
+
+            try {
+                const res = await fetch(`${API_URL}/usuario/foto`, {
+                    method: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    mostrarStatus("Foto atualizada com sucesso!");
+                } else {
+                    mostrarStatus(data.resposta || "Erro ao enviar foto");
+                }
+            } catch (err) {
+                console.error("Erro ao enviar foto:", err);
+                mostrarStatus("Erro de conexão ao enviar foto");
+            }
+        });
+
+        removerFotoBtn.addEventListener("click", async () => {
+            try {
+                const res = await fetch(`${API_URL}/usuario/foto`, {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    fotoImg.src = "";
+                    fotoImg.classList.remove("ativo");
+                    fotoLabel.classList.remove("tem-foto");
+                    fotoInput.value = "";
+                    mostrarStatus("Foto removida com sucesso!");
+                } else {
+                    mostrarStatus(data.resposta || "Erro ao remover foto");
+                }
+            } catch (err) {
+                console.error("Erro ao remover foto:", err);
+                mostrarStatus("Erro de conexão ao remover foto");
+            }
+        });
+
+        document.getElementById("formPerfil").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const payload = {
+                nome: document.getElementById("input_perfil_nome").value,
+                email: document.getElementById("input_perfil_email").value,
+                telefone: document.getElementById("input_perfil_telefone").value.replace(/\D/g, "").replace(/^55/, ""),
+                bio: document.getElementById("input_perfil_bio").value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/usuario`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.resposta === "Usuário atualizado com sucesso") {
+                    document.getElementById("perfil-nome-topo").textContent = payload.nome || "Nome do Aluno";
+                    mostrarStatus("Alterações salvas com sucesso!");
+                } else {
+                    mostrarStatus(data.resposta || "Erro ao salvar alterações");
+                }
+            } catch (err) {
+                console.error(err);
+                mostrarStatus("Erro de conexão com o servidor");
+            }
+        });
+</script>
+</body>
+</html>

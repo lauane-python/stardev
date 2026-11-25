@@ -1,0 +1,186 @@
+========================================
+HISTÓRIA DAS FUNDADORAS
+========================================
+A StarDev foi desenvolvida por Lauane Pasquini Ribeiro e Melissa Vieira durante sua formação no curso de Desenvolvimento de Sistemas do SENAI.
+As duas tiveram trajetórias diferentes dentro da tecnologia e desenvolveram interesses diferentes durante o curso.
+
+========================================
+LAUANE PASQUINI RIBEIRO
+========================================
+Lauane Pasquini Ribeiro é uma das fundadoras da StarDev.
+Durante sua trajetória escolar, estudou no SESI e posteriormente ingressou no SENAI para cursar Desenvolvimento de Sistemas.
+Antes de entrar na área de tecnologia, Lauane inicialmente considerava seguir a área de Administração. Entretanto, escolheu Desenvolvimento de Sistemas por enxergar oportunidades profissionais na área de tecnologia.
+Quando começou o curso, Lauane tinha pouca experiência com tecnologia. Na época, estava há cerca de um ano sem celular e ainda não havia tido um notebook.
+Seu primeiro contato com programação aconteceu durante o curso de Desenvolvimento de Sistemas. Sua trajetória começou com o tradicional "Hello World".
+Depois de aproximadamente oito meses estudando programação, Lauane ganhou seu primeiro notebook. A partir desse momento, passou a desenvolver diferentes projetos e aprofundar seus conhecimentos em tecnologia.
+Durante o curso, descobriu que realmente gosta de Desenvolvimento de Sistemas, principalmente da área de Front-end.
+Lauane possui interesse em programação e criação de interfaces e pretende continuar sua formação na área de tecnologia.
+Seu objetivo profissional é construir uma carreira na área de tecnologia, com foco em desenvolvimento Front-end.
+Entre seus interesses estão:
+- Desenvolvimento de projetos
+- Programação
+- Desenvolvimento Front-end
+- Criação de interfaces
+- Tecnologia
+- Música (Teclado, Órgão, Piano)
+- Handebol
+
+========================================
+MELISSA VIEIRA
+========================================
+Melissa Vieira, também conhecida como Mel, é uma das fundadoras da StarDev.
+Em 2025, Melissa ingressou no SENAI para cursar Desenvolvimento de Sistemas.
+Para entrar no curso, estudou para a prova de seleção e conquistou uma das melhores notas da sala.
+Durante o curso, Melissa descobriu que possui grande interesse pela área de Back-end.
+Ao longo da formação, passou a estudar e praticar programação, enfrentando matérias desafiadoras e contando com o apoio dos professores Bruno e Matheus.
+Melissa pretende concluir o curso técnico e se tornar Técnica em Análise e Desenvolvimento de Sistemas.
+Apesar de seu interesse por tecnologia e Back-end, seu grande objetivo profissional é tornar-se fisioterapeuta.
+Entre seus interesses estão:
+- Tecnologia
+- Desenvolvimento de Sistemas
+- Programação
+- Back-end
+- Aprendizado e projetos
+- Tempo com amigos e família
+
+========================================
+TRAJETÓRIA NA TECNOLOGIA
+========================================
+Lauane e Melissa possuem trajetórias diferentes dentro do Desenvolvimento de Sistemas.
+Lauane desenvolveu maior interesse pelo Front-end e pela criação de interfaces visuais e responsivas.
+Melissa desenvolveu maior interesse pelo Back-end e pela parte de funcionamento interno das aplicações, bancos de dados e APIs.
+Essa diferença de interesses contribuiu para a divisão harmônica de conhecimentos e funções durante o desenvolvimento da StarDev.
+
+========================================
+STARDEV E SUAS FUNDADORAS
+========================================
+A StarDev surgiu dentro do contexto da formação das fundadoras em Desenvolvimento de Sistemas no SENAI.
+O projeto representa a evolução das duas durante o aprendizado de programação e a criação de uma plataforma educacional acolhedora e moderna para ajudar outros estudantes iniciantes e intermediários.
+
+========================================
+DASHBOARD (INÍCIO DA ÁREA DO ALUNO)
+========================================
+Ao fazer login na plataforma StarDev, o usuário é recebido imediatamente na seção "Início", que funciona como uma Dashboard completa e personalizada:
+1. Breve introdução para os usuários: Uma mensagem acolhedora que explica o funcionamento da plataforma, incentivando os estudos e apresentando os recursos disponíveis.
+2. Continue de onde parou: Um painel inteligente que identifica automaticamente a última aula e matéria que o aluno assistiu. Ele exibe o nome da matéria, o nome da aula, a data do último acesso e um botão "Continuar" para retomar o estudo diretamente naquela aula com apenas um clique.
+3. Vídeo especial para membros cadastrados: Uma área exclusiva contendo um vídeo especial com introdução das fundadoras da StarDev (disponível somente para quem possui cadastro na plataforma), dando boas-vindas e dicas valiosas de aprendizado.
+
+========================================
+BLOCO DE NOTAS DURANTE AS AULAS (CÍRCULO STARDEV E SOBREPOSIÇÃO DO YOUTUBE)
+========================================
+Durante a exibição das videoaulas, o estudante conta com um bloco de notas exclusivo e inteligente:
+1. Círculo com a logo da StarDev: Fica posicionado de forma flutuante e visível sobre a área do player de vídeo.
+2. Ao clicar no círculo: Ele se expande suavemente e vira um bloco de notas compacto e prático. O estudante pode fazer todas as suas anotações em tempo real enquanto assiste ao vídeo, sem pausar ou perder o raciocínio.
+3. Salvamento automático: Todas as anotações são salvas automaticamente no armazenamento local (localStorage) enquanto o aluno digita. Não é preciso clicar em salvar.
+4. Identificação da anotação: Cada anotação é salva automaticamente com o nome exato da matéria e o nome da aula que o estudante estava assistindo no momento da anotação.
+5. Funcionamento em tela expandida / Sobreposição do YouTube: O bloco de notas e o botão circular da StarDev possuem um recurso especial que permite sobrepor o YouTube perfeitamente. Quando o estudante ativa a tela expandida ou tela cheia através dos controles do player, todo o container do vídeo é expandido e o círculo da StarDev junto com o bloco de notas continuam visíveis e utilizáveis flutuando por cima do vídeo em execução, garantindo que o aluno anote em tela cheia sem nenhuma interrupção.
+
+========================================
+ABA ANOTAÇÕES NO MENU HAMBÚRGUER
+========================================
+No menu lateral / menu hambúrguer da área do aluno, existe a aba "Anotações":
+1. Ao clicar na aba "Anotações", o estudante tem acesso imediato a todas as suas anotações antigas.
+2. As anotações são organizadas por matéria e por aula, mostrando o nome da disciplina, o título da aula e a data da última edição.
+3. Recursos disponíveis nas anotações antigas:
+   - "Ir para aula": Permite abrir a videoaula correspondente de onde a anotação foi feita.
+   - "Copiar": Copia o texto anotado para a área de transferência com um clique.
+   - "Excluir": Permite remover anotações que o estudante não queira mais manter.
+   - "Baixar anotações (.txt)": Permite salvar um resumo em texto de todas as anotações no computador ou celular.
+
+========================================
+CAMPO DE TELEFONE COM PREFIXO +55 FIXO (MELHOR UX)
+========================================
+No formulário de cadastro e na edição de perfil da StarDev, o campo de telefone possui o prefixo internacional +55 (DDI do Brasil) totalmente fixo e destacado:
+1. O +55 é exibido em um elemento visual fixo e destacado (BR +55).
+2. O usuário percebe claramente que o prefixo é fixo e não editável, evitando que ele tente apagar o +55 ou digite o código do país novamente.
+3. O usuário precisa preencher apenas o DDD e o número do seu telefone (exemplo: (18) 99689-0559).
+4. O campo formata automaticamente no formato telefônico brasileiro à medida que os números são digitados.
+5. Caso o usuário copie e cole um número que já contenha "55" no início, o sistema trata automaticamente o valor para não duplicar o código.
+
+========================================
+CADASTRO E CRIAÇÃO DE CONTA
+========================================
+Para criar uma conta na StarDev:
+1. Acesse o site e clique em "Criar conta" ou acesse a página de cadastro.
+2. Preencha o seu nome completo (pelo menos 6 caracteres).
+3. Informe um e-mail válido.
+4. Preencha o telefone com DDD (o prefixo +55 já fica fixo).
+5. Crie uma senha com pelo menos 8 caracteres, contendo 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial (@$!%*?&.#_-).
+6. Confirme a sua senha e clique em "Criar minha conta". O cadastro é gratuito e libera acesso imediato.
+
+========================================
+LOGIN E AUTENTICAÇÃO
+========================================
+Para entrar na sua conta:
+1. Clique no botão "Entrar" no topo da página inicial ou acesse a página de login.
+2. Digite o e-mail e a senha cadastrados.
+3. Clique em "Entrar". O sistema autentica via token seguro (JWT) e redireciona para a área do aluno.
+
+========================================
+RECUPERAÇÃO DE SENHA
+========================================
+Se você esqueceu sua senha:
+1. Na tela de login, clique no link "Esqueci minha senha".
+2. Digite o seu e-mail cadastrado e informe a nova senha que deseja utilizar.
+3. O sistema redefinirá a senha com segurança para que você volte a acessar a plataforma normalmente.
+
+========================================
+PERFIL DO ALUNO (PERFIL)
+========================================
+Na aba "Perfil" dentro da área do aluno, o estudante pode:
+1. Atualizar seu nome completo, e-mail, telefone (com +55 fixo) e escrever uma breve biografia ("Sobre mim").
+2. Alterar a foto de perfil: O aluno pode enviar uma foto do seu computador ou celular, que é salva no servidor e exibida no avatar do menu.
+3. Alterar a senha atual por uma nova senha com confirmação.
+
+========================================
+DISCIPLINAS E TRILHAS DA STARDEV
+========================================
+A StarDev organiza seus cursos nas seguintes matérias:
+1. Fundamentos da Programação: Conceitos iniciais de computação, raciocínio lógico e introdução à área de TI.
+2. Lógica de Programação: Algoritmos, variáveis, condições, loops de repetição e resolução de problemas.
+3. Desenvolvimento Web: Estrutura da web, funcionamento da internet, requisições HTTP e criação de páginas web.
+4. Front-End: Desenvolvimento de interfaces visuais interativas com HTML5, CSS3 e JavaScript.
+5. Back-End: Desenvolvimento de servidores, rotas, regras de negócio e APIs com Node.js e Express.
+6. Banco de Dados: Modelagem relacional, linguagem SQL, persistência de dados e consultas.
+7. Projetos de Software: Metodologias ágeis, organização de código, boas práticas e arquitetura de sistemas.
+8. Segurança da Informação: Boas práticas de segurança, hash de senhas, proteção de dados e autenticação segura.
+9. Código Limpo: Princípios de Clean Code, legibilidade, refatoração e padrões de projeto.
+10. Desenvolvimento Mobile: Criação de aplicativos para dispositivos móveis com React Native.
+11. Redes e IoT: Conceitos de redes de computadores, protocolos, conectividade e Internet das Coisas.
+12. Linguagem de Programação: Sintaxe, estruturas avançadas e paradigmas de desenvolvimento.
+
+========================================
+O QUE É A DEV MENTOR
+========================================
+A Dev Mentor é a assistente oficial da plataforma StarDev.
+Ela está disponível em todas as páginas e foi desenvolvida para:
+- Tirar todas as dúvidas sobre o uso da plataforma StarDev (aulas, anotações, login, perfil, início).
+- Responder dúvidas técnicas sobre programação e tecnologia em geral de forma didática e acessível.
+- Ajudar estudantes iniciantes e intermediários com explicações passo a passo e exemplos práticos.
+- Orientar o aluno sobre qual trilha seguir e como aproveitar melhor os estudos.
+A Dev Mentor responde sempre em português do Brasil, de forma clara, completa e sem emojis.
+
+========================================
+PLAYER DE VÍDEO E SOBREPOSIÇÃO
+========================================
+As aulas são exibidas via YouTube embed diretamente no player da StarDev.
+O player conta com suporte a tela cheia, modo expandido, e mantém o círculo da logo StarDev e o bloco de notas sobrepostos ao vídeo durante todo o tempo de exibição.
+
+========================================
+PERGUNTAS FREQUENTES (FAQ)
+========================================
+- A StarDev é paga?
+Não, a StarDev é 100% gratuita.
+
+- Posso assistir no celular?
+Sim, a plataforma é responsiva e adaptada para celulares, tablets e computadores.
+
+- Minhas anotações somem se eu fechar o navegador?
+Não, as anotações são salvas localmente no seu dispositivo no localStorage. Elas permanecem guardadas e disponíveis na aba "Anotações" no menu hambúrguer.
+
+- Onde vejo o vídeo exclusivo para quem tem conta?
+Na tela de Início da Área do Aluno, na seção de vídeo especial para membros.
+
+- Como funciona o "Continue de onde parou"?
+Toda vez que você abre uma videoaula, a StarDev registra automaticamente a matéria e o nome da aula. Quando você volta ao Início, um card mostra sua última aula e basta clicar em "Continuar" para voltar direto a ela.
+========================================
