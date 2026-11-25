@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aulas-StarDev</title>
+    <link rel="stylesheet" href="/front/style.css">
+    <link rel="stylesheet" href="/front/chatfront/css/chatbot.css">
+    <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+</head>
+<body class="body_index_cadastro">
+    <header class="header_index_cadastro">
+        <figure class="logo">
+            <a href="/front/index.html" target="_self" class="hrefs"><img src="/front/img/logo.svg" alt="LOGOTIPO StarDev" href="/front/index.html"></a>
+        </figure>
+        <nav>
+            <figure class="ftichome">
+                <a href="/front/aulas.html" target="_self" class="hrefs"><img src="/front/img/home.svg" alt="ICONE HOME.SVG"></a>
+            </figure>
+            <a href="/front/perfil.html" target="_self" class="hrefs">
+                <img src="/front/img/perfil-icon.svg" alt="ICONE PERFIL.SVG" class="icone-perfil-nav">
+            </a>
+        </nav>
+    </header>
+    <main>
+        <section><h1 id="aulas"><strong>AULAS</strong></h1></section>
+        <section id="section_todas_aulas">
+            <section class="section-aulas">
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Fundamentos da Programação</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Lógica de Programação</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Desenvolvimento Web</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Front-end</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Back-end</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Banco de Dados</a></p>
+            </section>
+            <section class="section-aulas">
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Projetos de Software</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Segurança da Informação</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Código Limpo</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Desenvolvimento Mobile</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Redes e IOT</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html" target="_blank" class="hrefs_aulas">Linguagem de Programação</a></p>
+            </section>
+        </section>
+    </main>
+    <footer id="footer_index_cadastro">
+        <p>Você é um Star Dev</p>
+        <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
+    </footer>
+    <div id="chatbot_container"></div>
+    <script>
+        fetch("/front/chatfront/components/chatbot.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("chatbot_container").innerHTML = data;
+
+            const script = document.createElement("script");
+            script.src = "/front/chatfront/js/chatbot.js";
+
+            document.body.appendChild(script);
+        });
+        </script>
+</body>
+</html>
